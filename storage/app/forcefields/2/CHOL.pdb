@@ -1,0 +1,11 @@
+TITLE     MDANALYSIS FRAME 0: Created by PDBWriter
+CRYST1  112.238  112.238   99.112  90.00  90.00  90.00 P 1           1
+ATOM      1  ROH CHOLM  20      53.300  58.700  66.190  1.00  0.00      SYST O
+ATOM      2  R1  CHOLM  20      53.250  59.840  63.600  1.00  0.00      SYST R
+ATOM      3  R2  CHOLM  20      53.200  62.570  63.180  1.00  0.00      SYST R
+ATOM      4  R3  CHOLM  20      55.380  62.050  61.640  1.00  0.00      SYST R
+ATOM      5  R4  CHOLM  20      53.980  64.200  60.230  1.00  0.00      SYST R
+ATOM      6  R5  CHOLM  20      54.600  62.290  59.390  1.00  0.00      SYST R
+ATOM      7  C1  CHOLM  20      56.480  64.660  57.070  1.00  0.00      SYST C
+ATOM      8  C2  CHOLM  20      56.880  64.400  53.700  1.00  0.00      SYST C
+END

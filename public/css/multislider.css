@@ -1,0 +1,135 @@
+
+.containerSlider {
+
+  padding: 0;
+  width: 50%;
+  border-radius: 4px;
+}
+
+.multi-range {
+  width: 100%;
+  height: 45px;
+  position: relative;
+  margin-bottom: 2em;
+}
+.multi-range__track {
+  height: 10px;
+  width: 100%;
+  background: transparent;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+}
+.multi-range__track-bg {
+  height: 100%;
+  width: 95%;
+  background: #ccc;
+  position: absolute;
+  top: 0;
+  left: 2.5%;
+}
+
+
+.multi-range__fill {
+  height: 100%;
+  width: 100%;
+  /*background: #2994b2;*/
+  background: linear-gradient(to right, #FF9AA2 0%, #B5EAD7 100%);
+
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.multi-range__handle {
+  /*height: 100%;
+  width: 5%;*/
+  height: 30px;
+  width: 30px;
+  border-color: white;
+  border-width: 2px;
+  border-style: solid;
+  /*background: #343434;*/
+  background:#2994b2;
+  position: absolute;
+  top: 50%;
+  cursor: -webkit-grab;
+  cursor: grab;
+  transform: translateY(-50%);
+  /*border-radius: 4px;*/
+
+  border-radius: 30px;
+}
+.multi-range__handle:focus:first-child {
+  /*border: 3px solid #2994b2;*/
+  border: 4px solid white;
+}
+.multi-range__handle:focus:last-child {
+  border: 4px solid white;
+  /*border: 3px solid #91157e;*/
+}
+.multi-range__ticks {
+  height: 100%;
+  width: 95%;
+  background: transparent;
+  position: absolute;
+  top: 0;
+  left: 2.5%;
+  display: flex;
+  justify-content: space-between;
+}
+.multi-range__tick {
+  width: 2px;
+  height: 100%;
+  /*background: #fff;*/
+  background:#80e3ff;
+}
+
+span[class^="start-slide-"]{
+  color:#FF9AA2;
+}
+span[class^="end-slide-"]{
+  color:#B5EAD7;
+}
+
+[data-handle-position="start"]{
+  background:#FF9AA2;
+
+}
+[data-handle-position="end"]{
+  background:#B5EAD7;
+
+}
+
+.multi-range__labels {
+  font-size: 14px;
+  position: absolute;
+  left: 2.5%;
+  min-width: 100%;
+  overflow: visible;
+  top: calc(100% + 0.5em);
+}
+
+.multi-range__labels > .label {
+  font-size: 12px;
+  position: absolute;
+  display: none;
+}
+@media screen and (max-width: 709px) {
+  .multi-range__labels > .label:nth-child(4n + 1) {
+    display: block;
+  }
+}
+@media screen and (min-width: 710px) {
+  .multi-range__labels > .label:nth-child(odd) {
+    display: block;
+  }
+}
+@media screen and (min-width: 1560px) {
+  .multi-range__labels > .label {
+    display: block;
+  }
+}
+.label {
+  transform: translateX(-50%);
+}

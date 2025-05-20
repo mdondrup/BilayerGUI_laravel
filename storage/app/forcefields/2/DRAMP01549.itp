@@ -1,0 +1,222 @@
+[ moleculetype ] 
+Protein_A         1 
+[ atoms ] 
+    1    Qd     1   GLY    BB     1  1.0000 ; 1 
+    2    Nd     2   LEU    BB     2  0.0000 ; 1 
+    3   AC1     2   LEU   SC1     3  0.0000 ; 1 
+    4    Nd     3   LEU    BB     4  0.0000 ; 1 
+    5   AC1     3   LEU   SC1     5  0.0000 ; 1 
+    6    Nd     4   SER    BB     6  0.0000 ; 1 
+    7    P1     4   SER   SC1     7  0.0000 ; 1 
+    8    N0     5   VAL    BB     8  0.0000 ; H 
+    9   AC2     5   VAL   SC1     9  0.0000 ; H 
+   10    N0     6   LEU    BB    10  0.0000 ; H 
+   11   AC1     6   LEU   SC1    11  0.0000 ; H 
+   12    N0     7   GLY    BB    12  0.0000 ; H 
+   13    N0     8   SER    BB    13  0.0000 ; H 
+   14    P1     8   SER   SC1    14  0.0000 ; H 
+   15    N0     9   VAL    BB    15  0.0000 ; H 
+   16   AC2     9   VAL   SC1    16  0.0000 ; H 
+   17    C5    10   ALA    BB    17  0.0000 ; H 
+   18    N0    11   LYS    BB    18  0.0000 ; H 
+   19    C3    11   LYS   SC1    19  0.0000 ; H 
+   20    Qd    11   LYS   SC2    20  1.0000 ; H 
+   21    N0    12   HIS    BB    21  0.0000 ; H 
+   22   SC4    12   HIS   SC1    22  0.0000 ; H 
+   23   SP1    12   HIS   SC2    23  0.0000 ; H 
+   24   SP1    12   HIS   SC3    24  0.0000 ; H 
+   25    N0    13   VAL    BB    25  0.0000 ; H 
+   26   AC2    13   VAL   SC1    26  0.0000 ; H 
+   27    N0    14   LEU    BB    27  0.0000 ; H 
+   28   AC1    14   LEU   SC1    28  0.0000 ; H 
+   29    C5    15   PRO    BB    29  0.0000 ; H 
+   30    C3    15   PRO   SC1    30  0.0000 ; H 
+   31    N0    16   HIS    BB    31  0.0000 ; H 
+   32   SC4    16   HIS   SC1    32  0.0000 ; H 
+   33   SP1    16   HIS   SC2    33  0.0000 ; H 
+   34   SP1    16   HIS   SC3    34  0.0000 ; H 
+   35    N0    17   VAL    BB    35  0.0000 ; H 
+   36   AC2    17   VAL   SC1    36  0.0000 ; H 
+   37    N0    18   VAL    BB    37  0.0000 ; H 
+   38   AC2    18   VAL   SC1    38  0.0000 ; H 
+   39    C5    19   PRO    BB    39  0.0000 ; H 
+   40    C3    19   PRO   SC1    40  0.0000 ; H 
+   41    N0    20   VAL    BB    41  0.0000 ; H 
+   42   AC2    20   VAL   SC1    42  0.0000 ; H 
+   43    N0    21   ILE    BB    43  0.0000 ; H 
+   44   AC1    21   ILE   SC1    44  0.0000 ; H 
+   45    N0    22   ALA    BB    45  0.0000 ; 2 
+   46    Na    23   GLU    BB    46  0.0000 ; 2 
+   47    Qa    23   GLU   SC1    47 -1.0000 ; 2 
+   48    Na    24   HIS    BB    48  0.0000 ; 2 
+   49   SC4    24   HIS   SC1    49  0.0000 ; 2 
+   50   SP1    24   HIS   SC2    50  0.0000 ; 2 
+   51   SP1    24   HIS   SC3    51  0.0000 ; 2 
+   52    Qa    25   LEU    BB    52 -1.0000 ; 2 
+   53   AC1    25   LEU   SC1    53  0.0000 ; 2 
+[ bonds ] 
+    2     3      1   0.33000  7500 ; LEU 
+    4     5      1   0.33000  7500 ; LEU 
+    6     7      1   0.25000  7500 ; SER 
+   10    11      1   0.33000  7500 ; LEU 
+   13    14      1   0.25000  7500 ; SER 
+   18    19      1   0.33000  5000 ; LYS 
+   19    20      1   0.28000  5000 ; LYS 
+   21    22      1   0.32000  7500 ; HIS 
+   27    28      1   0.33000  7500 ; LEU 
+   29    30      1   0.30000  7500 ; PRO 
+   31    32      1   0.32000  7500 ; HIS 
+   39    40      1   0.30000  7500 ; PRO 
+   46    47      1   0.40000  5000 ; GLU 
+   48    49      1   0.32000  7500 ; HIS 
+   52    53      1   0.33000  7500 ; LEU 
+[ constraints ] 
+    1     2      1   0.31000 ; GLY(1)-LEU(1) 
+    2     4      1   0.31000 ; LEU(1)-LEU(1) 
+    4     6      1   0.31000 ; LEU(1)-SER(1) 
+    6     8      1   0.31000 ; SER(1)-VAL(H) 
+    8    10      1   0.31000 ; VAL(H)-LEU(H) 
+   10    12      1   0.31000 ; LEU(H)-GLY(H) 
+   12    13      1   0.31000 ; GLY(H)-SER(H) 
+   13    15      1   0.31000 ; SER(H)-VAL(H) 
+   15    17      1   0.31000 ; VAL(H)-ALA(H) 
+   17    18      1   0.31000 ; ALA(H)-LYS(H) 
+   18    21      1   0.31000 ; LYS(H)-HIS(H) 
+   21    25      1   0.31000 ; HIS(H)-VAL(H) 
+   25    27      1   0.31000 ; VAL(H)-LEU(H) 
+   27    29      1   0.31000 ; LEU(H)-PRO(H) 
+   29    31      1   0.31000 ; PRO(H)-HIS(H) 
+   31    35      1   0.31000 ; HIS(H)-VAL(H) 
+   35    37      1   0.31000 ; VAL(H)-VAL(H) 
+   37    39      1   0.31000 ; VAL(H)-PRO(H) 
+   39    41      1   0.31000 ; PRO(H)-VAL(H) 
+   41    43      1   0.31000 ; VAL(H)-ILE(H) 
+   43    45      1   0.31000 ; ILE(H)-ALA(2) 
+   45    46      1   0.31000 ; ALA(2)-GLU(2) 
+   46    48      1   0.31000 ; GLU(2)-HIS(2) 
+   48    52      1   0.31000 ; HIS(2)-LEU(2) 
+    8     9      1   0.26500 ; VAL 
+   15    16      1   0.26500 ; VAL 
+   22    23      1   0.27000 ; HIS 
+   22    24      1   0.27000 ; HIS 
+   23    24      1   0.27000 ; HIS 
+   25    26      1   0.26500 ; VAL 
+   32    33      1   0.27000 ; HIS 
+   32    34      1   0.27000 ; HIS 
+   33    34      1   0.27000 ; HIS 
+   35    36      1   0.26500 ; VAL 
+   37    38      1   0.26500 ; VAL 
+   41    42      1   0.26500 ; VAL 
+   43    44      1   0.31000 ; ILE 
+   49    50      1   0.27000 ; HIS 
+   49    51      1   0.27000 ; HIS 
+   50    51      1   0.27000 ; HIS 
+[ angles ] 
+    1     2     4      2     96   700 ; GLY(1)-LEU(1)-LEU(1) 
+    2     4     6      2     96   700 ; LEU(1)-LEU(1)-SER(1) 
+    4     6     8      2     96   700 ; LEU(1)-SER(1)-VAL(H) 
+    6     8    10      2     96   700 ; SER(1)-VAL(H)-LEU(H) 
+    8    10    12      2     96   700 ; VAL(H)-LEU(H)-GLY(H) 
+   10    12    13      2     96   700 ; LEU(H)-GLY(H)-SER(H) 
+   12    13    15      2     96   700 ; GLY(H)-SER(H)-VAL(H) 
+   13    15    17      2     96   700 ; SER(H)-VAL(H)-ALA(H) 
+   15    17    18      2     96   700 ; VAL(H)-ALA(H)-LYS(H) 
+   17    18    21      2     96   700 ; ALA(H)-LYS(H)-HIS(H) 
+   18    21    25      2     96   700 ; LYS(H)-HIS(H)-VAL(H) 
+   21    25    27      2     96   700 ; HIS(H)-VAL(H)-LEU(H) 
+   25    27    29      2     98   100 ; VAL(H)-LEU(H)-PRO(H) 
+   27    29    31      2     98   100 ; LEU(H)-PRO(H)-HIS(H) 
+   29    31    35      2     98   100 ; PRO(H)-HIS(H)-VAL(H) 
+   31    35    37      2     96   700 ; HIS(H)-VAL(H)-VAL(H) 
+   35    37    39      2     98   100 ; VAL(H)-VAL(H)-PRO(H) 
+   37    39    41      2     98   100 ; VAL(H)-PRO(H)-VAL(H) 
+   39    41    43      2     98   100 ; PRO(H)-VAL(H)-ILE(H) 
+   41    43    45      2     96   700 ; VAL(H)-ILE(H)-ALA(2) 
+   43    45    46      2     96   700 ; ILE(H)-ALA(2)-GLU(2) 
+   45    46    48      2     96   700 ; ALA(2)-GLU(2)-HIS(2) 
+   46    48    52      2     96   700 ; GLU(2)-HIS(2)-LEU(2) 
+    1     2     3      2    100    25 ; GLY(1)-LEU(1) SBB 
+    2     4     5      2    100    25 ; LEU(1)-LEU(1) SBB 
+    4     6     7      2    100    25 ; LEU(1)-SER(1) SBB 
+    6     8     9      2    100    25 ; SER(1)-VAL(H) SBB 
+    8    10    11      2    100    25 ; VAL(H)-LEU(H) SBB 
+   12    13    14      2    100    25 ; GLY(H)-SER(H) SBB 
+   13    15    16      2    100    25 ; SER(H)-VAL(H) SBB 
+   17    18    19      2    100    25 ; ALA(H)-LYS(H) SBB 
+   18    21    22      2    100    25 ; LYS(H)-HIS(H) SBB 
+   21    25    26      2    100    25 ; HIS(H)-VAL(H) SBB 
+   25    27    28      2    100    25 ; VAL(H)-LEU(H) SBB 
+   27    29    30      2    100    25 ; LEU(H)-PRO(H) SBB 
+   29    31    32      2    100    25 ; PRO(H)-HIS(H) SBB 
+   31    35    36      2    100    25 ; HIS(H)-VAL(H) SBB 
+   35    37    38      2    100    25 ; VAL(H)-VAL(H) SBB 
+   37    39    40      2    100    25 ; VAL(H)-PRO(H) SBB 
+   39    41    42      2    100    25 ; PRO(H)-VAL(H) SBB 
+   41    43    44      2    100    25 ; VAL(H)-ILE(H) SBB 
+   45    46    47      2    100    25 ; ALA(2)-GLU(2) SBB 
+   46    48    49      2    100    25 ; GLU(2)-HIS(2) SBB 
+   48    52    53      2    100    25 ; HIS(2)-LEU(2) SBB 
+   18    19    20      2    180    25 ; LYS 
+   21    22    23      2    150    50 ; HIS 
+   21    22    24      2    150    50 ; HIS 
+   31    32    33      2    150    50 ; HIS 
+   31    32    34      2    150    50 ; HIS 
+   48    49    50      2    150    50 ; HIS 
+   48    49    51      2    150    50 ; HIS 
+[ dihedrals ] 
+    1     2     4     6      1   -120   400     1 ; GLY(1)-LEU(1)-LEU(1)-SER(1) 
+    2     4     6     8      1   -120   400     1 ; LEU(1)-LEU(1)-SER(1)-VAL(H) 
+    4     6     8    10      1   -120   400     1 ; LEU(1)-SER(1)-VAL(H)-LEU(H) 
+    6     8    10    12      1   -120   400     1 ; SER(1)-VAL(H)-LEU(H)-GLY(H) 
+    8    10    12    13      1   -120   400     1 ; VAL(H)-LEU(H)-GLY(H)-SER(H) 
+   10    12    13    15      1   -120   400     1 ; LEU(H)-GLY(H)-SER(H)-VAL(H) 
+   12    13    15    17      1   -120   400     1 ; GLY(H)-SER(H)-VAL(H)-ALA(H) 
+   13    15    17    18      1   -120   400     1 ; SER(H)-VAL(H)-ALA(H)-LYS(H) 
+   15    17    18    21      1   -120   400     1 ; VAL(H)-ALA(H)-LYS(H)-HIS(H) 
+   17    18    21    25      1   -120   400     1 ; ALA(H)-LYS(H)-HIS(H)-VAL(H) 
+   18    21    25    27      1   -120   400     1 ; LYS(H)-HIS(H)-VAL(H)-LEU(H) 
+   21    25    27    29      1   -120   400     1 ; HIS(H)-VAL(H)-LEU(H)-PRO(H) 
+   25    27    29    31      1   -120   400     1 ; VAL(H)-LEU(H)-PRO(H)-HIS(H) 
+   27    29    31    35      1   -120   400     1 ; LEU(H)-PRO(H)-HIS(H)-VAL(H) 
+   29    31    35    37      1   -120   400     1 ; PRO(H)-HIS(H)-VAL(H)-VAL(H) 
+   31    35    37    39      1   -120   400     1 ; HIS(H)-VAL(H)-VAL(H)-PRO(H) 
+   35    37    39    41      1   -120   400     1 ; VAL(H)-VAL(H)-PRO(H)-VAL(H) 
+   37    39    41    43      1   -120   400     1 ; VAL(H)-PRO(H)-VAL(H)-ILE(H) 
+   39    41    43    45      1   -120   400     1 ; PRO(H)-VAL(H)-ILE(H)-ALA(2) 
+   41    43    45    46      1   -120   400     1 ; VAL(H)-ILE(H)-ALA(2)-GLU(2) 
+   43    45    46    48      1   -120   400     1 ; ILE(H)-ALA(2)-GLU(2)-HIS(2) 
+   45    46    48    52      1   -120   400     1 ; ALA(2)-GLU(2)-HIS(2)-LEU(2) 
+   21    23    24    22      2      0    50 ; HIS 
+   31    33    34    32      2      0    50 ; HIS 
+   48    50    51    49      2      0    50 ; HIS 
+#ifdef POSRES 
+#ifndef POSRES_FC 
+#define POSRES_FC 1000.00 
+#endif 
+ [ position_restraints ] 
+      1    1    POSRES_FC    POSRES_FC    POSRES_FC 
+      2    1    POSRES_FC    POSRES_FC    POSRES_FC 
+      4    1    POSRES_FC    POSRES_FC    POSRES_FC 
+      6    1    POSRES_FC    POSRES_FC    POSRES_FC 
+      8    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     10    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     12    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     13    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     15    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     17    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     18    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     21    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     25    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     27    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     29    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     31    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     35    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     37    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     39    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     41    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     43    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     45    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     46    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     48    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     52    1    POSRES_FC    POSRES_FC    POSRES_FC 
+#endif

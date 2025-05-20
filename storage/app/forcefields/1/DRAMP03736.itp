@@ -1,0 +1,471 @@
+[ moleculetype ] 
+Protein_A         1 
+[ atoms ] 
+    1    Qd     1   GLY    BB     1  1.0000 ; 1 
+    2    Nd     2   LYS    BB     2  0.0000 ; 1 
+    3    C3     2   LYS   SC1     3  0.0000 72.0000 ; 1 
+    4    Qd     2   LYS   SC2     4  0.0000 36.0000 ; 1 
+    5     D     2   LYS   SCP     5  1.0000 36.0000 ; 1 
+    6    Nd     3   VAL    BB     6  0.0000 ; 1 
+    7    C2     3   VAL   SC1     7  0.0000 ; 1 
+    8    Nd     4   TRP    BB     8  0.0000 ; 1 
+    9   SC4     4   TRP   SC1     9  0.0000 ; 1 
+   10   SNd     4   TRP   SC2    10  0.0000 ; 1 
+   11   SC5     4   TRP   SC3    11  0.0000 ; 1 
+   12   SC5     4   TRP   SC4    12  0.0000 ; 1 
+   13    N0     5   ASP    BB    13  0.0000 ; H 
+   14    Qa     5   ASP   SC1    14  0.0000 36.0000 ; H 
+   15     D     5   ASP   SCN    15 -1.0000 36.0000 ; H 
+   16    N0     6   TRP    BB    16  0.0000 ; H 
+   17   SC4     6   TRP   SC1    17  0.0000 ; H 
+   18   SNd     6   TRP   SC2    18  0.0000 ; H 
+   19   SC5     6   TRP   SC3    19  0.0000 ; H 
+   20   SC5     6   TRP   SC4    20  0.0000 ; H 
+   21    N0     7   ILE    BB    21  0.0000 ; H 
+   22    C1     7   ILE   SC1    22  0.0000 ; H 
+   23    N0     8   LYS    BB    23  0.0000 ; H 
+   24    C3     8   LYS   SC1    24  0.0000 72.0000 ; H 
+   25    Qd     8   LYS   SC2    25  0.0000 36.0000 ; H 
+   26     D     8   LYS   SCP    26  1.0000 36.0000 ; H 
+   27    N0     9   SER    BB    27  0.0000 ; H 
+   28    N0     9   SER   SC1    28  0.0000  0.0000 ; H 
+   29     D     9   SER   SCP    29  0.4000 36.0000 ; H 
+   30     D     9   SER   SCN    30 -0.4000 36.0000 ; H 
+   31    N0    10   THR    BB    31  0.0000 ; H 
+   32    N0    10   THR   SC1    32  0.0000  0.0000 ; H 
+   33     D    10   THR   SCP    33  0.3600 36.0000 ; H 
+   34     D    10   THR   SCN    34 -0.3600 36.0000 ; H 
+   35    C5    11   ALA    BB    35  0.0000 ; H 
+   36    N0    12   LYS    BB    36  0.0000 ; H 
+   37    C3    12   LYS   SC1    37  0.0000 72.0000 ; H 
+   38    Qd    12   LYS   SC2    38  0.0000 36.0000 ; H 
+   39     D    12   LYS   SCP    39  1.0000 36.0000 ; H 
+   40    N0    13   LYS    BB    40  0.0000 ; H 
+   41    C3    13   LYS   SC1    41  0.0000 72.0000 ; H 
+   42    Qd    13   LYS   SC2    42  0.0000 36.0000 ; H 
+   43     D    13   LYS   SCP    43  1.0000 36.0000 ; H 
+   44    N0    14   LEU    BB    44  0.0000 ; H 
+   45    C1    14   LEU   SC1    45  0.0000 ; H 
+   46    N0    15   TRP    BB    46  0.0000 ; H 
+   47   SC4    15   TRP   SC1    47  0.0000 ; H 
+   48   SNd    15   TRP   SC2    48  0.0000 ; H 
+   49   SC5    15   TRP   SC3    49  0.0000 ; H 
+   50   SC5    15   TRP   SC4    50  0.0000 ; H 
+   51    N0    16   ASN    BB    51  0.0000 ; H 
+   52   Nda    16   ASN   SC1    52  0.0000  0.0000 ; H 
+   53     D    16   ASN   SCP    53  0.4600 36.0000 ; H 
+   54     D    16   ASN   SCN    54 -0.4600 36.0000 ; H 
+   55    N0    17   SER    BB    55  0.0000 ; H 
+   56    N0    17   SER   SC1    56  0.0000  0.0000 ; H 
+   57     D    17   SER   SCP    57  0.4000 36.0000 ; H 
+   58     D    17   SER   SCN    58 -0.4000 36.0000 ; H 
+   59    N0    18   GLU    BB    59  0.0000 ; H 
+   60    Qa    18   GLU   SC1    60  0.0000 36.0000 ; H 
+   61     D    18   GLU   SCN    61 -1.0000 36.0000 ; H 
+   62    C5    19   PRO    BB    62  0.0000 ; H 
+   63    C3    19   PRO   SC1    63  0.0000 ; H 
+   64    N0    20   VAL    BB    64  0.0000 ; H 
+   65    C2    20   VAL   SC1    65  0.0000 ; H 
+   66    N0    21   LYS    BB    66  0.0000 ; H 
+   67    C3    21   LYS   SC1    67  0.0000 72.0000 ; H 
+   68    Qd    21   LYS   SC2    68  0.0000 36.0000 ; H 
+   69     D    21   LYS   SCP    69  1.0000 36.0000 ; H 
+   70    N0    22   GLU    BB    70  0.0000 ; H 
+   71    Qa    22   GLU   SC1    71  0.0000 36.0000 ; H 
+   72     D    22   GLU   SCN    72 -1.0000 36.0000 ; H 
+   73    N0    23   LEU    BB    73  0.0000 ; H 
+   74    C1    23   LEU   SC1    74  0.0000 ; H 
+   75    N0    24   LYS    BB    75  0.0000 ; H 
+   76    C3    24   LYS   SC1    76  0.0000 72.0000 ; H 
+   77    Qd    24   LYS   SC2    77  0.0000 36.0000 ; H 
+   78     D    24   LYS   SCP    78  1.0000 36.0000 ; H 
+   79    N0    25   ASN    BB    79  0.0000 ; H 
+   80   Nda    25   ASN   SC1    80  0.0000  0.0000 ; H 
+   81     D    25   ASN   SCP    81  0.4600 36.0000 ; H 
+   82     D    25   ASN   SCN    82 -0.4600 36.0000 ; H 
+   83    N0    26   THR    BB    83  0.0000 ; H 
+   84    N0    26   THR   SC1    84  0.0000  0.0000 ; H 
+   85     D    26   THR   SCP    85  0.3600 36.0000 ; H 
+   86     D    26   THR   SCN    86 -0.3600 36.0000 ; H 
+   87    C5    27   ALA    BB    87  0.0000 ; H 
+   88    N0    28   LEU    BB    88  0.0000 ; H 
+   89    C1    28   LEU   SC1    89  0.0000 ; H 
+   90    N0    29   ASN    BB    90  0.0000 ; H 
+   91   Nda    29   ASN   SC1    91  0.0000  0.0000 ; H 
+   92     D    29   ASN   SCP    92  0.4600 36.0000 ; H 
+   93     D    29   ASN   SCN    93 -0.4600 36.0000 ; H 
+   94    C5    30   ALA    BB    94  0.0000 ; H 
+   95    C5    31   ALA    BB    95  0.0000 ; H 
+   96    N0    32   LYS    BB    96  0.0000 ; H 
+   97    C3    32   LYS   SC1    97  0.0000 72.0000 ; H 
+   98    Qd    32   LYS   SC2    98  0.0000 36.0000 ; H 
+   99     D    32   LYS   SCP    99  1.0000 36.0000 ; H 
+  100    N0    33   ASN    BB   100  0.0000 ; H 
+  101   Nda    33   ASN   SC1   101  0.0000  0.0000 ; H 
+  102     D    33   ASN   SCP   102  0.4600 36.0000 ; H 
+  103     D    33   ASN   SCN   103 -0.4600 36.0000 ; H 
+  104    N0    34   PHE    BB   104  0.0000 ; H 
+  105   SC5    34   PHE   SC1   105  0.0000 ; H 
+  106   SC5    34   PHE   SC2   106  0.0000 ; H 
+  107   SC5    34   PHE   SC3   107  0.0000 ; H 
+  108    N0    35   VAL    BB   108  0.0000 ; H 
+  109    C2    35   VAL   SC1   109  0.0000 ; H 
+  110    C5    36   ALA    BB   110  0.0000 ; H 
+  111    N0    37   GLU    BB   111  0.0000 ; H 
+  112    Qa    37   GLU   SC1   112  0.0000 36.0000 ; H 
+  113     D    37   GLU   SCN   113 -1.0000 36.0000 ; H 
+  114    N0    38   LYS    BB   114  0.0000 ; H 
+  115    C3    38   LYS   SC1   115  0.0000 72.0000 ; H 
+  116    Qd    38   LYS   SC2   116  0.0000 36.0000 ; H 
+  117     D    38   LYS   SCP   117  1.0000 36.0000 ; H 
+  118    N0    39   ILE    BB   118  0.0000 ; H 
+  119    C1    39   ILE   SC1   119  0.0000 ; H 
+  120    N0    40   GLY    BB   120  0.0000 ; H 
+  121    N0    41   ALA    BB   121  0.0000 ; 2 
+  122    Na    42   THR    BB   122  0.0000 ; 2 
+  123    N0    42   THR   SC1   123  0.0000  0.0000 ; 2 
+  124     D    42   THR   SCP   124  0.3600 36.0000 ; 2 
+  125     D    42   THR   SCN   125 -0.3600 36.0000 ; 2 
+  126    Na    43   PRO    BB   126  0.0000 ; 2 
+  127    C3    43   PRO   SC1   127  0.0000 ; 2 
+  128    Qa    44   SER    BB   128 -1.0000 ; 2 
+  129    N0    44   SER   SC1   129  0.0000  0.0000 ; 2 
+  130     D    44   SER   SCP   130  0.4000 36.0000 ; 2 
+  131     D    44   SER   SCN   131 -0.4000 36.0000 ; 2 
+[ virtual_sites2 ] 
+   28    29    30      1   0.50000 ; SER 
+   32    33    34      1   0.50000 ; THR 
+   52    53    54      1   0.50000 ; ASN 
+   56    57    58      1   0.50000 ; SER 
+   80    81    82      1   0.50000 ; ASN 
+   84    85    86      1   0.50000 ; THR 
+   91    92    93      1   0.50000 ; ASN 
+  101   102   103      1   0.50000 ; ASN 
+  123   124   125      1   0.50000 ; THR 
+  129   130   131      1   0.50000 ; SER 
+[ exclusions ] 
+  128   130 ; SER(44) 
+  128   131 ; SER(44) 
+[ bonds ] 
+    2     3      1   0.33000  5000 ; LYS 
+    3     4      1   0.28000  5000 ; LYS 
+    8     9      1   0.30000  5000 ; TRP 
+   13    14      1   0.32000  7500 ; ASP 
+   16    17      1   0.30000  5000 ; TRP 
+   23    24      1   0.33000  5000 ; LYS 
+   24    25      1   0.28000  5000 ; LYS 
+   27    28      1   0.25000  7500 ; SER 
+   31    32      1   0.26000  9000 ; THR 
+   36    37      1   0.33000  5000 ; LYS 
+   37    38      1   0.28000  5000 ; LYS 
+   40    41      1   0.33000  5000 ; LYS 
+   41    42      1   0.28000  5000 ; LYS 
+   44    45      1   0.33000  7500 ; LEU 
+   46    47      1   0.30000  5000 ; TRP 
+   51    52      1   0.32000  5000 ; ASN 
+   55    56      1   0.25000  7500 ; SER 
+   59    60      1   0.40000  5000 ; GLU 
+   62    63      1   0.30000  7500 ; PRO 
+   66    67      1   0.33000  5000 ; LYS 
+   67    68      1   0.28000  5000 ; LYS 
+   70    71      1   0.40000  5000 ; GLU 
+   73    74      1   0.33000  7500 ; LEU 
+   75    76      1   0.33000  5000 ; LYS 
+   76    77      1   0.28000  5000 ; LYS 
+   79    80      1   0.32000  5000 ; ASN 
+   83    84      1   0.26000  9000 ; THR 
+   88    89      1   0.33000  7500 ; LEU 
+   90    91      1   0.32000  5000 ; ASN 
+   96    97      1   0.33000  5000 ; LYS 
+   97    98      1   0.28000  5000 ; LYS 
+  100   101      1   0.32000  5000 ; ASN 
+  104   105      1   0.31000  7500 ; PHE 
+  111   112      1   0.40000  5000 ; GLU 
+  114   115      1   0.33000  5000 ; LYS 
+  115   116      1   0.28000  5000 ; LYS 
+  122   123      1   0.26000  9000 ; THR 
+  126   127      1   0.30000  7500 ; PRO 
+  128   129      1   0.25000  7500 ; SER 
+[ constraints ] 
+    1     2      1   0.31000 ; GLY(1)-LYS(1) 
+    2     6      1   0.31000 ; LYS(1)-VAL(1) 
+    6     8      1   0.31000 ; VAL(1)-TRP(1) 
+    8    13      1   0.31000 ; TRP(1)-ASP(H) 
+   13    16      1   0.31000 ; ASP(H)-TRP(H) 
+   16    21      1   0.31000 ; TRP(H)-ILE(H) 
+   21    23      1   0.31000 ; ILE(H)-LYS(H) 
+   23    27      1   0.31000 ; LYS(H)-SER(H) 
+   27    31      1   0.31000 ; SER(H)-THR(H) 
+   31    35      1   0.31000 ; THR(H)-ALA(H) 
+   35    36      1   0.31000 ; ALA(H)-LYS(H) 
+   36    40      1   0.31000 ; LYS(H)-LYS(H) 
+   40    44      1   0.31000 ; LYS(H)-LEU(H) 
+   44    46      1   0.31000 ; LEU(H)-TRP(H) 
+   46    51      1   0.31000 ; TRP(H)-ASN(H) 
+   51    55      1   0.31000 ; ASN(H)-SER(H) 
+   55    59      1   0.31000 ; SER(H)-GLU(H) 
+   59    62      1   0.31000 ; GLU(H)-PRO(H) 
+   62    64      1   0.31000 ; PRO(H)-VAL(H) 
+   64    66      1   0.31000 ; VAL(H)-LYS(H) 
+   66    70      1   0.31000 ; LYS(H)-GLU(H) 
+   70    73      1   0.31000 ; GLU(H)-LEU(H) 
+   73    75      1   0.31000 ; LEU(H)-LYS(H) 
+   75    79      1   0.31000 ; LYS(H)-ASN(H) 
+   79    83      1   0.31000 ; ASN(H)-THR(H) 
+   83    87      1   0.31000 ; THR(H)-ALA(H) 
+   87    88      1   0.31000 ; ALA(H)-LEU(H) 
+   88    90      1   0.31000 ; LEU(H)-ASN(H) 
+   90    94      1   0.31000 ; ASN(H)-ALA(H) 
+   94    95      1   0.31000 ; ALA(H)-ALA(H) 
+   95    96      1   0.31000 ; ALA(H)-LYS(H) 
+   96   100      1   0.31000 ; LYS(H)-ASN(H) 
+  100   104      1   0.31000 ; ASN(H)-PHE(H) 
+  104   108      1   0.31000 ; PHE(H)-VAL(H) 
+  108   110      1   0.31000 ; VAL(H)-ALA(H) 
+  110   111      1   0.31000 ; ALA(H)-GLU(H) 
+  111   114      1   0.31000 ; GLU(H)-LYS(H) 
+  114   118      1   0.31000 ; LYS(H)-ILE(H) 
+  118   120      1   0.31000 ; ILE(H)-GLY(H) 
+  120   121      1   0.31000 ; GLY(H)-ALA(2) 
+  121   122      1   0.31000 ; ALA(2)-THR(2) 
+  122   126      1   0.31000 ; THR(2)-PRO(2) 
+  126   128      1   0.31000 ; PRO(2)-SER(2) 
+    4     5      1   0.11000 ; LYS 
+    6     7      1   0.26500 ; VAL 
+    9    10      1   0.27000 ; TRP 
+    9    11      1   0.27000 ; TRP 
+   10    11      1   0.27000 ; TRP 
+   10    12      1   0.27000 ; TRP 
+   11    12      1   0.27000 ; TRP 
+   14    15      1   0.11000 ; ASP 
+   17    18      1   0.27000 ; TRP 
+   17    19      1   0.27000 ; TRP 
+   18    19      1   0.27000 ; TRP 
+   18    20      1   0.27000 ; TRP 
+   19    20      1   0.27000 ; TRP 
+   21    22      1   0.31000 ; ILE 
+   25    26      1   0.11000 ; LYS 
+   29    30      1   0.28000 ; SER 
+   33    34      1   0.28000 ; THR 
+   38    39      1   0.11000 ; LYS 
+   42    43      1   0.11000 ; LYS 
+   47    48      1   0.27000 ; TRP 
+   47    49      1   0.27000 ; TRP 
+   48    49      1   0.27000 ; TRP 
+   48    50      1   0.27000 ; TRP 
+   49    50      1   0.27000 ; TRP 
+   53    54      1   0.28000 ; ASN 
+   57    58      1   0.28000 ; SER 
+   60    61      1   0.11000 ; GLU 
+   64    65      1   0.26500 ; VAL 
+   68    69      1   0.11000 ; LYS 
+   71    72      1   0.11000 ; GLU 
+   77    78      1   0.11000 ; LYS 
+   81    82      1   0.28000 ; ASN 
+   85    86      1   0.28000 ; THR 
+   92    93      1   0.28000 ; ASN 
+   98    99      1   0.11000 ; LYS 
+  102   103      1   0.28000 ; ASN 
+  105   106      1   0.27000 ; PHE 
+  105   107      1   0.27000 ; PHE 
+  106   107      1   0.27000 ; PHE 
+  108   109      1   0.26500 ; VAL 
+  112   113      1   0.11000 ; GLU 
+  116   117      1   0.11000 ; LYS 
+  118   119      1   0.31000 ; ILE 
+  124   125      1   0.28000 ; THR 
+  130   131      1   0.28000 ; SER 
+[ angles ] 
+    1     2     6      2     96   700 ; GLY(1)-LYS(1)-VAL(1) 
+    2     6     8      2     96   700 ; LYS(1)-VAL(1)-TRP(1) 
+    6     8    13      2     96   700 ; VAL(1)-TRP(1)-ASP(H) 
+    8    13    16      2     96   700 ; TRP(1)-ASP(H)-TRP(H) 
+   13    16    21      2     96   700 ; ASP(H)-TRP(H)-ILE(H) 
+   16    21    23      2     96   700 ; TRP(H)-ILE(H)-LYS(H) 
+   21    23    27      2     96   700 ; ILE(H)-LYS(H)-SER(H) 
+   23    27    31      2     96   700 ; LYS(H)-SER(H)-THR(H) 
+   27    31    35      2     96   700 ; SER(H)-THR(H)-ALA(H) 
+   31    35    36      2     96   700 ; THR(H)-ALA(H)-LYS(H) 
+   35    36    40      2     96   700 ; ALA(H)-LYS(H)-LYS(H) 
+   36    40    44      2     96   700 ; LYS(H)-LYS(H)-LEU(H) 
+   40    44    46      2     96   700 ; LYS(H)-LEU(H)-TRP(H) 
+   44    46    51      2     96   700 ; LEU(H)-TRP(H)-ASN(H) 
+   46    51    55      2     96   700 ; TRP(H)-ASN(H)-SER(H) 
+   51    55    59      2     96   700 ; ASN(H)-SER(H)-GLU(H) 
+   55    59    62      2     98   100 ; SER(H)-GLU(H)-PRO(H) 
+   59    62    64      2     98   100 ; GLU(H)-PRO(H)-VAL(H) 
+   62    64    66      2     98   100 ; PRO(H)-VAL(H)-LYS(H) 
+   64    66    70      2     96   700 ; VAL(H)-LYS(H)-GLU(H) 
+   66    70    73      2     96   700 ; LYS(H)-GLU(H)-LEU(H) 
+   70    73    75      2     96   700 ; GLU(H)-LEU(H)-LYS(H) 
+   73    75    79      2     96   700 ; LEU(H)-LYS(H)-ASN(H) 
+   75    79    83      2     96   700 ; LYS(H)-ASN(H)-THR(H) 
+   79    83    87      2     96   700 ; ASN(H)-THR(H)-ALA(H) 
+   83    87    88      2     96   700 ; THR(H)-ALA(H)-LEU(H) 
+   87    88    90      2     96   700 ; ALA(H)-LEU(H)-ASN(H) 
+   88    90    94      2     96   700 ; LEU(H)-ASN(H)-ALA(H) 
+   90    94    95      2     96   700 ; ASN(H)-ALA(H)-ALA(H) 
+   94    95    96      2     96   700 ; ALA(H)-ALA(H)-LYS(H) 
+   95    96   100      2     96   700 ; ALA(H)-LYS(H)-ASN(H) 
+   96   100   104      2     96   700 ; LYS(H)-ASN(H)-PHE(H) 
+  100   104   108      2     96   700 ; ASN(H)-PHE(H)-VAL(H) 
+  104   108   110      2     96   700 ; PHE(H)-VAL(H)-ALA(H) 
+  108   110   111      2     96   700 ; VAL(H)-ALA(H)-GLU(H) 
+  110   111   114      2     96   700 ; ALA(H)-GLU(H)-LYS(H) 
+  111   114   118      2     96   700 ; GLU(H)-LYS(H)-ILE(H) 
+  114   118   120      2     96   700 ; LYS(H)-ILE(H)-GLY(H) 
+  118   120   121      2     96   700 ; ILE(H)-GLY(H)-ALA(2) 
+  120   121   122      2     96   700 ; GLY(H)-ALA(2)-THR(2) 
+  121   122   126      2     98   100 ; ALA(2)-THR(2)-PRO(2) 
+  122   126   128      2     98   100 ; THR(2)-PRO(2)-SER(2) 
+    1     2     3      2    100    25 ; GLY(1)-LYS(1) SBB 
+    2     6     7      2    100    25 ; LYS(1)-VAL(1) SBB 
+    6     8     9      2    100    25 ; VAL(1)-TRP(1) SBB 
+    8    13    14      2    100    25 ; TRP(1)-ASP(H) SBB 
+   13    16    17      2    100    25 ; ASP(H)-TRP(H) SBB 
+   16    21    22      2    100    25 ; TRP(H)-ILE(H) SBB 
+   21    23    24      2    100    25 ; ILE(H)-LYS(H) SBB 
+   23    27    28      2    100    25 ; LYS(H)-SER(H) SBB 
+   27    31    32      2    100    25 ; SER(H)-THR(H) SBB 
+   35    36    37      2    100    25 ; ALA(H)-LYS(H) SBB 
+   36    40    41      2    100    25 ; LYS(H)-LYS(H) SBB 
+   40    44    45      2    100    25 ; LYS(H)-LEU(H) SBB 
+   44    46    47      2    100    25 ; LEU(H)-TRP(H) SBB 
+   46    51    52      2    100    25 ; TRP(H)-ASN(H) SBB 
+   51    55    56      2    100    25 ; ASN(H)-SER(H) SBB 
+   55    59    60      2    100    25 ; SER(H)-GLU(H) SBB 
+   59    62    63      2    100    25 ; GLU(H)-PRO(H) SBB 
+   62    64    65      2    100    25 ; PRO(H)-VAL(H) SBB 
+   64    66    67      2    100    25 ; VAL(H)-LYS(H) SBB 
+   66    70    71      2    100    25 ; LYS(H)-GLU(H) SBB 
+   70    73    74      2    100    25 ; GLU(H)-LEU(H) SBB 
+   73    75    76      2    100    25 ; LEU(H)-LYS(H) SBB 
+   75    79    80      2    100    25 ; LYS(H)-ASN(H) SBB 
+   79    83    84      2    100    25 ; ASN(H)-THR(H) SBB 
+   87    88    89      2    100    25 ; ALA(H)-LEU(H) SBB 
+   88    90    91      2    100    25 ; LEU(H)-ASN(H) SBB 
+   95    96    97      2    100    25 ; ALA(H)-LYS(H) SBB 
+   96   100   101      2    100    25 ; LYS(H)-ASN(H) SBB 
+  100   104   105      2    100    25 ; ASN(H)-PHE(H) SBB 
+  104   108   109      2    100    25 ; PHE(H)-VAL(H) SBB 
+  110   111   112      2    100    25 ; ALA(H)-GLU(H) SBB 
+  111   114   115      2    100    25 ; GLU(H)-LYS(H) SBB 
+  114   118   119      2    100    25 ; LYS(H)-ILE(H) SBB 
+  121   122   123      2    100    25 ; ALA(2)-THR(2) SBB 
+  122   126   127      2    100    25 ; THR(2)-PRO(2) SBB 
+  126   128   129      2    100    25 ; PRO(2)-SER(2) SBB 
+    2     3     4      2    180    25 ; LYS 
+    8     9    10      2    210    50 ; TRP 
+    8     9    11      2     90    50 ; TRP 
+   16    17    18      2    210    50 ; TRP 
+   16    17    19      2     90    50 ; TRP 
+   23    24    25      2    180    25 ; LYS 
+   36    37    38      2    180    25 ; LYS 
+   40    41    42      2    180    25 ; LYS 
+   46    47    48      2    210    50 ; TRP 
+   46    47    49      2     90    50 ; TRP 
+   66    67    68      2    180    25 ; LYS 
+   75    76    77      2    180    25 ; LYS 
+   96    97    98      2    180    25 ; LYS 
+  104   105   106      2    150    50 ; PHE 
+  104   105   107      2    150    50 ; PHE 
+  114   115   116      2    180    25 ; LYS 
+[ dihedrals ] 
+    1     2     6     8      1   -120   400     1 ; GLY(1)-LYS(1)-VAL(1)-TRP(1) 
+    2     6     8    13      1   -120   400     1 ; LYS(1)-VAL(1)-TRP(1)-ASP(H) 
+    6     8    13    16      1   -120   400     1 ; VAL(1)-TRP(1)-ASP(H)-TRP(H) 
+    8    13    16    21      1   -120   400     1 ; TRP(1)-ASP(H)-TRP(H)-ILE(H) 
+   13    16    21    23      1   -120   400     1 ; ASP(H)-TRP(H)-ILE(H)-LYS(H) 
+   16    21    23    27      1   -120   400     1 ; TRP(H)-ILE(H)-LYS(H)-SER(H) 
+   21    23    27    31      1   -120   400     1 ; ILE(H)-LYS(H)-SER(H)-THR(H) 
+   23    27    31    35      1   -120   400     1 ; LYS(H)-SER(H)-THR(H)-ALA(H) 
+   27    31    35    36      1   -120   400     1 ; SER(H)-THR(H)-ALA(H)-LYS(H) 
+   31    35    36    40      1   -120   400     1 ; THR(H)-ALA(H)-LYS(H)-LYS(H) 
+   35    36    40    44      1   -120   400     1 ; ALA(H)-LYS(H)-LYS(H)-LEU(H) 
+   36    40    44    46      1   -120   400     1 ; LYS(H)-LYS(H)-LEU(H)-TRP(H) 
+   40    44    46    51      1   -120   400     1 ; LYS(H)-LEU(H)-TRP(H)-ASN(H) 
+   44    46    51    55      1   -120   400     1 ; LEU(H)-TRP(H)-ASN(H)-SER(H) 
+   46    51    55    59      1   -120   400     1 ; TRP(H)-ASN(H)-SER(H)-GLU(H) 
+   51    55    59    62      1   -120   400     1 ; ASN(H)-SER(H)-GLU(H)-PRO(H) 
+   55    59    62    64      1   -120   400     1 ; SER(H)-GLU(H)-PRO(H)-VAL(H) 
+   59    62    64    66      1   -120   400     1 ; GLU(H)-PRO(H)-VAL(H)-LYS(H) 
+   62    64    66    70      1   -120   400     1 ; PRO(H)-VAL(H)-LYS(H)-GLU(H) 
+   64    66    70    73      1   -120   400     1 ; VAL(H)-LYS(H)-GLU(H)-LEU(H) 
+   66    70    73    75      1   -120   400     1 ; LYS(H)-GLU(H)-LEU(H)-LYS(H) 
+   70    73    75    79      1   -120   400     1 ; GLU(H)-LEU(H)-LYS(H)-ASN(H) 
+   73    75    79    83      1   -120   400     1 ; LEU(H)-LYS(H)-ASN(H)-THR(H) 
+   75    79    83    87      1   -120   400     1 ; LYS(H)-ASN(H)-THR(H)-ALA(H) 
+   79    83    87    88      1   -120   400     1 ; ASN(H)-THR(H)-ALA(H)-LEU(H) 
+   83    87    88    90      1   -120   400     1 ; THR(H)-ALA(H)-LEU(H)-ASN(H) 
+   87    88    90    94      1   -120   400     1 ; ALA(H)-LEU(H)-ASN(H)-ALA(H) 
+   88    90    94    95      1   -120   400     1 ; LEU(H)-ASN(H)-ALA(H)-ALA(H) 
+   90    94    95    96      1   -120   400     1 ; ASN(H)-ALA(H)-ALA(H)-LYS(H) 
+   94    95    96   100      1   -120   400     1 ; ALA(H)-ALA(H)-LYS(H)-ASN(H) 
+   95    96   100   104      1   -120   400     1 ; ALA(H)-LYS(H)-ASN(H)-PHE(H) 
+   96   100   104   108      1   -120   400     1 ; LYS(H)-ASN(H)-PHE(H)-VAL(H) 
+  100   104   108   110      1   -120   400     1 ; ASN(H)-PHE(H)-VAL(H)-ALA(H) 
+  104   108   110   111      1   -120   400     1 ; PHE(H)-VAL(H)-ALA(H)-GLU(H) 
+  108   110   111   114      1   -120   400     1 ; VAL(H)-ALA(H)-GLU(H)-LYS(H) 
+  110   111   114   118      1   -120   400     1 ; ALA(H)-GLU(H)-LYS(H)-ILE(H) 
+  111   114   118   120      1   -120   400     1 ; GLU(H)-LYS(H)-ILE(H)-GLY(H) 
+  114   118   120   121      1   -120   400     1 ; LYS(H)-ILE(H)-GLY(H)-ALA(2) 
+  118   120   121   122      1   -120   400     1 ; ILE(H)-GLY(H)-ALA(2)-THR(2) 
+  120   121   122   126      1   -120   400     1 ; GLY(H)-ALA(2)-THR(2)-PRO(2) 
+  121   122   126   128      1   -120   400     1 ; ALA(2)-THR(2)-PRO(2)-SER(2) 
+    8    10    11     9      2      0    50 ; TRP 
+    9    10    12    11      2      0   200 ; TRP 
+   16    18    19    17      2      0    50 ; TRP 
+   17    18    20    19      2      0   200 ; TRP 
+   46    48    49    47      2      0    50 ; TRP 
+   47    48    50    49      2      0   200 ; TRP 
+  104   106   107   105      2      0    50 ; PHE 
+#ifdef POSRES 
+#ifndef POSRES_FC 
+#define POSRES_FC 1000.00 
+#endif 
+ [ position_restraints ] 
+      1    1    POSRES_FC    POSRES_FC    POSRES_FC 
+      2    1    POSRES_FC    POSRES_FC    POSRES_FC 
+      6    1    POSRES_FC    POSRES_FC    POSRES_FC 
+      8    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     13    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     16    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     21    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     23    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     27    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     31    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     35    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     36    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     40    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     44    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     46    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     51    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     55    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     59    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     62    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     64    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     66    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     70    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     73    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     75    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     79    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     83    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     87    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     88    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     90    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     94    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     95    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     96    1    POSRES_FC    POSRES_FC    POSRES_FC 
+    100    1    POSRES_FC    POSRES_FC    POSRES_FC 
+    104    1    POSRES_FC    POSRES_FC    POSRES_FC 
+    108    1    POSRES_FC    POSRES_FC    POSRES_FC 
+    110    1    POSRES_FC    POSRES_FC    POSRES_FC 
+    111    1    POSRES_FC    POSRES_FC    POSRES_FC 
+    114    1    POSRES_FC    POSRES_FC    POSRES_FC 
+    118    1    POSRES_FC    POSRES_FC    POSRES_FC 
+    120    1    POSRES_FC    POSRES_FC    POSRES_FC 
+    121    1    POSRES_FC    POSRES_FC    POSRES_FC 
+    122    1    POSRES_FC    POSRES_FC    POSRES_FC 
+    126    1    POSRES_FC    POSRES_FC    POSRES_FC 
+    128    1    POSRES_FC    POSRES_FC    POSRES_FC 
+#endif

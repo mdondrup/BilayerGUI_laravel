@@ -1,0 +1,125 @@
+[ moleculetype ] 
+Protein_A         1 
+[ atoms ] 
+    1    Qd     1   ILE    BB     1  1.0000 ; 1 
+    2    C1     1   ILE   SC1     2  0.0000 ; 1 
+    3    Nd     2   PHE    BB     3  0.0000 ; 1 
+    4   SC5     2   PHE   SC1     4  0.0000 ; 1 
+    5   SC5     2   PHE   SC2     5  0.0000 ; 1 
+    6   SC5     2   PHE   SC3     6  0.0000 ; 1 
+    7    Nd     3   GLY    BB     7  0.0000 ; 1 
+    8    N0     4   ALA    BB     8  0.0000 ; 1 
+    9    N0     5   ILE    BB     9  0.0000 ; H 
+   10    C1     5   ILE   SC1    10  0.0000 ; H 
+   11    C5     6   ALA    BB    11  0.0000 ; H 
+   12    N0     7   GLY    BB    12  0.0000 ; H 
+   13    N0     8   LEU    BB    13  0.0000 ; H 
+   14    C1     8   LEU   SC1    14  0.0000 ; H 
+   15    N0     9   LEU    BB    15  0.0000 ; H 
+   16    C1     9   LEU   SC1    16  0.0000 ; H 
+   17    Na    10   LYS    BB    17  0.0000 ; 2 
+   18    C3    10   LYS   SC1    18  0.0000 72.0000 ; 2 
+   19    Qd    10   LYS   SC2    19  0.0000 36.0000 ; 2 
+   20     D    10   LYS   SCP    20  1.0000 36.0000 ; 2 
+   21    Na    11   ASN    BB    21  0.0000 ; 2 
+   22   Nda    11   ASN   SC1    22  0.0000  0.0000 ; 2 
+   23     D    11   ASN   SCP    23  0.4600 36.0000 ; 2 
+   24     D    11   ASN   SCN    24 -0.4600 36.0000 ; 2 
+   25    Na    12   ILE    BB    25  0.0000 ; 2 
+   26    C1    12   ILE   SC1    26  0.0000 ; 2 
+   27    Qa    13   PHE    BB    27 -1.0000 ; 2 
+   28   SC5    13   PHE   SC1    28  0.0000 ; 2 
+   29   SC5    13   PHE   SC2    29  0.0000 ; 2 
+   30   SC5    13   PHE   SC3    30  0.0000 ; 2 
+[ virtual_sites2 ] 
+   22    23    24      1   0.50000 ; ASN 
+[ bonds ] 
+    3     4      1   0.31000  7500 ; PHE 
+   13    14      1   0.33000  7500 ; LEU 
+   15    16      1   0.33000  7500 ; LEU 
+   17    18      1   0.33000  5000 ; LYS 
+   18    19      1   0.28000  5000 ; LYS 
+   21    22      1   0.32000  5000 ; ASN 
+   27    28      1   0.31000  7500 ; PHE 
+[ constraints ] 
+    1     3      1   0.31000 ; ILE(1)-PHE(1) 
+    3     7      1   0.31000 ; PHE(1)-GLY(1) 
+    7     8      1   0.31000 ; GLY(1)-ALA(1) 
+    8     9      1   0.31000 ; ALA(1)-ILE(H) 
+    9    11      1   0.31000 ; ILE(H)-ALA(H) 
+   11    12      1   0.31000 ; ALA(H)-GLY(H) 
+   12    13      1   0.31000 ; GLY(H)-LEU(H) 
+   13    15      1   0.31000 ; LEU(H)-LEU(H) 
+   15    17      1   0.31000 ; LEU(H)-LYS(2) 
+   17    21      1   0.31000 ; LYS(2)-ASN(2) 
+   21    25      1   0.31000 ; ASN(2)-ILE(2) 
+   25    27      1   0.31000 ; ILE(2)-PHE(2) 
+    1     2      1   0.31000 ; ILE 
+    4     5      1   0.27000 ; PHE 
+    4     6      1   0.27000 ; PHE 
+    5     6      1   0.27000 ; PHE 
+    9    10      1   0.31000 ; ILE 
+   19    20      1   0.11000 ; LYS 
+   23    24      1   0.28000 ; ASN 
+   25    26      1   0.31000 ; ILE 
+   28    29      1   0.27000 ; PHE 
+   28    30      1   0.27000 ; PHE 
+   29    30      1   0.27000 ; PHE 
+[ angles ] 
+    1     3     7      2     96   700 ; ILE(1)-PHE(1)-GLY(1) 
+    3     7     8      2     96   700 ; PHE(1)-GLY(1)-ALA(1) 
+    7     8     9      2     96   700 ; GLY(1)-ALA(1)-ILE(H) 
+    8     9    11      2     96   700 ; ALA(1)-ILE(H)-ALA(H) 
+    9    11    12      2     96   700 ; ILE(H)-ALA(H)-GLY(H) 
+   11    12    13      2     96   700 ; ALA(H)-GLY(H)-LEU(H) 
+   12    13    15      2     96   700 ; GLY(H)-LEU(H)-LEU(H) 
+   13    15    17      2     96   700 ; LEU(H)-LEU(H)-LYS(2) 
+   15    17    21      2     96   700 ; LEU(H)-LYS(2)-ASN(2) 
+   17    21    25      2     96   700 ; LYS(2)-ASN(2)-ILE(2) 
+   21    25    27      2     96   700 ; ASN(2)-ILE(2)-PHE(2) 
+    2     1     3      2    100    25 ; ILE(1)-PHE(1) SBB 
+    1     3     4      2    100    25 ; ILE(1)-PHE(1) SBB 
+    8     9    10      2    100    25 ; ALA(1)-ILE(H) SBB 
+   12    13    14      2    100    25 ; GLY(H)-LEU(H) SBB 
+   13    15    16      2    100    25 ; LEU(H)-LEU(H) SBB 
+   15    17    18      2    100    25 ; LEU(H)-LYS(2) SBB 
+   17    21    22      2    100    25 ; LYS(2)-ASN(2) SBB 
+   21    25    26      2    100    25 ; ASN(2)-ILE(2) SBB 
+   25    27    28      2    100    25 ; ILE(2)-PHE(2) SBB 
+    3     4     5      2    150    50 ; PHE 
+    3     4     6      2    150    50 ; PHE 
+   17    18    19      2    180    25 ; LYS 
+   27    28    29      2    150    50 ; PHE 
+   27    28    30      2    150    50 ; PHE 
+[ dihedrals ] 
+    1     3     7     8      1   -120   400     1 ; ILE(1)-PHE(1)-GLY(1)-ALA(1) 
+    3     7     8     9      1   -120   400     1 ; PHE(1)-GLY(1)-ALA(1)-ILE(H) 
+    7     8     9    11      1   -120   400     1 ; GLY(1)-ALA(1)-ILE(H)-ALA(H) 
+    8     9    11    12      1   -120   400     1 ; ALA(1)-ILE(H)-ALA(H)-GLY(H) 
+    9    11    12    13      1   -120   400     1 ; ILE(H)-ALA(H)-GLY(H)-LEU(H) 
+   11    12    13    15      1   -120   400     1 ; ALA(H)-GLY(H)-LEU(H)-LEU(H) 
+   12    13    15    17      1   -120   400     1 ; GLY(H)-LEU(H)-LEU(H)-LYS(2) 
+   13    15    17    21      1   -120   400     1 ; LEU(H)-LEU(H)-LYS(2)-ASN(2) 
+   15    17    21    25      1   -120   400     1 ; LEU(H)-LYS(2)-ASN(2)-ILE(2) 
+   17    21    25    27      1   -120   400     1 ; LYS(2)-ASN(2)-ILE(2)-PHE(2) 
+    3     5     6     4      2      0    50 ; PHE 
+   27    29    30    28      2      0    50 ; PHE 
+#ifdef POSRES 
+#ifndef POSRES_FC 
+#define POSRES_FC 1000.00 
+#endif 
+ [ position_restraints ] 
+      1    1    POSRES_FC    POSRES_FC    POSRES_FC 
+      3    1    POSRES_FC    POSRES_FC    POSRES_FC 
+      7    1    POSRES_FC    POSRES_FC    POSRES_FC 
+      8    1    POSRES_FC    POSRES_FC    POSRES_FC 
+      9    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     11    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     12    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     13    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     15    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     17    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     21    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     25    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     27    1    POSRES_FC    POSRES_FC    POSRES_FC 
+#endif

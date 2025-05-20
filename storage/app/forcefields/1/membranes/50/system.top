@@ -1,0 +1,18 @@
+#include "toppar/martini_v2.2P.itp"
+#include "toppar/martini_v2.0_lipids_all_201506.itp"
+#include "toppar/martini_v2.0_ions.itp"
+#include "Protein_A.itp"
+
+[ system ]
+; name
+Martini system
+
+[ molecules ]
+; name        number
+POPE 187
+POPG 63
+POPE 188
+POPG 62
+PW          6101
+NA               124
+Protein_A   1

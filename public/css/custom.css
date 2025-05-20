@@ -1,0 +1,618 @@
+/*******************************/
+/** INICIO - Welcome - INICIO **/
+/*******************************/
+
+html.welcome, .welcome body {
+    background-color: #fff0;
+    color: #636b6f;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 200;
+    height: 100vh;
+    margin: 0;
+}
+
+.welcome .full-height {
+    height: 100vh;
+}
+
+.welcome .flex-center {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.welcome .position-ref {
+    position: relative;
+}
+
+.welcome .top-right {
+    position: absolute;
+    right: 10px;
+    top: 18px;
+}
+
+.welcome .content {
+    text-align: center;
+}
+
+.welcome .title {
+    font-size: 84px;
+}
+
+.welcome .links > a {
+    color: #636b6f;
+    padding: 0 25px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .1rem;
+
+    text-transform: uppercase;
+}
+
+.welcome .m-b-md {
+    margin-bottom: 30px;
+}
+
+/*************************/
+/** FIN - Welcome - FIN **/
+/*************************/
+
+body{
+    /*background: linear-gradient(to bottom, rgba(92, 77, 66, 1.0) 0%, rgba(92, 77, 66, 0.8) 100%), url(/storage/image/bg_03.jpg);*/
+    background: linear-gradient(to bottom, rgba(92, 77, 66, 1.0) 0%, rgba(92, 77, 66, 0.8) 100%);
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* Colores alternos tabla vertical*/
+/*
+td:nth-child(even) {
+  background-color: cornflowerblue!important;
+}*/
+
+.selector-inicio {
+    width: 10%;
+    display: inline;
+}
+
+.table td, .table th {
+    border-top: 0;
+  /*  table-layout: fixed;
+    width: 100%;*/
+
+        vertical-align: middle!important;
+
+}
+
+.tableComp table, .tableComp td, .tableComp th{
+border: 1px solid black;
+padding:7px!important;
+text-align: center;
+}
+
+.mostrar_ocultar_filtros {
+    cursor: pointer;
+}
+
+.pendiente {
+    color: #FFF;
+    background-color: red;
+    padding: 5px 10px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+#formulario-busqueda-avanzada input {
+    margin-bottom: 0 !important;
+}
+
+.opciones-busqueda-avanzada {
+    display: flex;
+    align-items: center;
+}
+#tabla-busqueda-avanzada{
+
+  font-size: 9pt;
+}
+#accordion{
+  font-size: 9pt;
+}
+#tabla-busqueda-avanzada th {
+    white-space: nowrap;
+    text-align: center;
+    border-bottom-width: thin;
+    border-bottom-color: #aaaaaa;
+
+
+}
+.VerticaDivision {
+  border-right-width: thin;
+  border-right:-color: #aaaaaa;
+  vertical-align: middle!important;
+}
+
+#tabla-busqueda-avanzada td {
+    white-space: nowrap;
+    text-align: center;
+}
+
+.filtro-busqueda-avanzada .form-group {
+    margin-bottom: 0 !important;
+}
+
+.filtro-busqueda-avanzada{
+
+  border-radius: 8px;
+    border-style: solid;
+    border-width: 1px;
+    padding: 11px;
+    border-color: white;
+
+}
+
+i.fas {
+    cursor: pointer;
+}
+
+.chartStatCenter{
+  margin: 0px auto;
+}
+
+.ordeparameterlipid{
+    border-radius: 15px;
+    mix-blend-mode: multiply;
+
+}
+.chart-container {
+  position: relative;
+  margin: auto;
+  width: 80vw;
+  height: 70vh;
+
+}
+.chart-container-half {
+  position: relative;
+  margin: auto;
+  width: 80vw;
+  height: 50vh;
+
+}
+
+#accordion .title{
+  font-size: 12pt;
+  font-weight: bold;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.title{
+  font-size: 15pt;
+  font-weight: bold;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.right{
+  float: right;
+}
+
+.btn-outline-secondary {
+    /*color: #e07558;
+    border-color: #e07558;*/
+
+    color: white;
+    border-color: white;
+  }
+
+.btn-outline-secondary:hover {
+    color: #fff;
+    background-color:   #e85d57;
+    border-color: #ffffff;
+}
+
+
+.bg-solapa{
+  color: #fff;
+    background-color: rgb(170 170 170 / 50%);
+  border-color: #ffffff;
+  /*-webkit-box-shadow: 0px 20px 23px 2px rgba(0,0,0,0.37);
+  box-shadow: 0px 20px 23px 2px rgba(0,0,0,0.37);*/
+}
+
+.bg-datos{
+  height: auto;
+  /* Set a specific height */
+
+  min-height: 100vh;
+  /*background: linear-gradient(to bottom, #4e4e4e 0%, #000000 100%);*/
+/*background: linear-gradient(to bottom, rgba(81, 214, 256, 0.8) 0%, rgba(0, 122, 133, 0.8) 100%), url(/storage/images/bg_03.jpg);*/
+background: linear-gradient(to bottom, rgba(81, 214, 256, 0.8) 0%, rgba(0, 122, 133, 0.8) 100%);
+
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.txt-white{
+  color: white;
+}
+table{
+color: white!important;
+
+}
+.titulochart{
+font-size: 18pt;
+font-weight: bold;
+
+}
+.subtitulochart{
+  font-size: 15pt;
+  font-weight: bold;
+
+}
+
+
+.titulo{
+
+  font-size: 18pt;
+    font-weight: bold;
+    text-decoration: none;
+    color: #ffffff;
+    padding-bottom: 15px;
+}
+
+.txt-titulo{
+
+  font-size: 12pt;
+    font-weight: bold;
+    text-decoration: none;
+    color: #ffffff;
+    padding-bottom: 15px;
+}
+
+.txt-dato{
+  font-size: 12pt;
+  position: relative;
+  left: 9px;
+  color: #ffffff;
+}
+.card-datos{
+  border-bottom-right-radius: 40px;
+  border-bottom-left-radius: 40px;
+}
+
+.card-header{
+  background-color: rgb(255 255 255 / 28%);
+
+}
+.nav-tabs-conf{
+}
+
+
+.bg-mole{
+  background-color: rgb(255 255 255 / 28%);
+  /*border-radius: 20px;*/
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+.bg-peptide{
+padding: 10px;
+background-color: white;
+border-radius: 10px;
+margin-top: 25px;
+}
+
+.Chart_subtxt{
+position: relative;
+
+}
+.details{
+ width: 98%;
+}
+
+.bg-jmol{
+  background-color: #aaaaaa;
+  border-radius: 20px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.bg-jmolAnalysis{
+  background-color: #aaaaaa;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.head-mole{
+    background-color: rgb(255 255 255 / 50%);
+    padding: 6px;
+}
+
+.nav-tabs .nav-item {
+  -webkit-box-shadow: inset 0px -9px 0px 0px rgba(0,0,0,0.38);
+  box-shadow: inset 0px -3px 0px 0px rgba(0,0,0,0.38);
+  background-color: #318999;
+}
+.nav-tabs{
+  border: none;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color:  #58b4d1;
+    border-color: #007A85;
+}
+.btn-primary:hover {
+    color: #fff;
+    background-color: #007A85;
+    border-color: #007A85;
+}
+
+.btn-link{
+  color: white;
+}
+.btn-link:hover{
+  color: #c33331;
+}
+
+.jmol_zorder div:nth-child(2){
+ z_order: 0!important;
+
+
+}
+
+.expandCompare{
+  width: fit-content;
+  margin: auto;
+}
+
+.card-body {
+  padding: 1.25rem;
+  /*background-color:  #484343;
+  border-radius: 20px;*/
+}
+
+h2 {
+  color : white;
+}
+
+hr{
+  color:white;
+}
+
+label{
+  color: white;
+  text-decoration: none;
+  font-size: 12pt;
+  text-align: left;
+}
+
+.logos{
+  border-radius: 15px;
+      background-color: white;
+      padding: 7px;
+      margin: 10px;
+}
+.txt_desc{
+
+  font-size: 16pt;
+}
+.txt_header{
+  background-color: white;
+  color: black;
+  font-size: 13pt;
+  font-weight: bold;
+  padding: 2px;
+  border-radius: 5px;
+
+}
+
+.txt_dato{
+  font-size: 14pt;
+}
+
+.listAnalist{
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.separador{
+background-color: rgb(226 226 226 / 38%);
+color: white;
+border-radius: 5px;
+margin-top: 30px;
+
+}
+.separador h3{
+padding-left: 30px;
+
+}
+.cardlipids{
+
+}
+.cardlipids h5{
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  padding: 10px;
+  background-color: rgb(255 255 255 / 20%);
+
+}
+
+a{
+  color: white;
+  text-decoration: underline;
+  background-color: transparent;
+
+}
+
+a:hover {
+    color: #000000;
+    text-decoration: underline;
+}
+
+.table-responsive {
+     background-color: rgb(226 226 226 / 38%);
+}
+
+.form-control{
+  color: black;
+  background-color: white;
+}
+.form-control:hover{
+  color: black;
+  background-color: white;
+}
+
+.bg-primary {
+    background-color: #007A85!important;
+}
+
+.form-control:focus{
+  color: black;
+  background-color: white;
+}
+
+.form-control::-webkit-input-placeholder {
+  color: white;
+}
+
+
+.search_result{
+background-color: rgb(255 255 255 / 20%);
+    border-radius: 10px;
+
+}
+/* Tooltip container */
+.tooltip-2 {
+ position: relative;
+ display: inline-block;
+ color: white;
+ font-size: 10pt;
+
+}
+
+/* Tooltip text */
+.tooltip-2 .tooltiptext {
+ visibility: hidden;
+ width: 300px;
+ background-color: #555;
+ color: #fff;
+ text-align: center;
+ padding: 5px 0;
+ border-radius: 6px;
+ padding: 4px;
+ line-height: 150%;
+
+ /* Position the tooltip text */
+ position: absolute;
+ z-index: 1;
+ bottom: 125%;
+ left: 50%;
+ margin-left: -60px;
+
+ /* Fade in tooltip */
+ opacity: 0;
+ transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip-2 .tooltiptext::after {
+ content: "";
+ position: absolute;
+ top: 100%;
+ left: 50%;
+ margin-left: -5px;
+ border-width: 5px;
+ border-style: solid;
+ border-color: #555 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip-2:hover .tooltiptext {
+ visibility: visible;
+ opacity: 1;
+}
+
+/* by amino acid */
+.polar{
+  color:yellow;
+}
+.acido{
+  color:red;
+}
+.hidrofobico{
+  color:#39f139;
+}
+.basico{
+  color:blue;
+}
+
+
+.DistanceCol
+{
+  color:#ffc107;
+  }
+.angleCol{
+  color:#a3dc34;
+}
+.tableAnalisys{
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.multi-range{
+font-size: 11px;
+}
+
+.noUi-value{
+  color:white;
+  top:12px;
+}
+.noUi-marker-horizontal.noUi-marker {
+  height: 5px!important;
+}
+.noUi-marker-horizontal.noUi-marker-large {
+  height: 10px!important;
+}
+
+
+.noUi-horizontal .noUi-tooltip {
+
+    background-color: #d2a95e;
+    z-index: 22;
+    bottom: -6%!important;
+    min-width: 34px;
+}
+
+/*  AUTOCOMPLETE style */
+.ui-menu-item-wrapper:hover {
+  background-color: orange;
+}
+.ui-menu-item-wrapper:focus {
+  background-color: orange;
+}
+.ui-autocomplete {
+  max-height: 100px;
+  overflow-y: auto;
+  /* prevent horizontal scrollbar */
+  overflow-x: hidden;
+  background-color: white;
+  max-width: 300px;
+  list-style-type: none;
+}
+/* IE 6 doesn't support max-height
+ * we use height instead, but this forces the menu to always be this tall
+ */
+* html .ui-autocomplete {
+  height: 100px;
+}
+
+ /* MANSORY */
+.grid-item { width: 200px; }
+.grid-item--width2 { width: 400px; }

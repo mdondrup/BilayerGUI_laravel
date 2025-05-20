@@ -1,0 +1,6 @@
+TITLE     MDANALYSIS FRAME 0: Created by PDBWriter
+CRYST1  128.697  128.697   84.730  90.00  90.00  90.00 P 1           1
+ATOM      1  W   PW  M 520      51.320  44.170  68.280  1.00  0.00      SYST W
+ATOM      2  WP  PW  M 520      51.240  42.810  68.630  1.00  0.00      SYST P
+ATOM      3  WM  PW  M 520      51.430  43.650  66.980  1.00  0.00      SYST W
+END

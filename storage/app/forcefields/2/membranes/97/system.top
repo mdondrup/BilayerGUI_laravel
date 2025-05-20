@@ -1,0 +1,23 @@
+#include "toppar/martini_v2.2.itp"
+#include "toppar/martini_v2.0_lipids_all_201506.itp"
+#include "toppar/martini_v2.0_ions.itp"
+#include "Protein_A.itp"
+
+[ system ]
+; name
+Martini system
+
+[ molecules ]
+; name        number
+CHOL 77
+DOPC 70
+DOPE 37
+DPSM 66
+CHOL 77
+DOPC 37
+DOPE 70
+DOPS 50
+DPSM 16
+W           6231
+NA               38
+Protein_A   1

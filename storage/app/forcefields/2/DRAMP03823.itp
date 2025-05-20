@@ -1,0 +1,129 @@
+[ moleculetype ] 
+Protein_A         1 
+[ atoms ] 
+    1    Qd     1   ALA    BB     1  1.0000 ; 1 
+    2    Nd     2   LEU    BB     2  0.0000 ; 1 
+    3   AC1     2   LEU   SC1     3  0.0000 ; 1 
+    4    Nd     3   TRP    BB     4  0.0000 ; 1 
+    5   SC4     3   TRP   SC1     5  0.0000 ; 1 
+    6   SNd     3   TRP   SC2     6  0.0000 ; 1 
+    7   SC5     3   TRP   SC3     7  0.0000 ; 1 
+    8   SC5     3   TRP   SC4     8  0.0000 ; 1 
+    9    Nd     4   LYS    BB     9  0.0000 ; 1 
+   10    C3     4   LYS   SC1    10  0.0000 ; 1 
+   11    Qd     4   LYS   SC2    11  1.0000 ; 1 
+   12    N0     5   THR    BB    12  0.0000 ; H 
+   13    P1     5   THR   SC1    13  0.0000 ; H 
+   14    N0     6   LEU    BB    14  0.0000 ; H 
+   15   AC1     6   LEU   SC1    15  0.0000 ; H 
+   16    N0     7   LEU    BB    16  0.0000 ; H 
+   17   AC1     7   LEU   SC1    17  0.0000 ; H 
+   18    N0     8   LYS    BB    18  0.0000 ; H 
+   19    C3     8   LYS   SC1    19  0.0000 ; H 
+   20    Qd     8   LYS   SC2    20  1.0000 ; H 
+   21    N0     9   LYS    BB    21  0.0000 ; H 
+   22    C3     9   LYS   SC1    22  0.0000 ; H 
+   23    Qd     9   LYS   SC2    23  1.0000 ; H 
+   24    Na    10   VAL    BB    24  0.0000 ; 2 
+   25   AC2    10   VAL   SC1    25  0.0000 ; 2 
+   26    Na    11   LEU    BB    26  0.0000 ; 2 
+   27   AC1    11   LEU   SC1    27  0.0000 ; 2 
+   28    Na    12   LYS    BB    28  0.0000 ; 2 
+   29    C3    12   LYS   SC1    29  0.0000 ; 2 
+   30    Qd    12   LYS   SC2    30  1.0000 ; 2 
+   31    Qa    13   ALA    BB    31 -1.0000 ; 2 
+[ bonds ] 
+    2     3      1   0.33000  7500 ; LEU 
+    4     5      1   0.30000  5000 ; TRP 
+    9    10      1   0.33000  5000 ; LYS 
+   10    11      1   0.28000  5000 ; LYS 
+   14    15      1   0.33000  7500 ; LEU 
+   16    17      1   0.33000  7500 ; LEU 
+   18    19      1   0.33000  5000 ; LYS 
+   19    20      1   0.28000  5000 ; LYS 
+   21    22      1   0.33000  5000 ; LYS 
+   22    23      1   0.28000  5000 ; LYS 
+   26    27      1   0.33000  7500 ; LEU 
+   28    29      1   0.33000  5000 ; LYS 
+   29    30      1   0.28000  5000 ; LYS 
+[ constraints ] 
+    1     2      1   0.31000 ; ALA(1)-LEU(1) 
+    2     4      1   0.31000 ; LEU(1)-TRP(1) 
+    4     9      1   0.31000 ; TRP(1)-LYS(1) 
+    9    12      1   0.31000 ; LYS(1)-THR(H) 
+   12    14      1   0.31000 ; THR(H)-LEU(H) 
+   14    16      1   0.31000 ; LEU(H)-LEU(H) 
+   16    18      1   0.31000 ; LEU(H)-LYS(H) 
+   18    21      1   0.31000 ; LYS(H)-LYS(H) 
+   21    24      1   0.31000 ; LYS(H)-VAL(2) 
+   24    26      1   0.31000 ; VAL(2)-LEU(2) 
+   26    28      1   0.31000 ; LEU(2)-LYS(2) 
+   28    31      1   0.31000 ; LYS(2)-ALA(2) 
+    5     6      1   0.27000 ; TRP 
+    5     7      1   0.27000 ; TRP 
+    6     7      1   0.27000 ; TRP 
+    6     8      1   0.27000 ; TRP 
+    7     8      1   0.27000 ; TRP 
+   12    13      1   0.26000 ; THR 
+   24    25      1   0.26500 ; VAL 
+[ angles ] 
+    1     2     4      2     96   700 ; ALA(1)-LEU(1)-TRP(1) 
+    2     4     9      2     96   700 ; LEU(1)-TRP(1)-LYS(1) 
+    4     9    12      2     96   700 ; TRP(1)-LYS(1)-THR(H) 
+    9    12    14      2     96   700 ; LYS(1)-THR(H)-LEU(H) 
+   12    14    16      2     96   700 ; THR(H)-LEU(H)-LEU(H) 
+   14    16    18      2     96   700 ; LEU(H)-LEU(H)-LYS(H) 
+   16    18    21      2     96   700 ; LEU(H)-LYS(H)-LYS(H) 
+   18    21    24      2     96   700 ; LYS(H)-LYS(H)-VAL(2) 
+   21    24    26      2     96   700 ; LYS(H)-VAL(2)-LEU(2) 
+   24    26    28      2     96   700 ; VAL(2)-LEU(2)-LYS(2) 
+   26    28    31      2     96   700 ; LEU(2)-LYS(2)-ALA(2) 
+    1     2     3      2    100    25 ; ALA(1)-LEU(1) SBB 
+    2     4     5      2    100    25 ; LEU(1)-TRP(1) SBB 
+    4     9    10      2    100    25 ; TRP(1)-LYS(1) SBB 
+    9    12    13      2    100    25 ; LYS(1)-THR(H) SBB 
+   12    14    15      2    100    25 ; THR(H)-LEU(H) SBB 
+   14    16    17      2    100    25 ; LEU(H)-LEU(H) SBB 
+   16    18    19      2    100    25 ; LEU(H)-LYS(H) SBB 
+   18    21    22      2    100    25 ; LYS(H)-LYS(H) SBB 
+   21    24    25      2    100    25 ; LYS(H)-VAL(2) SBB 
+   24    26    27      2    100    25 ; VAL(2)-LEU(2) SBB 
+   26    28    29      2    100    25 ; LEU(2)-LYS(2) SBB 
+    4     5     6      2    210    50 ; TRP 
+    4     5     7      2     90    50 ; TRP 
+    9    10    11      2    180    25 ; LYS 
+   18    19    20      2    180    25 ; LYS 
+   21    22    23      2    180    25 ; LYS 
+   28    29    30      2    180    25 ; LYS 
+[ dihedrals ] 
+    1     2     4     9      1   -120   400     1 ; ALA(1)-LEU(1)-TRP(1)-LYS(1) 
+    2     4     9    12      1   -120   400     1 ; LEU(1)-TRP(1)-LYS(1)-THR(H) 
+    4     9    12    14      1   -120   400     1 ; TRP(1)-LYS(1)-THR(H)-LEU(H) 
+    9    12    14    16      1   -120   400     1 ; LYS(1)-THR(H)-LEU(H)-LEU(H) 
+   12    14    16    18      1   -120   400     1 ; THR(H)-LEU(H)-LEU(H)-LYS(H) 
+   14    16    18    21      1   -120   400     1 ; LEU(H)-LEU(H)-LYS(H)-LYS(H) 
+   16    18    21    24      1   -120   400     1 ; LEU(H)-LYS(H)-LYS(H)-VAL(2) 
+   18    21    24    26      1   -120   400     1 ; LYS(H)-LYS(H)-VAL(2)-LEU(2) 
+   21    24    26    28      1   -120   400     1 ; LYS(H)-VAL(2)-LEU(2)-LYS(2) 
+   24    26    28    31      1   -120   400     1 ; VAL(2)-LEU(2)-LYS(2)-ALA(2) 
+    4     6     7     5      2      0    50 ; TRP 
+    5     6     8     7      2      0   200 ; TRP 
+#ifdef POSRES 
+#ifndef POSRES_FC 
+#define POSRES_FC 1000.00 
+#endif 
+ [ position_restraints ] 
+      1    1    POSRES_FC    POSRES_FC    POSRES_FC 
+      2    1    POSRES_FC    POSRES_FC    POSRES_FC 
+      4    1    POSRES_FC    POSRES_FC    POSRES_FC 
+      9    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     12    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     14    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     16    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     18    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     21    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     24    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     26    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     28    1    POSRES_FC    POSRES_FC    POSRES_FC 
+     31    1    POSRES_FC    POSRES_FC    POSRES_FC 
+#endif
