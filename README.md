@@ -1,3 +1,18 @@
+# Synopsis
+
+A portal for visualization of molecular simulations
+
+## Installation
+
+* clone this repository
+* Install the dependencies with ``` composer install ```
+* Create a .env configuration file from the example environment ``` cp .env.example .env ```
+* Create the pp key: ``` php artisan key:generate ```
+* Create the database
+* Edit the configuration file and add the database credentials
+* Create the database: ``` php artisan migrate ```
+
+
 # Supepmen
 
 Portal para visualizar datos de simulaciones con moléculas
