@@ -19,22 +19,13 @@ use Illuminate\Support\Collection;
 
     // PATH A GIThub de la base de datos https://github.com/NMRLipids/Databank/tree/main/Data/Simulations  -> quita Databank de la base de datos y añade esto --> tree/main/
     // https://github.com/NMRLipids/Databank/tree/main/Data/Simulations/d15/255/d152552d182b9d3b623ca5cc03700fef00505b05/f7dd41f2428fbc621fed20aefa8cceafaf761d53/POPCOrderParameters.json
-
     // https://raw.githubusercontent.com/NMRLipids/Databank/main/  <--- descarga del json en Raw
-
     // https://github.com/NMRLipids/Databank/tree/main/Data/Simulations  <-- ?¿?¿ Nueva url
     // fd8/18f/fd818f1fa1b32dcd80ac3a124e76bd2d73705abe/fd9cef87eca7bfbaac8581358f2d8f13d8d43cd1
 
-    //$GitHubURL = 'https://raw.githubusercontent.com/NMRLipids/Databank/main/Data/Simulations/';
-    $GitHubURL =    'https://raw.githubusercontent.com/NMRLipids/Databank/main/';
-    $GitHubURLEXP = 'https://raw.githubusercontent.com/NMRLipids/Databank/main/';
-/*  $GitHubURL = 'https://raw.githubusercontent.com/NMRLipids/Databank/main/Data/';
-  $GitHubURLEXP = 'https://raw.githubusercontent.com/NMRLipids/Databank/main/Data/';*/
-    //$GitHubURLEXP = 'https://raw.githubusercontent.com/NMRLipids/';
-
-    //https://raw.githubusercontent.com/NMRLipids/Databank/main/Data/Ranking/CHOL_total_Ranking.json
-
-    //$GitHubURL = "https://raw.githubusercontent.com/NMRLipids/Databank/main/";
+    $GitHubURL =    'https://raw.githubusercontent.com/NMRLipids/BilayerData/main/';
+    $GitHubURLEXP = 'https://raw.githubusercontent.com/NMRLipids/BilayerData/main/';
+    // TODO: Why do we have two same vars?
 
     function filtraValor($val)
     {
@@ -765,7 +756,7 @@ die();
 
                                                     <span class="txt-dato">
                                                         <a
-                                                            href="{{ 'https://github.com/NMRLipids/Databank/tree/main/Data/Simulations/' . $trayectoria->git_path }}">
+                                                            href="{{ 'https://github.com/NMRLipids/BilayerData/tree/main/Simulations/' . $trayectoria->git_path }}">
                                                             <span>See the system in : </span><img style="width: 120px;"
                                                                 src="{{ asset('storage/images/github.png') }}">
                                                         </a>
