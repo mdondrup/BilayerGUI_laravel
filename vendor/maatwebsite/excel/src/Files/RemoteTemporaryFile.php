@@ -2,6 +2,8 @@
 
 namespace Maatwebsite\Excel\Files;
 
+use Illuminate\Support\Arr;
+
 class RemoteTemporaryFile extends TemporaryFile
 {
     /**
@@ -25,9 +27,9 @@ class RemoteTemporaryFile extends TemporaryFile
     private $localTemporaryFile;
 
     /**
-     * @param string             $disk
-     * @param string             $filename
-     * @param LocalTemporaryFile $localTemporaryFile
+     * @param  string  $disk
+     * @param  string  $filename
+     * @param  LocalTemporaryFile  $localTemporaryFile
      */
     public function __construct(string $disk, string $filename, LocalTemporaryFile $localTemporaryFile)
     {
@@ -91,13 +93,14 @@ class RemoteTemporaryFile extends TemporaryFile
     /**
      * @return TemporaryFile
      */
-    public function sync(): TemporaryFile
+    public function sync(bool $copy = true): TemporaryFile
     {
         if (!$this->localTemporaryFile->exists()) {
-            touch($this->localTemporaryFile->getLocalPath());
+            $this->localTemporaryFile = resolve(TemporaryFileFactory::class)
+                ->makeLocal(Arr::last(explode('/', $this->filename)));
         }
 
-        $this->disk()->copy(
+        $copy && $this->disk()->copy(
             $this,
             $this->localTemporaryFile->getLocalPath()
         );
@@ -133,7 +136,7 @@ class RemoteTemporaryFile extends TemporaryFile
     }
 
     /**
-     * @param string|resource $contents
+     * @param  string|resource  $contents
      */
     public function put($contents)
     {

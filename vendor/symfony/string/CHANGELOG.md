@@ -1,6 +1,32 @@
 CHANGELOG
 =========
 
+7.3
+---
+
+ * Add the `AbstractString::pascal()` method
+
+7.2
+---
+
+ * Add `TruncateMode` enum to handle more truncate methods
+ * Add the `AbstractString::kebab()` method
+
+7.1
+---
+
+ * Add `localeLower()`, `localeUpper()`, `localeTitle()` methods to `AbstractUnicodeString`
+
+6.2
+---
+
+  * Add support for emoji in `AsciiSlugger`
+
+5.4
+---
+
+ * Add `trimSuffix()` and `trimPrefix()` methods
+
 5.3
 ---
 

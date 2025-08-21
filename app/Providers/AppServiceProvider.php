@@ -2,31 +2,23 @@
 
 namespace App\Providers;
 
-//use Gragot\Laravel\Log; //TODO: Fix this
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         //
     }
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        /*DB::listen(function ($query) {
-            Log::sql($query->sql);
-        });*/
+        //
     }
 }

@@ -9,28 +9,37 @@
  */
 namespace PHPUnit\Framework;
 
-use function count;
+use function assert;
+use function class_exists;
 use function explode;
-use PHPUnit\Util\Test as TestUtil;
+use PHPUnit\Framework\TestSize\TestSize;
+use PHPUnit\Metadata\Api\Groups;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class DataProviderTestSuite extends TestSuite
 {
     /**
-     * @var string[]
+     * @var list<ExecutionOrderDependency>
      */
-    private $dependencies = [];
+    private array $dependencies = [];
 
     /**
-     * @param string[] $dependencies
+     * @var ?non-empty-list<ExecutionOrderDependency>
+     */
+    private ?array $providedTests = null;
+
+    /**
+     * @param list<ExecutionOrderDependency> $dependencies
      */
     public function setDependencies(array $dependencies): void
     {
         $this->dependencies = $dependencies;
 
-        foreach ($this->tests as $test) {
+        foreach ($this->tests() as $test) {
             if (!$test instanceof TestCase) {
                 continue;
             }
@@ -39,25 +48,38 @@ final class DataProviderTestSuite extends TestSuite
         }
     }
 
-    public function getDependencies(): array
+    /**
+     * @return non-empty-list<ExecutionOrderDependency>
+     */
+    public function provides(): array
     {
-        return $this->dependencies;
-    }
+        if ($this->providedTests === null) {
+            $this->providedTests = [new ExecutionOrderDependency($this->name())];
+        }
 
-    public function hasDependencies(): bool
-    {
-        return count($this->dependencies) > 0;
+        return $this->providedTests;
     }
 
     /**
-     * Returns the size of the each test created using the data provider(s).
-     *
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @return list<ExecutionOrderDependency>
      */
-    public function getSize(): int
+    public function requires(): array
     {
-        [$className, $methodName] = explode('::', $this->getName());
+        // A DataProviderTestSuite does not have to traverse its child tests
+        // as these are inherited and cannot reference dataProvider rows directly
+        return $this->dependencies;
+    }
 
-        return TestUtil::getSize($className, $methodName);
+    /**
+     * Returns the size of each test created using the data provider(s).
+     */
+    public function size(): TestSize
+    {
+        [$className, $methodName] = explode('::', $this->name());
+
+        assert(class_exists($className));
+        assert($methodName !== '');
+
+        return (new Groups)->size($className, $methodName);
     }
 }

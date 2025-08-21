@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\SitemapXmlController;
-
+use App\Http\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,33 +30,33 @@ Route::get('/advanced-search/result', 'BusquedaAvanzadaController@results')->nam
 Route::post('/advanced-search/export', 'BusquedaAvanzadaController@export')->name('advanced-search.export');
 
 // TEST de busqueda avanzada
-Route::get('/new-advanced-search', 'NewAdvancedSearchController@form')->name('new_advanced_search.form');
-Route::get('/new-advanced-search/result', 'NewAdvancedSearchController@results')->name('new_advanced_search.results');
-Route::get('/new-advanced-search/compare', 'NewAdvancedSearchController@compare')->name('new_advanced_search.compare');
-Route::post('/new-advanced-search/updatecompare', 'NewAdvancedSearchController@updatecompare')->name('new_advanced_search.updatecompare');
-Route::get('/new-advanced-search/export', 'NewAdvancedSearchController@resultsExport')->name('new_advanced_search.resultsExportacion');
+Route::get('/new-advanced-search', 'App\Http\Controllers\NewAdvancedSearchController@form')->name('new_advanced_search.form');
+Route::get('/new-advanced-search/result', 'App\Http\Controllers\NewAdvancedSearchController@results')->name('new_advanced_search.results');
+Route::get('/new-advanced-search/compare', 'App\Http\Controllers\NewAdvancedSearchController@compare')->name('new_advanced_search.compare');
+Route::post('/new-advanced-search/updatecompare', 'App\Http\Controllers\NewAdvancedSearchController@updatecompare')->name('new_advanced_search.updatecompare');
+Route::get('/new-advanced-search/export', 'App\Http\Controllers\NewAdvancedSearchController@resultsExport')->name('new_advanced_search.resultsExportacion');
 
-Route::get('/new-advanced-search/exportcompare', 'NewAdvancedSearchController@exportarcompare')->name('new_advanced_search.exportarcompare');
+Route::get('/new-advanced-search/exportcompare', 'App\Http\Controllers\NewAdvancedSearchController@exportarcompare')->name('new_advanced_search.exportarcompare');
 // ------
 // Estadisticas
-Route::get('/statistics', 'StatisticsController@results')->name('statistics.results');
-Route::get('/totals', 'StatisticsController@totals')->name('statistics.totals');
+Route::get('/statistics', 'App\Http\Controllers\StatisticsController@results')->name('statistics.results');
+Route::get('/totals', 'App\Http\Controllers\StatisticsController@totals')->name('statistics.totals');
 // File
-Route::get('files/{id}/{file}', 'FileController@download')->name('download');
-Route::get('filesp/{id}/{file}', 'FileController@downloadp')->name('downloadp');
-Route::get('filesff/{id}/{file}', 'FileController@downloadff')->name('downloadff');
+Route::get('files/{id}/{file}', 'App\Http\Controllers\FileController@download')->name('download');
+Route::get('filesp/{id}/{file}', 'App\Http\Controllers\FileController@downloadp')->name('downloadp');
+Route::get('filesff/{id}/{file}', 'FApp\Http\Controllers\ileController@downloadff')->name('downloadff');
 
-Route::get('/filtro/{codigo}', 'FiltrosController@html')->name('filtros.html');
-Route::get('/filtro-busqueda-avanzada/{codigo}/{numero}', 'FiltrosController@htmlBusquedaAvanzada')->name('filtros.html_busqueda_avanzada');
-Route::get('/trajectories/{trayectoria_id}', 'TrayectoriasController@show')->name('trayectorias.show');
+Route::get('/filtro/{codigo}', 'App\Http\Controllers\FiltrosController@html')->name('filtros.html');
+Route::get('/filtro-busqueda-avanzada/{codigo}/{numero}', 'App\Http\Controllers\FiltrosController@htmlBusquedaAvanzada')->name('filtros.html_busqueda_avanzada');
+Route::get('/trajectories/{trayectoria_id}', 'App\Http\Controllers\TrayectoriasController@show')->name('trayectorias.show');
 
-Route::get('/filtro-busqueda-avanzada-selects/{codigo}/{numero}', 'FiltrosController@htmlBusquedaAvanzadaSelects')->name('filtros.html_busqueda_avanzada_selects');
+Route::get('/filtro-busqueda-avanzada-selects/{codigo}/{numero}', 'App\Http\Controllers\FiltrosController@htmlBusquedaAvanzadaSelects')->name('filtros.html_busqueda_avanzada_selects');
 
 
-Route::get('/search', 'SearchController@results')->name('search.results');
+Route::get('/search', 'App\Http\Controllers\SearchController@results')->name('search.results');
 
 // AUTOCOMPLETE
-Route::get('/search/basic', 'SearchController@basic')->name('search.basic');
+Route::get('/search/basic', 'App\Http\Controllers\SearchController@basic')->name('search.basic');
 
 
 // Esto no sirve

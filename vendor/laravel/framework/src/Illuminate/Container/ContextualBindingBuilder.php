@@ -33,7 +33,6 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract
      *
      * @param  \Illuminate\Contracts\Container\Container  $container
      * @param  string|array  $concrete
-     * @return void
      */
     public function __construct(Container $container, $concrete)
     {
@@ -80,5 +79,17 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract
 
             return is_array($taggedServices) ? $taggedServices : iterator_to_array($taggedServices);
         });
+    }
+
+    /**
+     * Specify the configuration item to bind as a primitive.
+     *
+     * @param  string  $key
+     * @param  mixed  $default
+     * @return void
+     */
+    public function giveConfig($key, $default = null)
+    {
+        $this->give(fn ($container) => $container->get('config')->get($key, $default));
     }
 }

@@ -7,8 +7,11 @@ use Illuminate\Contracts\Redis\Factory;
 use Illuminate\Redis\Connections\Connection;
 use Illuminate\Redis\Connectors\PhpRedisConnector;
 use Illuminate\Redis\Connectors\PredisConnector;
+use Illuminate\Support\Arr;
 use Illuminate\Support\ConfigurationUrlParser;
 use InvalidArgumentException;
+
+use function Illuminate\Support\enum_value;
 
 /**
  * @mixin \Illuminate\Redis\Connections\Connection
@@ -63,7 +66,6 @@ class RedisManager implements Factory
      * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @param  string  $driver
      * @param  array  $config
-     * @return void
      */
     public function __construct($app, $driver, array $config)
     {
@@ -75,12 +77,12 @@ class RedisManager implements Factory
     /**
      * Get a Redis connection by name.
      *
-     * @param  string|null  $name
+     * @param  \UnitEnum|string|null  $name
      * @return \Illuminate\Redis\Connections\Connection
      */
     public function connection($name = null)
     {
-        $name = $name ?: 'default';
+        $name = enum_value($name) ?: 'default';
 
         if (isset($this->connections[$name])) {
             return $this->connections[$name];
@@ -108,7 +110,7 @@ class RedisManager implements Factory
         if (isset($this->config[$name])) {
             return $this->connector()->connect(
                 $this->parseConnectionConfiguration($this->config[$name]),
-                $options
+                array_merge(Arr::except($options, 'parameters'), ['parameters' => Arr::get($options, 'parameters.'.$name, Arr::get($options, 'parameters', []))])
             );
         }
 
@@ -157,7 +159,7 @@ class RedisManager implements Factory
     /**
      * Get the connector instance for the current driver.
      *
-     * @return \Illuminate\Contracts\Redis\Connector
+     * @return \Illuminate\Contracts\Redis\Connector|null
      */
     protected function connector()
     {
@@ -167,12 +169,11 @@ class RedisManager implements Factory
             return $customCreator();
         }
 
-        switch ($this->driver) {
-            case 'predis':
-                return new PredisConnector;
-            case 'phpredis':
-                return new PhpRedisConnector;
-        }
+        return match ($this->driver) {
+            'predis' => new PredisConnector,
+            'phpredis' => new PhpRedisConnector,
+            default => null,
+        };
     }
 
     /**
@@ -192,7 +193,7 @@ class RedisManager implements Factory
         }
 
         return array_filter($parsed, function ($key) {
-            return ! in_array($key, ['driver', 'username'], true);
+            return $key !== 'driver';
         }, ARRAY_FILTER_USE_KEY);
     }
 
@@ -238,10 +239,26 @@ class RedisManager implements Factory
     }
 
     /**
+     * Disconnect the given connection and remove from local cache.
+     *
+     * @param  string|null  $name
+     * @return void
+     */
+    public function purge($name = null)
+    {
+        $name = $name ?: 'default';
+
+        unset($this->connections[$name]);
+    }
+
+    /**
      * Register a custom driver creator Closure.
      *
      * @param  string  $driver
      * @param  \Closure  $callback
+     *
+     * @param-closure-this  $this  $callback
+     *
      * @return $this
      */
     public function extend($driver, Closure $callback)

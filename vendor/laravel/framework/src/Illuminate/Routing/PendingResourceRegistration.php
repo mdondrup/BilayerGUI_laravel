@@ -7,7 +7,7 @@ use Illuminate\Support\Traits\Macroable;
 
 class PendingResourceRegistration
 {
-    use Macroable;
+    use CreatesRegularExpressionRouteConstraints, Macroable;
 
     /**
      * The resource registrar.
@@ -51,7 +51,6 @@ class PendingResourceRegistration
      * @param  string  $name
      * @param  string  $controller
      * @param  array  $options
-     * @return void
      */
     public function __construct(ResourceRegistrar $registrar, $name, $controller, array $options)
     {
@@ -64,7 +63,7 @@ class PendingResourceRegistration
     /**
      * Set the methods the controller should apply to.
      *
-     * @param  array|string|dynamic  $methods
+     * @param  array|string|mixed  $methods
      * @return \Illuminate\Routing\PendingResourceRegistration
      */
     public function only($methods)
@@ -77,7 +76,7 @@ class PendingResourceRegistration
     /**
      * Set the methods the controller should exclude.
      *
-     * @param  array|string|dynamic  $methods
+     * @param  array|string|mixed  $methods
      * @return \Illuminate\Routing\PendingResourceRegistration
      */
     public function except($methods)
@@ -149,7 +148,48 @@ class PendingResourceRegistration
      */
     public function middleware($middleware)
     {
+        $middleware = Arr::wrap($middleware);
+
+        foreach ($middleware as $key => $value) {
+            $middleware[$key] = (string) $value;
+        }
+
         $this->options['middleware'] = $middleware;
+
+        if (isset($this->options['middleware_for'])) {
+            foreach ($this->options['middleware_for'] as $method => $value) {
+                $this->options['middleware_for'][$method] = Router::uniqueMiddleware(array_merge(
+                    Arr::wrap($value),
+                    $middleware
+                ));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Specify middleware that should be added to the specified resource routes.
+     *
+     * @param  array|string  $methods
+     * @param  array|string  $middleware
+     * @return $this
+     */
+    public function middlewareFor($methods, $middleware)
+    {
+        $methods = Arr::wrap($methods);
+        $middleware = Arr::wrap($middleware);
+
+        if (isset($this->options['middleware'])) {
+            $middleware = Router::uniqueMiddleware(array_merge(
+                $this->options['middleware'],
+                $middleware
+            ));
+        }
+
+        foreach ($methods as $method) {
+            $this->options['middleware_for'][$method] = $middleware;
+        }
 
         return $this;
     }
@@ -165,6 +205,25 @@ class PendingResourceRegistration
         $this->options['excluded_middleware'] = array_merge(
             (array) ($this->options['excluded_middleware'] ?? []), Arr::wrap($middleware)
         );
+
+        return $this;
+    }
+
+    /**
+     * Specify middleware that should be removed from the specified resource routes.
+     *
+     * @param  array|string  $methods
+     * @param  array|string  $middleware
+     * @return $this
+     */
+    public function withoutMiddlewareFor($methods, $middleware)
+    {
+        $methods = Arr::wrap($methods);
+        $middleware = Arr::wrap($middleware);
+
+        foreach ($methods as $method) {
+            $this->options['excluded_middleware_for'][$method] = $middleware;
+        }
 
         return $this;
     }
@@ -196,6 +255,19 @@ class PendingResourceRegistration
     }
 
     /**
+     * Define the callable that should be invoked on a missing model exception.
+     *
+     * @param  callable  $callback
+     * @return $this
+     */
+    public function missing($callback)
+    {
+        $this->options['missing'] = $callback;
+
+        return $this;
+    }
+
+    /**
      * Indicate that the resource routes should be scoped using the given binding fields.
      *
      * @param  array  $fields
@@ -204,6 +276,19 @@ class PendingResourceRegistration
     public function scoped(array $fields = [])
     {
         $this->options['bindingFields'] = $fields;
+
+        return $this;
+    }
+
+    /**
+     * Define which routes should allow "trashed" models to be retrieved when resolving implicit model bindings.
+     *
+     * @param  array  $methods
+     * @return \Illuminate\Routing\PendingResourceRegistration
+     */
+    public function withTrashed(array $methods = [])
+    {
+        $this->options['trashed'] = $methods;
 
         return $this;
     }

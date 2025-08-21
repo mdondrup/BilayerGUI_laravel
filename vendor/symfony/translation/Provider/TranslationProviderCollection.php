@@ -15,22 +15,20 @@ use Symfony\Component\Translation\Exception\InvalidArgumentException;
 
 /**
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
- *
- * @experimental in 5.3
  */
 final class TranslationProviderCollection
 {
-    private $providers;
+    /**
+     * @var array<string, ProviderInterface>
+     */
+    private array $providers;
 
     /**
      * @param array<string, ProviderInterface> $providers
      */
     public function __construct(iterable $providers)
     {
-        $this->providers = [];
-        foreach ($providers as $name => $provider) {
-            $this->providers[$name] = $provider;
-        }
+        $this->providers = \is_array($providers) ? $providers : iterator_to_array($providers);
     }
 
     public function __toString(): string
@@ -46,7 +44,7 @@ final class TranslationProviderCollection
     public function get(string $name): ProviderInterface
     {
         if (!$this->has($name)) {
-            throw new InvalidArgumentException(sprintf('Provider "%s" not found. Available: "%s".', $name, (string) $this));
+            throw new InvalidArgumentException(\sprintf('Provider "%s" not found. Available: "%s".', $name, (string) $this));
         }
 
         return $this->providers[$name];

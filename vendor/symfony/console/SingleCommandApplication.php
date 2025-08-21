@@ -20,11 +20,14 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class SingleCommandApplication extends Command
 {
-    private $version = 'UNKNOWN';
-    private $autoExit = true;
-    private $running = false;
+    private string $version = 'UNKNOWN';
+    private bool $autoExit = true;
+    private bool $running = false;
 
-    public function setVersion(string $version): self
+    /**
+     * @return $this
+     */
+    public function setVersion(string $version): static
     {
         $this->version = $version;
 
@@ -33,15 +36,17 @@ class SingleCommandApplication extends Command
 
     /**
      * @final
+     *
+     * @return $this
      */
-    public function setAutoExit(bool $autoExit): self
+    public function setAutoExit(bool $autoExit): static
     {
         $this->autoExit = $autoExit;
 
         return $this;
     }
 
-    public function run(InputInterface $input = null, OutputInterface $output = null): int
+    public function run(?InputInterface $input = null, ?OutputInterface $output = null): int
     {
         if ($this->running) {
             return parent::run($input, $output);
@@ -62,6 +67,6 @@ class SingleCommandApplication extends Command
             $this->running = false;
         }
 
-        return $ret ?? 1;
+        return $ret;
     }
 }

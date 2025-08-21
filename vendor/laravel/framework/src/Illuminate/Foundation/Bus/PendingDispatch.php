@@ -2,10 +2,17 @@
 
 namespace Illuminate\Foundation\Bus;
 
+use Illuminate\Bus\UniqueLock;
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Contracts\Cache\Repository as Cache;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Foundation\Queue\InteractsWithUniqueJobs;
 
 class PendingDispatch
 {
+    use InteractsWithUniqueJobs;
+
     /**
      * The job.
      *
@@ -24,7 +31,6 @@ class PendingDispatch
      * Create a new pending job dispatch.
      *
      * @param  mixed  $job
-     * @return void
      */
     public function __construct($job)
     {
@@ -34,7 +40,7 @@ class PendingDispatch
     /**
      * Set the desired connection for the job.
      *
-     * @param  string|null  $connection
+     * @param  \BackedEnum|string|null  $connection
      * @return $this
      */
     public function onConnection($connection)
@@ -47,7 +53,7 @@ class PendingDispatch
     /**
      * Set the desired queue for the job.
      *
-     * @param  string|null  $queue
+     * @param  \BackedEnum|string|null  $queue
      * @return $this
      */
     public function onQueue($queue)
@@ -60,7 +66,7 @@ class PendingDispatch
     /**
      * Set the desired connection for the chain.
      *
-     * @param  string|null  $connection
+     * @param  \BackedEnum|string|null  $connection
      * @return $this
      */
     public function allOnConnection($connection)
@@ -73,7 +79,7 @@ class PendingDispatch
     /**
      * Set the desired queue for the chain.
      *
-     * @param  string|null  $queue
+     * @param  \BackedEnum|string|null  $queue
      * @return $this
      */
     public function allOnQueue($queue)
@@ -84,7 +90,7 @@ class PendingDispatch
     }
 
     /**
-     * Set the desired delay for the job.
+     * Set the desired delay in seconds for the job.
      *
      * @param  \DateTimeInterface|\DateInterval|int|null  $delay
      * @return $this
@@ -92,6 +98,42 @@ class PendingDispatch
     public function delay($delay)
     {
         $this->job->delay($delay);
+
+        return $this;
+    }
+
+    /**
+     * Set the delay for the job to zero seconds.
+     *
+     * @return $this
+     */
+    public function withoutDelay()
+    {
+        $this->job->withoutDelay();
+
+        return $this;
+    }
+
+    /**
+     * Indicate that the job should be dispatched after all database transactions have committed.
+     *
+     * @return $this
+     */
+    public function afterCommit()
+    {
+        $this->job->afterCommit();
+
+        return $this;
+    }
+
+    /**
+     * Indicate that the job should not wait until database transactions have been committed before dispatching.
+     *
+     * @return $this
+     */
+    public function beforeCommit()
+    {
+        $this->job->beforeCommit();
 
         return $this;
     }
@@ -122,16 +164,63 @@ class PendingDispatch
     }
 
     /**
+     * Determine if the job should be dispatched.
+     *
+     * @return bool
+     */
+    protected function shouldDispatch()
+    {
+        if (! $this->job instanceof ShouldBeUnique) {
+            return true;
+        }
+
+        return (new UniqueLock(Container::getInstance()->make(Cache::class)))
+            ->acquire($this->job);
+    }
+
+    /**
+     * Get the underlying job instance.
+     *
+     * @return mixed
+     */
+    public function getJob()
+    {
+        return $this->job;
+    }
+
+    /**
+     * Dynamically proxy methods to the underlying job.
+     *
+     * @param  string  $method
+     * @param  array  $parameters
+     * @return $this
+     */
+    public function __call($method, $parameters)
+    {
+        $this->job->{$method}(...$parameters);
+
+        return $this;
+    }
+
+    /**
      * Handle the object's destruction.
      *
      * @return void
      */
     public function __destruct()
     {
-        if ($this->afterResponse) {
+        $this->addUniqueJobInformationToContext($this->job);
+
+        if (! $this->shouldDispatch()) {
+            $this->removeUniqueJobInformationFromContext($this->job);
+
+            return;
+        } elseif ($this->afterResponse) {
             app(Dispatcher::class)->dispatchAfterResponse($this->job);
         } else {
             app(Dispatcher::class)->dispatch($this->job);
         }
+
+        $this->removeUniqueJobInformationFromContext($this->job);
     }
 }
