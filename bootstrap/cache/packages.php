@@ -1,41 +1,16 @@
 <?php return array (
-  'consoletvs/charts' => 
+  'laravel/pail' => 
   array (
     'providers' => 
     array (
-      0 => 'ConsoleTVs\\Charts\\ChartsServiceProvider',
+      0 => 'Laravel\\Pail\\PailServiceProvider',
     ),
   ),
-  'facade/ignition' => 
+  'laravel/sail' => 
   array (
     'providers' => 
     array (
-      0 => 'Facade\\Ignition\\IgnitionServiceProvider',
-    ),
-    'aliases' => 
-    array (
-      'Flare' => 'Facade\\Ignition\\Facades\\Flare',
-    ),
-  ),
-  'fideloper/proxy' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Fideloper\\Proxy\\TrustedProxyServiceProvider',
-    ),
-  ),
-  'fruitcake/laravel-cors' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Fruitcake\\Cors\\CorsServiceProvider',
-    ),
-  ),
-  'fx3costa/laravelchartjs' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Fx3costa\\LaravelChartJs\\Providers\\ChartjsServiceProvider',
+      0 => 'Laravel\\Sail\\SailServiceProvider',
     ),
   ),
   'laravel/tinker' => 
@@ -45,29 +20,15 @@
       0 => 'Laravel\\Tinker\\TinkerServiceProvider',
     ),
   ),
-  'laravel/ui' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Laravel\\Ui\\UiServiceProvider',
-    ),
-  ),
   'maatwebsite/excel' => 
   array (
-    'providers' => 
-    array (
-      0 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
-    ),
     'aliases' => 
     array (
       'Excel' => 'Maatwebsite\\Excel\\Facades\\Excel',
     ),
-  ),
-  'mpociot/laravel-test-factory-helper' => 
-  array (
     'providers' => 
     array (
-      0 => 'Mpociot\\LaravelTestFactoryHelper\\TestFactoryHelperServiceProvider',
+      0 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
     ),
   ),
   'nesbot/carbon' => 
@@ -84,15 +45,22 @@
       0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     ),
   ),
-  'spatie/laravel-image-optimizer' => 
+  'nunomaduro/termwind' => 
   array (
     'providers' => 
     array (
-      0 => 'Spatie\\LaravelImageOptimizer\\ImageOptimizerServiceProvider',
+      0 => 'Termwind\\Laravel\\TermwindServiceProvider',
     ),
+  ),
+  'spatie/laravel-image-optimizer' => 
+  array (
     'aliases' => 
     array (
       'ImageOptimizer' => 'Spatie\\LaravelImageOptimizer\\Facades\\ImageOptimizer',
+    ),
+    'providers' => 
+    array (
+      0 => 'Spatie\\LaravelImageOptimizer\\ImageOptimizerServiceProvider',
     ),
   ),
 );

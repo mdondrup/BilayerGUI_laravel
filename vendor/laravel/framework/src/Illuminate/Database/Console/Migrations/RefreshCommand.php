@@ -4,11 +4,16 @@ namespace Illuminate\Database\Console\Migrations;
 
 use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
+use Illuminate\Console\Prohibitable;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Database\Events\DatabaseRefreshed;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputOption;
 
+#[AsCommand(name: 'migrate:refresh')]
 class RefreshCommand extends Command
 {
-    use ConfirmableTrait;
+    use ConfirmableTrait, Prohibitable;
 
     /**
      * The console command name.
@@ -31,8 +36,9 @@ class RefreshCommand extends Command
      */
     public function handle()
     {
-        if (! $this->confirmToProceed()) {
-            return 1;
+        if ($this->isProhibited() ||
+            ! $this->confirmToProceed()) {
+            return Command::FAILURE;
         }
 
         // Next we'll gather some of the options so that we can have the right options
@@ -62,6 +68,12 @@ class RefreshCommand extends Command
             '--realpath' => $this->input->getOption('realpath'),
             '--force' => true,
         ]));
+
+        if ($this->laravel->bound(Dispatcher::class)) {
+            $this->laravel[Dispatcher::class]->dispatch(
+                new DatabaseRefreshed($database, $this->needsSeeding())
+            );
+        }
 
         if ($this->needsSeeding()) {
             $this->runSeeder($database);
@@ -126,7 +138,7 @@ class RefreshCommand extends Command
     {
         $this->call('db:seed', array_filter([
             '--database' => $database,
-            '--class' => $this->option('seeder') ?: 'DatabaseSeeder',
+            '--class' => $this->option('seeder') ?: 'Database\\Seeders\\DatabaseSeeder',
             '--force' => true,
         ]));
     }

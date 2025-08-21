@@ -10,8 +10,13 @@ class TableGuesser
     ];
 
     const CHANGE_PATTERNS = [
-        '/_(to|from|in)_(\w+)_table$/',
-        '/_(to|from|in)_(\w+)$/',
+        '/.+_(to|from|in)_(\w+)_table$/',
+        '/.+_(to|from|in)_(\w+)$/',
+    ];
+
+    const DROP_PATTERNS = [
+        '/^drop_(\w+)_table$/',
+        '/^drop_(\w+)$/',
     ];
 
     /**
@@ -31,6 +36,12 @@ class TableGuesser
         foreach (self::CHANGE_PATTERNS as $pattern) {
             if (preg_match($pattern, $migration, $matches)) {
                 return [$matches[2], $create = false];
+            }
+        }
+
+        foreach (self::DROP_PATTERNS as $pattern) {
+            if (preg_match($pattern, $migration, $matches)) {
+                return [$matches[1], $create = false];
             }
         }
     }

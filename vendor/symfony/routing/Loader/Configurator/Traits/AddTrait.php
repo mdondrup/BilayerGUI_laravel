@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Routing\Loader\Configurator\Traits;
 
+use Symfony\Component\Routing\Loader\Configurator\AliasConfigurator;
 use Symfony\Component\Routing\Loader\Configurator\CollectionConfigurator;
 use Symfony\Component\Routing\Loader\Configurator\RouteConfigurator;
 use Symfony\Component\Routing\RouteCollection;
@@ -22,19 +23,16 @@ trait AddTrait
 {
     use LocalizedRouteTrait;
 
-    /**
-     * @var RouteCollection
-     */
-    protected $collection;
-    protected $name = '';
-    protected $prefixes;
+    protected RouteCollection $collection;
+    protected string $name = '';
+    protected ?array $prefixes = null;
 
     /**
      * Adds a route.
      *
      * @param string|array $path the path, or the localized paths of the route
      */
-    public function add(string $name, $path): RouteConfigurator
+    public function add(string $name, string|array $path): RouteConfigurator
     {
         $parentConfigurator = $this instanceof CollectionConfigurator ? $this : ($this instanceof RouteConfigurator ? $this->parentConfigurator : null);
         $route = $this->createLocalizedRoute($this->collection, $name, $path, $this->name, $this->prefixes);
@@ -42,12 +40,17 @@ trait AddTrait
         return new RouteConfigurator($this->collection, $route, $this->name, $parentConfigurator, $this->prefixes);
     }
 
+    public function alias(string $name, string $alias): AliasConfigurator
+    {
+        return new AliasConfigurator($this->collection->addAlias($name, $alias));
+    }
+
     /**
      * Adds a route.
      *
      * @param string|array $path the path, or the localized paths of the route
      */
-    public function __invoke(string $name, $path): RouteConfigurator
+    public function __invoke(string $name, string|array $path): RouteConfigurator
     {
         return $this->add($name, $path);
     }

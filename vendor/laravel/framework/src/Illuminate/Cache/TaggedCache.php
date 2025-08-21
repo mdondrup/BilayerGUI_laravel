@@ -2,6 +2,8 @@
 
 namespace Illuminate\Cache;
 
+use Illuminate\Cache\Events\CacheFlushed;
+use Illuminate\Cache\Events\CacheFlushing;
 use Illuminate\Contracts\Cache\Store;
 
 class TaggedCache extends Repository
@@ -22,7 +24,6 @@ class TaggedCache extends Repository
      *
      * @param  \Illuminate\Contracts\Cache\Store  $store
      * @param  \Illuminate\Cache\TagSet  $tags
-     * @return void
      */
     public function __construct(Store $store, TagSet $tags)
     {
@@ -52,11 +53,11 @@ class TaggedCache extends Repository
      *
      * @param  string  $key
      * @param  mixed  $value
-     * @return void
+     * @return int|bool
      */
     public function increment($key, $value = 1)
     {
-        $this->store->increment($this->itemKey($key), $value);
+        return $this->store->increment($this->itemKey($key), $value);
     }
 
     /**
@@ -64,11 +65,11 @@ class TaggedCache extends Repository
      *
      * @param  string  $key
      * @param  mixed  $value
-     * @return void
+     * @return int|bool
      */
     public function decrement($key, $value = 1)
     {
-        $this->store->decrement($this->itemKey($key), $value);
+        return $this->store->decrement($this->itemKey($key), $value);
     }
 
     /**
@@ -78,7 +79,11 @@ class TaggedCache extends Repository
      */
     public function flush()
     {
+        $this->event(new CacheFlushing($this->getName()));
+
         $this->tags->reset();
+
+        $this->event(new CacheFlushed($this->getName()));
 
         return true;
     }
@@ -105,12 +110,16 @@ class TaggedCache extends Repository
     /**
      * Fire an event for this cache instance.
      *
-     * @param  string  $event
+     * @param  object  $event
      * @return void
      */
     protected function event($event)
     {
-        parent::event($event->setTags($this->tags->getNames()));
+        if (method_exists($event, 'setTags')) {
+            $event->setTags($this->tags->getNames());
+        }
+
+        parent::event($event);
     }
 
     /**
