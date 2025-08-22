@@ -25,7 +25,15 @@ NMRLipids Databank -- A portal for visualization of molecular simulations
 * Edit the configuration file ```.env``` and add the database credentials and key
 * Optionally: configure server host and port (default: localhost9000)
 * Create the database: ``` php artisan migrate ```
-* To create a link to display resources in storage/: ``` php artisan storage:link ```
+* To create a link to display resources in ```storage/``` : ``` php artisan storage:link ```
+* This will set up a system with a MySQL database with the NMRLipids schema (default db name laravel), but with empty tables (and a schema not in sync with the current DB export).
+* To import the current test set of trajectories: ``` mysql -p laravel -u laravel < nmrlipid_trajectdb.sql ```
+* If this fails, retry:
+  
+```
+php artisan migrate:fresh
+mysql -p laravel -u laravel < nmrlipid_trajectdb.sql
+``` 
 
 ## Usage
 
@@ -41,5 +49,14 @@ NMRLipids Databank -- A portal for visualization of molecular simulations
 * Create a customized ``` .env ``` file
 * start Docker
 * Follow the instructions to install and run Sail here https://laravel.com/docs/12.x/sail
-* The web server will by default be accessible at http://localhost:80 
+* ``` ./vendor/bin/sail up -d ``` to start the container in demon-mode 
+* The web server will by default be accessible at http://localhost:80
+* commands to the Docker instance can be issued using sail e.g.
+```
+./vendor/bin/sail bash
+./vendor/bin/sail mysql
+```
+* Create a fresh database: ``` ./vendor/bin/sail artisan migrate:fresh  ```
+* Populate the database with the example data: ``` ./vendor/bin/sail mysql -p laravel < nmrlipid_trajectdb.sql ```
+
 
