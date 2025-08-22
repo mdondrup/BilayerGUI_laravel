@@ -10,6 +10,7 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
+SET FOREIGN_KEY_CHECKS = 0;
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -23,11 +24,19 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
+-- Dropping outdated tables:
+
+DROP TABLE IF EXISTS experiments_FF,experiments_OP,forcefields,heteromolecules,ions,lipids,membranes,migrations,peptides,ranking_global,ranking_heteromolecules,ranking_lipids,trajectories,trajectories_analysis,trajectories_analysis_heteromolecules,trajectories_analysis_ions,trajectories_analysis_lipids,trajectories_analysis_water,trajectories_experiments_FF,trajectories_experiments_OP,trajectories_heteromolecules,trajectories_ions,trajectories_lipids,trajectories_membranes,trajectories_water,users,water_models;
+
+DROP TABLE IF EXISTS `analysis`;
+DROP TABLE IF EXISTS `trajectories_peptides`;
+
 --
 -- Table structure for table `experiments_FF`
 --
 
-CREATE TABLE `experiments_FF` (
+DROP TABLE IF EXISTS `experiments_FF`;
+CREATE TABLE IF NOT EXISTS `experiments_FF` (
   `id` bigint UNSIGNED NOT NULL,
   `doi` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `path` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL
@@ -85,7 +94,7 @@ INSERT INTO `experiments_FF` (`id`, `doi`, `path`) VALUES
 -- Table structure for table `experiments_OP`
 --
 
-CREATE TABLE `experiments_OP` (
+CREATE TABLE IF NOT EXISTS `experiments_OP` (
   `id` bigint UNSIGNED NOT NULL,
   `doi` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `path` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL
@@ -149,7 +158,7 @@ INSERT INTO `experiments_OP` (`id`, `doi`, `path`) VALUES
 -- Table structure for table `forcefields`
 --
 
-CREATE TABLE `forcefields` (
+CREATE TABLE IF NOT EXISTS `forcefields` (
   `id` bigint UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
   `date` varchar(255) NOT NULL DEFAULT '',
@@ -313,7 +322,8 @@ INSERT INTO `forcefields` (`id`, `name`, `date`, `source`, `created_at`, `update
 -- Table structure for table `heteromolecules`
 --
 
-CREATE TABLE `heteromolecules` (
+DROP TABLE IF EXISTS `heteromolecules`; 
+CREATE TABLE IF NOT EXISTS `heteromolecules` (
   `id` bigint UNSIGNED NOT NULL,
   `molecule` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `forcefield_id` bigint UNSIGNED NOT NULL,
@@ -370,8 +380,8 @@ INSERT INTO `heteromolecules` (`id`, `molecule`, `forcefield_id`, `name`, `mappi
 --
 -- Table structure for table `ions`
 --
-
-CREATE TABLE `ions` (
+DROP TABLE IF EXISTS `ions`;
+CREATE TABLE IF NOT EXISTS `ions` (
   `id` bigint UNSIGNED NOT NULL,
   `molecule` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `forcefield_id` bigint UNSIGNED NOT NULL,
@@ -577,8 +587,9 @@ INSERT INTO `ions` (`id`, `molecule`, `forcefield_id`, `name`, `mapping`, `creat
 --
 -- Table structure for table `lipids`
 --
-
-CREATE TABLE `lipids` (
+DROP TABLE IF EXISTS `trajectories_lipids`;
+DROP TABLE IF EXISTS `lipids`;
+CREATE TABLE IF NOT EXISTS `lipids` (
   `id` bigint UNSIGNED NOT NULL,
   `molecule` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `forcefield_id` bigint UNSIGNED NOT NULL,
@@ -886,7 +897,7 @@ INSERT INTO `lipids` (`id`, `molecule`, `forcefield_id`, `name`, `mapping`, `cre
 -- Table structure for table `membranes`
 --
 
-CREATE TABLE `membranes` (
+CREATE TABLE IF NOT EXISTS `membranes` (
   `id` bigint UNSIGNED NOT NULL,
   `forcefield_id` bigint UNSIGNED NOT NULL,
   `lipid_names_l1` varchar(255) DEFAULT NULL,
@@ -1416,7 +1427,7 @@ INSERT INTO `membranes` (`id`, `forcefield_id`, `lipid_names_l1`, `lipid_names_l
 -- Table structure for table `migrations`
 --
 
-CREATE TABLE `migrations` (
+CREATE TABLE IF NOT EXISTS `migrations` (
   `id` int UNSIGNED NOT NULL,
   `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL
@@ -1428,7 +1439,7 @@ CREATE TABLE `migrations` (
 -- Table structure for table `ranking_global`
 --
 
-CREATE TABLE `ranking_global` (
+CREATE TABLE IF NOT EXISTS `ranking_global` (
   `id` bigint NOT NULL,
   `trajectory_id` bigint NOT NULL,
   `ranking_total` bigint NOT NULL,
@@ -2255,7 +2266,7 @@ INSERT INTO `ranking_global` (`id`, `trajectory_id`, `ranking_total`, `ranking_h
 -- Table structure for table `ranking_heteromolecules`
 --
 
-CREATE TABLE `ranking_heteromolecules` (
+CREATE TABLE IF NOT EXISTS `ranking_heteromolecules` (
   `id` bigint NOT NULL,
   `trajectory_id` bigint NOT NULL,
   `molecule_id` bigint NOT NULL,
@@ -2466,7 +2477,7 @@ INSERT INTO `ranking_heteromolecules` (`id`, `trajectory_id`, `molecule_id`, `ra
 -- Table structure for table `ranking_lipids`
 --
 
-CREATE TABLE `ranking_lipids` (
+CREATE TABLE IF NOT EXISTS `ranking_lipids` (
   `id` bigint NOT NULL,
   `trajectory_id` bigint NOT NULL,
   `lipid_id` int NOT NULL,
@@ -3501,7 +3512,8 @@ INSERT INTO `ranking_lipids` (`id`, `trajectory_id`, `lipid_id`, `ranking_total`
 -- Table structure for table `trajectories`
 --
 
-CREATE TABLE `trajectories` (
+DROP TABLE IF EXISTS `trajectories`;
+CREATE TABLE IF NOT EXISTS `trajectories` (
   `id` bigint UNSIGNED NOT NULL,
   `forcefield_id` bigint UNSIGNED NOT NULL,
   `membrane_id` bigint UNSIGNED NOT NULL,
@@ -4369,7 +4381,7 @@ INSERT INTO `trajectories` (`id`, `forcefield_id`, `membrane_id`, `git_path`, `s
 -- Table structure for table `trajectories_analysis`
 --
 
-CREATE TABLE `trajectories_analysis` (
+CREATE TABLE IF NOT EXISTS `trajectories_analysis` (
   `id` bigint NOT NULL,
   `trajectory_id` bigint UNSIGNED NOT NULL,
   `bilayer_thickness` float DEFAULT NULL,
@@ -5205,7 +5217,7 @@ INSERT INTO `trajectories_analysis` (`id`, `trajectory_id`, `bilayer_thickness`,
 -- Table structure for table `trajectories_analysis_heteromolecules`
 --
 
-CREATE TABLE `trajectories_analysis_heteromolecules` (
+CREATE TABLE IF NOT EXISTS `trajectories_analysis_heteromolecules` (
   `id` bigint UNSIGNED NOT NULL,
   `trajectory_id` bigint UNSIGNED NOT NULL,
   `molecule_id` bigint UNSIGNED NOT NULL COMMENT 'd',
@@ -5421,7 +5433,7 @@ INSERT INTO `trajectories_analysis_heteromolecules` (`id`, `trajectory_id`, `mol
 -- Table structure for table `trajectories_analysis_ions`
 --
 
-CREATE TABLE `trajectories_analysis_ions` (
+CREATE TABLE IF NOT EXISTS `trajectories_analysis_ions` (
   `id` bigint NOT NULL,
   `trajectory_id` bigint NOT NULL,
   `ion_id` bigint NOT NULL,
@@ -6172,7 +6184,7 @@ INSERT INTO `trajectories_analysis_ions` (`id`, `trajectory_id`, `ion_id`, `dens
 -- Table structure for table `trajectories_analysis_lipids`
 --
 
-CREATE TABLE `trajectories_analysis_lipids` (
+CREATE TABLE IF NOT EXISTS `trajectories_analysis_lipids` (
   `id` bigint NOT NULL,
   `trajectory_id` bigint UNSIGNED NOT NULL,
   `lipid_id` bigint UNSIGNED NOT NULL,
@@ -7211,7 +7223,7 @@ INSERT INTO `trajectories_analysis_lipids` (`id`, `trajectory_id`, `lipid_id`, `
 -- Table structure for table `trajectories_analysis_water`
 --
 
-CREATE TABLE `trajectories_analysis_water` (
+CREATE TABLE IF NOT EXISTS `trajectories_analysis_water` (
   `id` int NOT NULL,
   `trajectory_id` int NOT NULL,
   `water_id` int NOT NULL,
@@ -8033,7 +8045,7 @@ INSERT INTO `trajectories_analysis_water` (`id`, `trajectory_id`, `water_id`, `d
 -- Table structure for table `trajectories_experiments_FF`
 --
 
-CREATE TABLE `trajectories_experiments_FF` (
+CREATE TABLE IF NOT EXISTS `trajectories_experiments_FF` (
   `id` bigint UNSIGNED NOT NULL,
   `trajectory_id` bigint UNSIGNED NOT NULL,
   `experiment_id` bigint UNSIGNED NOT NULL
@@ -8242,7 +8254,7 @@ INSERT INTO `trajectories_experiments_FF` (`id`, `trajectory_id`, `experiment_id
 -- Table structure for table `trajectories_experiments_OP`
 --
 
-CREATE TABLE `trajectories_experiments_OP` (
+CREATE TABLE IF NOT EXISTS `trajectories_experiments_OP` (
   `id` bigint UNSIGNED NOT NULL,
   `trajectory_id` bigint UNSIGNED NOT NULL,
   `lipid_id` bigint UNSIGNED NOT NULL,
@@ -8438,7 +8450,7 @@ INSERT INTO `trajectories_experiments_OP` (`id`, `trajectory_id`, `lipid_id`, `e
 -- Table structure for table `trajectories_heteromolecules`
 --
 
-CREATE TABLE `trajectories_heteromolecules` (
+CREATE TABLE IF NOT EXISTS `trajectories_heteromolecules` (
   `id` bigint UNSIGNED NOT NULL,
   `trajectory_id` bigint UNSIGNED NOT NULL,
   `molecule_id` bigint UNSIGNED NOT NULL,
@@ -8652,7 +8664,7 @@ INSERT INTO `trajectories_heteromolecules` (`id`, `trajectory_id`, `molecule_id`
 -- Table structure for table `trajectories_ions`
 --
 
-CREATE TABLE `trajectories_ions` (
+CREATE TABLE IF NOT EXISTS `trajectories_ions` (
   `id` bigint UNSIGNED NOT NULL,
   `trajectory_id` bigint UNSIGNED NOT NULL,
   `ion_id` bigint UNSIGNED NOT NULL,
@@ -9405,8 +9417,8 @@ INSERT INTO `trajectories_ions` (`id`, `trajectory_id`, `ion_id`, `ion_name`, `n
 --
 -- Table structure for table `trajectories_lipids`
 --
-
-CREATE TABLE `trajectories_lipids` (
+DROP TABLE IF EXISTS `trajectories_lipids`;
+CREATE TABLE IF NOT EXISTS `trajectories_lipids` (
   `id` bigint UNSIGNED NOT NULL,
   `trajectory_id` bigint UNSIGNED NOT NULL,
   `lipid_id` bigint UNSIGNED NOT NULL,
@@ -10437,7 +10449,7 @@ INSERT INTO `trajectories_lipids` (`id`, `trajectory_id`, `lipid_id`, `lipid_nam
 -- Table structure for table `trajectories_membranes`
 --
 
-CREATE TABLE `trajectories_membranes` (
+CREATE TABLE IF NOT EXISTS `trajectories_membranes` (
   `id` bigint UNSIGNED NOT NULL,
   `trajectory_id` bigint UNSIGNED NOT NULL,
   `membrane_id` bigint UNSIGNED NOT NULL,
@@ -11261,7 +11273,7 @@ INSERT INTO `trajectories_membranes` (`id`, `trajectory_id`, `membrane_id`, `bul
 -- Table structure for table `trajectories_water`
 --
 
-CREATE TABLE `trajectories_water` (
+CREATE TABLE IF NOT EXISTS `trajectories_water` (
   `id` bigint UNSIGNED NOT NULL,
   `trajectory_id` bigint UNSIGNED NOT NULL,
   `water_id` bigint UNSIGNED NOT NULL,
@@ -12086,7 +12098,7 @@ INSERT INTO `trajectories_water` (`id`, `trajectory_id`, `water_id`, `water_name
 -- Table structure for table `users`
 --
 
-CREATE TABLE `users` (
+CREATE TABLE IF NOT EXISTS `users` (
   `id` bigint UNSIGNED NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -12101,8 +12113,8 @@ CREATE TABLE `users` (
 --
 -- Table structure for table `water_models`
 --
-
-CREATE TABLE `water_models` (
+DROP TABLE IF EXISTS `water_models`;
+CREATE TABLE IF NOT EXISTS `water_models` (
   `id` bigint UNSIGNED NOT NULL,
   `short_name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `mapping` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -12187,8 +12199,7 @@ ALTER TABLE `membranes`
 --
 -- Indexes for table `migrations`
 --
-ALTER TABLE `migrations`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `migrations`  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `ranking_global`
@@ -12592,6 +12603,7 @@ ALTER TABLE `trajectories_membranes`
 ALTER TABLE `trajectories_water`
   ADD CONSTRAINT `trajectories_water_ibfk_1` FOREIGN KEY (`trajectory_id`) REFERENCES `trajectories` (`id`),
   ADD CONSTRAINT `trajectories_water_ibfk_2` FOREIGN KEY (`water_id`) REFERENCES `water_models` (`id`);
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
