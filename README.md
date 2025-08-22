@@ -35,5 +35,11 @@ NMRLipids Databank -- A portal for visualization of molecular simulations
 
 ### Using Laravel's native Docker environment
 
-* 
+* You can use Laravel Sail to set up docker integration
+* Clone the repository
+* You need only composer, and Docker on the target machine
+* Create a customized ``` .env ``` file
+* start Docker
+* Follow the instructions to install and run Sail here https://laravel.com/docs/12.x/sail
+* The web server will by default be accessible at http://localhost:80 
 
