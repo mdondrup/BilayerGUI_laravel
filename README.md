@@ -50,13 +50,14 @@ mysql -p laravel -u laravel < nmrlipid_trajectdb.sql
 * start Docker
 * Follow the instructions to install and run Sail here https://laravel.com/docs/12.x/sail
 * ``` ./vendor/bin/sail up -d ``` to start the container in demon-mode 
-* The web server will by default be accessible at http://localhost:80
 * commands to the Docker instance can be issued using sail e.g.
 ```
 ./vendor/bin/sail bash
 ./vendor/bin/sail mysql
 ```
+* Update the application key: ``` ./vendor/bin/sail  artisan key:generate ```
 * Create a fresh database: ``` ./vendor/bin/sail artisan migrate:fresh  ```
 * Populate the database with the example data: ``` ./vendor/bin/sail mysql -p laravel < nmrlipid_trajectdb.sql ```
-
+* Create the link to the storage-directory: ```  ./vendor/bin/sail artisan storage:link ``` 
+* The web server will by default be accessible at http://localhost:80
 
