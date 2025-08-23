@@ -80,7 +80,7 @@ use App\Http\Controllers\StatisticsController;
                     <h1 class="text-white font-weight-bold">
                         <img class="img-fluid" alt="Responsive image"
                             src="{{ asset('storage/images/nmr_w_letras.png') }}" alt="">
-                        <br><br> Welcome to NMRlipids Databank-GUI
+                        <br><br> Welcome to NMRlipids Databank-GUI (nightly build)
                     </h1>
                     <hr class="divider" />
                 </div>
