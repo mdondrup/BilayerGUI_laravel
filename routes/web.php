@@ -5,6 +5,8 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\SitemapXmlController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\LipidController;
+use Illuminate\Support\Facades\View;
+
 
 /*
 |--------------------------------------------------------------------------
