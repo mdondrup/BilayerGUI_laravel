@@ -65,8 +65,10 @@ Route::get('/search/basic', 'App\Http\Controllers\SearchController@basic')->name
 
 
 // -- Image routes: These routes do not work
-Route::get('convert-pdf-to-image', [ImageController::class, 'index'])->name('form');
-Route::get('OptimizeImages', [ImageController::class, 'index'])->name('form');
+// ICICIC: Also these routes prevented caching of the routes they are assigned the same name as other routes
+// Please clarify their purpose before re-enabling
+// Route::get('convert-pdf-to-image', [ImageController::class, 'index'])->name('form');
+// Route::get('OptimizeImages', [ImageController::class, 'index'])->name('form');
 // ---
 
 
@@ -84,7 +86,34 @@ Route::get('listLipidos', function (Illuminate\Http\Request  $request) {
 });
 
 // Route::get('/peptido/{peptido_id}', 'PeptidosController@show')->name('peptidos.show');
-// Route::get('/lipido/{lipido_id}', 'LipidosController@show')->name('lipidos.show');
+
+/* TODO: Implementing a route for lipids
+/
+*/
+// Route::get('/lipid/{lipid_id}', 'LipidosController@show')->name('lipid.show');
+// Temporary route for lipid details using a closure with dummy data
+// In a real application, this should be replaced with a proper controller method
+// that fetches lipid details from the database.
+// Example: Route::get('/lipid/{lipid_id}', 'LipidosController@show')->name('lipid.show');
+
+Route::get('/lipid/{lipid_id}', function ($lipid_id) {
+    $dummyLipids = [
+        'id' => $lipid_id,
+        'name' => 'Lipid ' . $lipid_id,
+        'formula' => 'C55H98O6',
+        'mass' => '885.4',
+        'type' => 'Phospholipid',
+        'description' => 'This is a dummy lipid for demonstration.'
+    ];
+    $output = "<h2>Showing details for lipid: {$dummyLipids['id']}</h2>";
+    $output .= "<ul>";
+    foreach ($dummyLipids as $key => $value) {
+        $output .= "<li><strong>" . ucfirst($key) . ":</strong> " . $value . "</li>";
+    }
+    $output .= "</ul>";
+    return $output;
+})->name('lipid.show');
+
 // ion
 // agua
 // molecula
