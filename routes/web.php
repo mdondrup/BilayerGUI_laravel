@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\SitemapXmlController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\LipidController;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,23 +97,8 @@ Route::get('listLipidos', function (Illuminate\Http\Request  $request) {
 // that fetches lipid details from the database.
 // Example: Route::get('/lipid/{lipid_id}', 'LipidosController@show')->name('lipid.show');
 
-Route::get('/lipid/{lipid_id}', function ($lipid_id) {
-    $dummyLipids = [
-        'id' => $lipid_id,
-        'name' => 'Lipid ' . $lipid_id,
-        'formula' => 'C55H98O6',
-        'mass' => '885.4',
-        'type' => 'Phospholipid',
-        'description' => 'This is a dummy lipid for demonstration.'
-    ];
-    $output = "<h2>Showing details for lipid: {$dummyLipids['id']}</h2>";
-    $output .= "<ul>";
-    foreach ($dummyLipids as $key => $value) {
-        $output .= "<li><strong>" . ucfirst($key) . ":</strong> " . $value . "</li>";
-    }
-    $output .= "</ul>";
-    return $output;
-})->name('lipid.show');
+Route::get('/lipid/{lipid_id}', [LipidController::class, 'show']
+)->name('lipid.show');
 
 // ion
 // agua
