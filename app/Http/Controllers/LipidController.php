@@ -15,20 +15,26 @@ class LipidController extends Controller
 
         // Fetch lipid data from the database based on the provided lipid_id
         // For example:
-        $lipid = DB::table('lipids')->where('id', $lipid_id)->firstOrFail();
+        $lipid = DB::table('lipids')->where('lipid_id', $lipid_id)->firstOrFail();
 
 
-        // For demonstration, we will create a dummy lipid data array.
+        // Get the base data each lipid has from the DB.
        
-        $dummyLipids = [
-        'id' => $lipid_id,
-        'name' => $lipid->name ?? 'Nonexistent Lipid',
-        'formula' => 'C55H98O6',
-        'mass' => '885.4',
-        'type' => 'Phospholipid',
-        'description' => 'This is a dummy lipid for demonstration.'
-    ];
-     return View::make('lipid', ['lipid' => $dummyLipids]);
+        $lipids_data= [
+            'id' => $lipid_id,
+            'name' => $lipid->name ?? 'Nonexistent Lipid',
+            'molecule' => $lipid->molecule ?? 'Unknown Molecule',
+            'description' => $lipid->description ?? 'No description available.' 
+        ];
+        // get additional properties if needed
+        $properties = DB::table('lipid_properties')
+            ->join('properties', 'lipid_properties.property_id', '=', 'properties.property_id')
+            ->select('name','value','unit')
+            -> where('lipid_id', $lipid_id)->get();
+        $lipids_data['properties'] = $properties;
+
+
+     return View::make('lipid', ['lipid' => $lipids_data]);
 
 
         

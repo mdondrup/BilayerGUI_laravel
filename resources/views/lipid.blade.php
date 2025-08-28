@@ -89,8 +89,15 @@
                         <p class="text-white-75 mb-4 txt_desc">
                             <div class="text-white-75 mb-4 txt_desc">   
                                 <ul>
+        <?php $properties = $lipid['properties'] ?? []; 
+            unset($lipid['properties']);  // remove properties from lipid to avoid duplication
+        ?>
+
         @foreach ( $lipid as $key => $value )
             <li><strong>{{ $key }}:</strong> {{ $value }}</li>
+        @endforeach
+        @foreach ( $properties as $x )
+            <li><strong>{{ $x->name }}:</strong> {{ $x->value }}</li>
         @endforeach
            
                                 </ul>
