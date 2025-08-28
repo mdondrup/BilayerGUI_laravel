@@ -1,7 +1,4 @@
-<?php
 
-use App\Http\Controllers\StatisticsController;
-?>
 <!doctype html>
 <html class="welcome" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @include('layouts.head')
@@ -82,25 +79,26 @@ use App\Http\Controllers\StatisticsController;
                     <h2 class="text-white mt-0">NMRlipids Databank</h2>
                     <hr class="divider divider-light" />
                     <p class="text-white-75 mb-4 txt_desc">
-                        
-     <h3 class="text-white mt-0">Showing details for lipid: {{ $lipid['name'] }}</h2>
-     </p>
-</div>
-     <div class="container px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-lg-8 text-left">
-                    <p class="text-white-75 mb-4 txt_desc">
-<div class="text-white-75 mb-4 txt_desc">   
-     <ul>
+                        <h3 class="text-white mt-0">Showing details for lipid: {{ $lipid['name'] }}</h2>
+                     </p>
+                </div>
+            </div>
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-lg-8 text-left">
+                        <p class="text-white-75 mb-4 txt_desc">
+                            <div class="text-white-75 mb-4 txt_desc">   
+                                <ul>
         @foreach ( $lipid as $key => $value )
             <li><strong>{{ $key }}:</strong> {{ $value }}</li>
         @endforeach
            
-     </ul>
+                                </ul>
    
-</div>
-                    </p>
+                            </div>
+                        </p>
 
+                    </div>
                 </div>
             </div>
         </div>

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
-
+use Illuminate\Support\Facades\DB;
 
 class LipidController extends Controller
 {
@@ -13,6 +13,12 @@ class LipidController extends Controller
      */
     public function show(string $lipid_id) : \Illuminate\View\View    {
 
+        // Fetch lipid data from the database based on the provided lipid_id
+        // For example:
+        $lipid = DB::table('lipids')->where('id', $lipid_id)->firstOrFail();
+
+
+        // For demonstration, we will create a dummy lipid data array.
        
         $dummyLipids = [
         'id' => $lipid_id,
