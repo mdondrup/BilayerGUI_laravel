@@ -22,7 +22,7 @@ class LipidController extends Controller
        
         $dummyLipids = [
         'id' => $lipid_id,
-        'name' => 'Lipid POPE',
+        'name' => $lipid->name ?? 'Nonexistent Lipid',
         'formula' => 'C55H98O6',
         'mass' => '885.4',
         'type' => 'Phospholipid',
