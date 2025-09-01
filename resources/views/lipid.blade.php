@@ -79,7 +79,7 @@
                     <h2 class="text-white mt-0">NMRlipids Databank</h2>
                     <hr class="divider divider-light" />
                     <p class="text-white-75 mb-4 txt_desc">
-                        <h3 class="text-white mt-0">Showing details for lipid: {{ $lipid['name'] }}</h2>
+                        <h3 class="text-white mt-0">Showing details for lipid: {{ $lipid['name'] }}</h3>
                      </p>
                 </div>
             </div>
@@ -97,7 +97,7 @@
             <li><strong>{{ $key }}:</strong> {{ $value }}</li>
         @endforeach
         @foreach ( $properties as $x )
-            <li><strong>{{ $x->name }}:</strong> {{ $x->value }}</li>
+            <li><strong>{{ $x->name }}:</strong> {{ $x->value }}{{ $x->unit }} </li>
         @endforeach
            
                                 </ul>

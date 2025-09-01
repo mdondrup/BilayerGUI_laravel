@@ -23,19 +23,21 @@ import argparse
 import numpy as np
 import numbers
 from importlib import import_module
+from DatabankLib import *
+from DatabankLib.core import *
 
 # IMPORTLIB imports just `core` and `databankio` to avoid additional dependecies.
 # It DOES NOT require the package to be pre-installed
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-dbl = import_module("DatabankLib")
-NMRDict = import_module("DatabankLib.settings.molecules")
-core = import_module("DatabankLib.core")
-sys.path.pop(0)
+#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+#dbl = import_module("../Databank/DatabankLib", "DatabankLib")
+#NMRDict = import_module("DatabankLib.settings.molecules")
+#core = import_module("../Databank/DatabankLib.core", "core")
+#sys.path.pop(0)
 
 
 # most of paths should be inserted into the DB relative to repo root
 def genRpath(apath):
-    return osp.relpath(apath, dbl.NMLDB_ROOT_PATH)
+    return osp.relpath(apath, dbl.NMLDB_DATA_PATH)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # ARGUMENTS
@@ -370,9 +372,58 @@ def ResetTable(Table: str):
     return
 
 
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# MAIN PROGRAM
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
+import yaml
+import os
+
+# --- Load lipid metadata and insert cross-references ---
+def load_lipid_metadata(metadata_path, database):
+    with open(metadata_path, 'r') as f:
+        meta = yaml.safe_load(f)
+
+    lipid_info = meta.get('NMRlipids', {})
+    bioschema = meta.get('bioschema_properties', {})
+    sameas = meta.get('sameAs', {})
+
+    # Insert lipid into lipids table
+    lipid_data = {
+        'molecule': lipid_info.get('id', ''),
+        'name': lipid_info.get('name', ''),
+        'mapping': lipid_info.get('mapping', '')
+    }
+    lipid_id = CreateEntry('lipids', lipid_data)
+
+    # Insert bioschema properties as properties (optional, can be extended)
+    for prop, value in bioschema.items():
+        prop_data = {
+            'name': prop,
+            'description': '',
+            'value': value,
+            'unit': '',
+            'type': 'string'
+        }
+        prop_id = DBEntry('properties', prop_data, {'name': prop, 'value': value})
+        # Link lipid and property
+        DBEntry('lipid_properties', {'lipid_id': lipid_id, 'property_id': prop_id}, {'lipid_id': lipid_id, 'property_id': prop_id})
+
+    # Insert cross-references
+    for db_name, ext_id in sameas.items():
+        # Insert db into db table if not exists
+        db_data = {
+            'name': db_name,
+            'description': '',
+            'url_schema': '',
+            'version': ''
+        }
+        db_id = DBEntry('db', db_data, {'name': db_name})
+        crossref_data = {
+            'db_id': db_id,
+            'lipid_id': lipid_id,
+            'external_id': ext_id,
+            'external_url': ''
+        }
+        DBEntry('cross_references', crossref_data, {'db_id': db_id, 'lipid_id': lipid_id, 'external_id': ext_id})
 
 # The list of molecules in the membrane whose structure is not a phospholipid
 HETEROMOLECULES_LIST = ["CHOL", "DCHOL", "C20", "C30"]
@@ -404,63 +455,26 @@ TABLE_LIST = ["experiments_OP",
               "trajectories_experiments_FF"
               ]
 
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# MAIN PROGRAM
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 if __name__ == '__main__':
+
     # Load the configuration of the connection
     config = json.load(open(args.config, "r"))
-
-    # Conect to the database
     database = pymysql.connect(**config)
 
-    # Path to the ranking files
-    PATH_RANKING = osp.join(dbl.NMLDB_DATA_PATH, "Ranking")
-    PATH_SIMULATIONS = dbl.NMLDB_SIMU_PATH
-    PATH_EXPERIMENTS = dbl.NMLDB_EXP_PATH
+    # Load lipid metadata and cross-references
+    data_path = os.path.join(NMLDB_MOL_PATH, 'membrane')
+    for path, _, files in os.walk(data_path):
+        for file in files:
+            if file.endswith("metadata.yaml"):
+                metadata_path = os.path.join(path, file)
+                print(f"Loading metadata from {metadata_path}")
+                load_lipid_metadata(metadata_path, database)
 
-    # If -s(ystems) is given, only modify that entries
-    if args.systems is not None:
-        systems = []
-        for system in args.systems:
-            # Format the system info
-            system = system.strip("/\\")
-
-            # The path to the simulation file
-            PATH_SIMULATION = osp.join(PATH_SIMULATIONS, system)
-
-            # Read the README.yaml file, the information of the simulation
-            with open(osp.join(PATH_SIMULATION, 'README.yaml')) as File:
-                README = yaml.load(File, Loader=yaml.FullLoader)
-
-            # Add the math of the file
-            README["path"] = system
-
-            systems.append(README)
-
-    else:
-        # Initialize the whole databank
-        systems = core.initialize_databank()
-
-        # Remove the content of the tables and reset the autoincrements
-        for table in TABLE_LIST[::-1]:
-            ResetTable(table)
-
-        # Create dummy FF and membrane
-        Info = {
-            "name":   'None',
-            "date":   'None',
-            "source": 'None'
-            }
-        _ = DBEntry('forcefields', Info, Info)
-
-        # Create dummy FF and membrane
-        Info = {
-            "forcefield_id":   1,
-            "lipid_names_l1":  "None",
-            "lipid_names_l2":  "None",
-            "lipid_number_l1": "None",
-            "lipid_number_l2": "None",
-            "geometry":        "None"
-            }
-        _ = DBEntry('membranes', Info, Info)
+    # ...existing code...
 
 
 # -- TABLE `experiments_OP`
