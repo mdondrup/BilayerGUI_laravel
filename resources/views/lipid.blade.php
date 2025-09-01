@@ -87,7 +87,7 @@
                                             <a href="{{ $xref->url }}" target="_blank" class="text-white-75">{{ $xref->external_id ?? '' }}</a>
                                         @else
                                             <!-- Link to identifiers.org if no URL is provided -->
-                                            <a href="https://identifiers.org/{{ $xref->external_id }}" target="_blank" class="text-white-75">{{ $xref->external_id ?? '' }}</a>
+                                            <a href="https://identifiers.org/{{ $xref->database }}/{{ $xref->external_id }}" target="_blank" class="text-white-75">{{ $xref->external_id ?? '' }}</a>
 
                                          
                                         @endif
