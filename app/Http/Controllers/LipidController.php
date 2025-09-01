@@ -28,17 +28,35 @@ class LipidController extends Controller
         }
         // Get the base data each lipid has from the DB.
         $lipid_id = $lipid->id ?? null;
+        $propdescription = DB::table('lipid_properties')
+                ->join('properties', 'lipid_properties.property_id', '=', 'properties.id')
+                ->select('value','name')
+                ->where('lipid_id', '=', $lipid_id)
+                ->where('name', 'like', 'description')
+                ->where('value', '!=', '')
+                ->first();
         $lipids_data= [
             'id' => $lipid_id,
             'name' => $lipid->name ?? 'Nonexistent Lipid',
             'molecule' => $lipid->molecule ?? 'Unknown Molecule',
-            'description' => $lipid->description ?? 'No description available.' 
         ];
+        $des =  $lipid->description ?? $propdescription?->value; 
+        if (isset($des)) {
+            $lipids_data['description'] = $des;
+    };       
+        
         // get additional properties if needed
         $properties = DB::table('lipid_properties')
             ->join('properties', 'lipid_properties.property_id', '=', 'properties.id')
             ->select('name','value','unit')
-            -> where('lipid_id', $lipid_id)->get();
+            ->where('lipid_id', $lipid_id)
+            ->where('name', '!=', 'description')
+            ->get();
+        // If description is part of properties, move it to main lipid data
+        
+
+        // Move description from properties to main lipid data if exists
+        
         // add properties to lipid data
         $lipids_data['properties'] = $properties;
         // Add cross-references if any
