@@ -1,44 +1,8 @@
-
 <!doctype html>
 <html class="welcome" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @include('layouts.head')
 
-<script>
-    // Referencia: http://www.html5rocks.com/en/tutorials/speed/animations/
-    var last_known_scroll_position = 0;
-    var ticking = false;
-
-    function doSomething(scroll_pos) {
-        // Hacer algo con la posición del scroll
-        //console.log("scrolleo " + scroll_pos + "  " + window.innerHeight);
-        if (scroll_pos > 100 && scroll_pos < (window.innerHeight - 80)) {
-            $('footer').fadeOut();
-        } else {
-            $('footer').fadeIn();
-        }
-
-
-    }
-    /*
-    window.addEventListener('scroll', function(e) {
-      last_known_scroll_position = window.scrollY;
-
-      if (!ticking) {
-        window.requestAnimationFrame(function() {
-          doSomething(last_known_scroll_position);
-          ticking = false;
-        });
-      }
-      ticking = true;
-    });
-    */
-</script>
-
 <body id="page-top">
-
-    <!-- Fonts
-<link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
--->
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
         <div class="container px-4 px-lg-5">
@@ -50,60 +14,85 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto my-2 my-lg-0">
-
-                    <!--  <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>-->
                     <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                    <!--<li class="nav-item"><a class="nav-link" href="#portfolio">Project</a></li>-->
-                    <!--  @if (Route::has('login'))
-<li class="nav-item">
-                  @auth
-                                                                          <a class="nav-link" href="{{ url('/home') }}">Home</a>
-@else
-    <a  class="nav-link" href="{{ route('login') }}">Login</a>
-                  @endauth
-                </li>
-@endif-->
                 </ul>
             </div>
         </div>
     </nav>
 
-
-   
-
     <!-- About-->
     <section class="page-section bg-primary" id="about">
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-lg-8 text-center">
-                    <h2 class="text-white mt-0">NMRlipids Databank</h2>
+                <div class="col-lg-10">
+                    <h2 class="text-white text-center mt-0">NMRlipids Databank</h2>
                     <hr class="divider divider-light" />
-                    <p class="text-white-75 mb-4 txt_desc">
-                        <h3 class="text-white mt-0">Showing details for lipid: {{ $lipid['name'] }}</h3>
-                     </p>
-                </div>
-            </div>
-            <div class="container px-4 px-lg-5">
-                <div class="row gx-4 gx-lg-5 justify-content-center">
-                    <div class="col-lg-8 text-left">
-                        <p class="text-white-75 mb-4 txt_desc">
-                            <div class="text-white-75 mb-4 txt_desc">   
-                                <ul>
-        <?php $properties = $lipid['properties'] ?? []; 
-            unset($lipid['properties']);  // remove properties from lipid to avoid duplication
-        ?>
+                    <h3 class="text-white text-center mt-0">{{ $lipid['name'] }}</h3>
 
-        @foreach ( $lipid as $key => $value )
-            <li><strong>{{ $key }}:</strong> {{ $value }}</li>
-        @endforeach
-        @foreach ( $properties as $x )
-            <li><strong>{{ $x->name }}:</strong> {{ $x->value }}{{ $x->unit }} </li>
-        @endforeach
-           
+                    <?php 
+                        $properties = $lipid['properties'] ?? []; 
+                        $cross_refs = $lipid['cross_references'] ?? [];
+                        unset($lipid['properties']);  
+                        unset($lipid['cross_references']);  
+                    ?>
+
+                    <!-- Bootstrap Tabs -->
+                    <ul class="nav nav-pills justify-content-start" id="lipidTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab">Overview</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="properties-tab" data-bs-toggle="tab" data-bs-target="#properties" type="button" role="tab">Properties</button>
+                        </li>
+                        @if(!empty($cross_refs))
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="crossrefs-tab" data-bs-toggle="tab" data-bs-target="#crossrefs" type="button" role="tab">Cross References</button>
+                        </li>
+                        @endif
+                    </ul>
+
+                    <!-- Tab Contents -->
+                    <div class="tab-content bg-dark text-white p-4 rounded-bottom" id="lipidTabContent">
+                        
+                        <!-- Overview -->
+                        <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                            <ul class="mb-0" style="font-size:1.1em;">
+                                @foreach ($lipid as $key => $value)
+                                    <li><strong>{{ ucfirst($key) }}:</strong> {{ $value }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+
+                        <!-- Properties -->
+                        <div class="tab-pane fade" id="properties" role="tabpanel">
+                            @if(!empty($properties))
+                                <ul style="font-size:1.1em;">
+                                    @foreach ($properties as $x)
+                                        <li><strong>{{ $x->name }}:</strong> {{ $x->value }}{{ $x->unit }}</li>
+                                    @endforeach
                                 </ul>
-   
-                            </div>
-                        </p>
+                            @else
+                                <p>No properties available.</p>
+                            @endif
+                        </div>
+
+                        <!-- Cross References -->
+                        @if(!empty($cross_refs))
+                        <div class="tab-pane fade" id="crossrefs" role="tabpanel">
+                            <ul style="font-size:1.1em;">
+                                @foreach ($cross_refs as $xref)
+                                    <li>
+                                        <strong>{{ $xref->database ?? 'Database' }}:</strong>
+                                        @if(!empty($xref->url))
+                                            <a href="{{ $xref->url }}" target="_blank" class="text-white-75">{{ $xref->external_id ?? '' }}</a>
+                                        @else
+                                            {{ $xref->external_id ?? '' }}
+                                        @endif
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
 
                     </div>
                 </div>
@@ -111,18 +100,17 @@
         </div>
     </section>
 
-
-
-   
-
- <!-- Footer-->
+    <!-- Footer-->
     <footer class="bg-light py-5">
-        <div class="container px-4 px-lg-5"><div class="small text-center text-muted">Copyright &copy;{{ date('Y') }} - NMRlipids</div></div> 
-
+        <div class="container px-4 px-lg-5">
+            <div class="small text-center text-muted">
+                Copyright &copy;{{ date('Y') }} - NMRlipids
+            </div>
+        </div>
     </footer>
-  </body>
+    <!-- Bootstrap core JS--><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Core theme JS-->
+    <script src="{{ asset('js/scripts.js') }}"></script>
+
+</body>
 </html>
-
-
-
-

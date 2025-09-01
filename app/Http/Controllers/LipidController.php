@@ -15,11 +15,19 @@ class LipidController extends Controller
 
         // Fetch lipid data from the database based on the provided lipid_id
         // For example:
-        $lipid = DB::table('lipids')->where('id', $lipid_id)->firstOrFail();
-
-
+        if (empty($lipid_id)) {
+            abort(400, 'Lipid ID cannot be empty');
+        }
+        if (is_numeric($lipid_id)) {
+            $lipid = DB::table('lipids')->where('id', $lipid_id)->first();
+        } else {
+            $lipid = DB::table('lipids')->where('molecule', $lipid_id)->first();
+        }   
+        if (!$lipid) {
+            abort(404, "Lipid '$lipid_id' not found");
+        }
         // Get the base data each lipid has from the DB.
-       
+        $lipid_id = $lipid->id ?? null;
         $lipids_data= [
             'id' => $lipid_id,
             'name' => $lipid->name ?? 'Nonexistent Lipid',
@@ -31,7 +39,15 @@ class LipidController extends Controller
             ->join('properties', 'lipid_properties.property_id', '=', 'properties.id')
             ->select('name','value','unit')
             -> where('lipid_id', $lipid_id)->get();
+        // add properties to lipid data
         $lipids_data['properties'] = $properties;
+        // Add cross-references if any
+        $cross_refs = DB::table('cross_references')
+            ->where('lipid_id', $lipid_id)
+            ->join('db', 'cross_references.db_id', '=', 'db.id')
+            ->select('db.name as database', 'cross_references.external_id', 'cross_references.external_url as url')
+            ->get();
+        $lipids_data['cross_references'] = $cross_refs;
 
 
      return View::make('lipid', ['lipid' => $lipids_data]);

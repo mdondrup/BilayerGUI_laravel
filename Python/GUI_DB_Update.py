@@ -218,6 +218,39 @@ def CheckEntry(Table: str, Information: dict = {}) -> int:
     # extract ID-s value
     return ID[0]
 
+def LinkEntries(Table: str, Information: dict) -> None:
+    '''
+    Link two entries in a table
+
+    Parameters
+    ----------
+    Table : str
+        Name of the table.
+    Information : dict
+        Values to add.
+        Must contain the IDs of the two entries to link in the source tables.
+
+    Returns
+    -------
+    None: Linker table is not expected to return an ID
+    '''
+
+    # Create a cursor
+    with database.cursor() as cursor:
+        # Execute the query creating a new entry
+        res = cursor.execute(SQL_Create(Table, Information))
+
+    # Commit the changes
+    database.commit()
+
+    # Num rows affected should be 1
+    if res != 1:
+        RuntimeError("ERROR: record wasn't inserted!")
+        
+            
+    
+    print("A new entry was created in {}: index {}".format(Table, Information))
+    return None
 
 def CreateEntry(Table: str, Information: dict) -> int:
     '''
@@ -387,12 +420,16 @@ def load_lipid_metadata(metadata_path, database):
     sameas = meta.get('sameAs', {})
 
     # Insert lipid into lipids table
+    molecule_id = lipid_info.get('id', '')
+    if not molecule_id:
+        raise ValueError(f"Error in metadata path {metadata_path}Lipid ID cannot be empty")
+        
     lipid_data = {
-        'molecule': lipid_info.get('id', ''),
-        'name': lipid_info.get('name', ''),
-        'mapping': lipid_info.get('mapping', '')
+        'molecule': molecule_id,
+        'name': lipid_info.get('name', '') or molecule_id, 
+        'mapping': lipid_info.get('mapping', molecule_id),
     }
-    lipid_id = CreateEntry('lipids', lipid_data)
+    lipid_id = DBEntry('lipids', lipid_data, {'molecule': molecule_id})
 
     # Insert bioschema properties as properties (optional, can be extended)
     for prop, value in bioschema.items():
@@ -405,7 +442,8 @@ def load_lipid_metadata(metadata_path, database):
         }
         prop_id = DBEntry('properties', prop_data, {'name': prop, 'value': value})
         # Link lipid and property
-        DBEntry('lipid_properties', {'lipid_id': lipid_id, 'property_id': prop_id}, {'lipid_id': lipid_id, 'property_id': prop_id})
+        LinkEntries('lipid_properties', {'lipid_id': lipid_id, 'property_id': prop_id})
+        print ("Linked property {} to lipid ID {}".format(prop, lipid_id))
 
     # Insert cross-references
     for db_name, ext_id in sameas.items():
@@ -423,7 +461,7 @@ def load_lipid_metadata(metadata_path, database):
             'external_id': ext_id,
             'external_url': ''
         }
-        DBEntry('cross_references', crossref_data, {'db_id': db_id, 'lipid_id': lipid_id, 'external_id': ext_id})
+        LinkEntries('cross_references', crossref_data)
 
 # The list of molecules in the membrane whose structure is not a phospholipid
 HETEROMOLECULES_LIST = ["CHOL", "DCHOL", "C20", "C30"]
@@ -475,7 +513,8 @@ if __name__ == '__main__':
                 load_lipid_metadata(metadata_path, database)
 
     # ...existing code...
-
+    # 
+    exit(0)
 
 # -- TABLE `experiments_OP`
 
