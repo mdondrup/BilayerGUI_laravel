@@ -86,7 +86,10 @@
                                         @if(!empty($xref->url))
                                             <a href="{{ $xref->url }}" target="_blank" class="text-white-75">{{ $xref->external_id ?? '' }}</a>
                                         @else
-                                            {{ $xref->external_id ?? '' }}
+                                            <!-- Link to identifiers.org if no URL is provided -->
+                                            <a href="https://identifiers.org/{{ $xref->external_id }}" target="_blank" class="text-white-75">{{ $xref->external_id ?? '' }}</a>
+
+                                         
                                         @endif
                                     </li>
                                 @endforeach
