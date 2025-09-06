@@ -23,14 +23,18 @@ import argparse
 import numpy as np
 import numbers
 from importlib import import_module
+import DatabankLib as dbl # requires the package to be pre-installed
 from DatabankLib import *
 from DatabankLib.core import *
+from DatabankLib.settings import *
+
+
 
 # IMPORTLIB imports just `core` and `databankio` to avoid additional dependecies.
 # It DOES NOT require the package to be pre-installed
 #sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 #dbl = import_module("../Databank/DatabankLib", "DatabankLib")
-#NMRDict = import_module("DatabankLib.settings.molecules")
+NMRDict = import_module("DatabankLib.settings.molecules")
 #core = import_module("../Databank/DatabankLib.core", "core")
 #sys.path.pop(0)
 
@@ -184,7 +188,7 @@ def SQL_Update(Table: str, Values: dict, Condition: dict = {}) -> str:
 # Functions
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-def CheckEntry(Table: str, Information: dict = {}) -> int:
+def CheckEntry(Table: str, LipidInformation: dict = {}) -> int:
     '''
     Find an entry in the DB
 
@@ -192,7 +196,7 @@ def CheckEntry(Table: str, Information: dict = {}) -> int:
     ----------
     Table : str
         Name of the table.
-    Information : dict, optional
+    LipidInformation : dict, optional
         Values to check.
 
     Returns
@@ -204,7 +208,7 @@ def CheckEntry(Table: str, Information: dict = {}) -> int:
     # Create a cursor
     with database.cursor() as cursor:
         # Find the ID(s) of the entry matching the condition
-        cursor.execute(SQL_Select(Table, ["id"], Information))
+        cursor.execute(SQL_Select(Table, ["id"], LipidInformation))
         # The list of IDs
         ID = cursor.fetchone()
 
@@ -218,7 +222,7 @@ def CheckEntry(Table: str, Information: dict = {}) -> int:
     # extract ID-s value
     return ID[0]
 
-def LinkEntries(Table: str, Information: dict) -> None:
+def LinkEntries(Table: str, LipidInformation: dict) -> None:
     '''
     Link two entries in a table
 
@@ -226,7 +230,7 @@ def LinkEntries(Table: str, Information: dict) -> None:
     ----------
     Table : str
         Name of the table.
-    Information : dict
+    LipidInformation : dict
         Values to add.
         Must contain the IDs of the two entries to link in the source tables.
 
@@ -238,7 +242,7 @@ def LinkEntries(Table: str, Information: dict) -> None:
     # Create a cursor
     with database.cursor() as cursor:
         # Execute the query creating a new entry
-        res = cursor.execute(SQL_Create(Table, Information))
+        res = cursor.execute(SQL_Create(Table, LipidInformation))
 
     # Commit the changes
     database.commit()
@@ -249,10 +253,10 @@ def LinkEntries(Table: str, Information: dict) -> None:
         
             
     
-    print("A new entry was created in {}: index {}".format(Table, Information))
+    print("A new entry was created in {}: index {}".format(Table, LipidInformation))
     return None
 
-def CreateEntry(Table: str, Information: dict) -> int:
+def CreateEntry(Table: str, LipidInformation: dict) -> int:
     '''
     Add an entry into a table
 
@@ -260,7 +264,7 @@ def CreateEntry(Table: str, Information: dict) -> int:
     ----------
     Table : str
         Name of the table.
-    Information : dict, optional
+    LipidInformation : dict, optional
         Values to add.
 
     Returns
@@ -272,7 +276,7 @@ def CreateEntry(Table: str, Information: dict) -> int:
     # Create a cursor
     with database.cursor() as cursor:
         # Execute the query creating a new entry
-        res = cursor.execute(SQL_Create(Table, Information))
+        res = cursor.execute(SQL_Create(Table, LipidInformation))
 
     # Commit the changes
     database.commit()
@@ -280,15 +284,15 @@ def CreateEntry(Table: str, Information: dict) -> int:
     # Num rows affected should be 1
     if res != 1:
         print("ERROR: record wasn't inserted!")
-        print(Information)
+        print(LipidInformation)
         return 0
 
     # Check if the entry was created
-    ID = CheckEntry(Table, Information)
+    ID = CheckEntry(Table, LipidInformation)
     # If there is not an ID, raise an error (the table was not created)
     if not ID:
         print("WARNING: Something may have gone wrong with the table {}".format(Table))
-        print(Information)
+        print(LipidInformation)
         return 0
     # If an ID is obtained, the entry was created succesfuly
     else:
@@ -296,7 +300,7 @@ def CreateEntry(Table: str, Information: dict) -> int:
         return ID
 
 
-def UpdateEntry(Table: str, Information: dict, Condition: dict):
+def UpdateEntry(Table: str, LipidInformation: dict, Condition: dict):
     '''
     Updates an entry in a table.
 
@@ -304,7 +308,7 @@ def UpdateEntry(Table: str, Information: dict, Condition: dict):
     ----------
     Table : str
         Name of the table.
-    Information : dict
+    LipidInformation : dict
         Values to add.
     Condition : dict
         Conditions to select the entry.
@@ -313,7 +317,7 @@ def UpdateEntry(Table: str, Information: dict, Condition: dict):
     # Create a cursor
     with database.cursor() as cursor:
         # Execute the query updating an entry
-        cursor.execute(SQL_Update(Table, Information, Condition))
+        cursor.execute(SQL_Update(Table, LipidInformation, Condition))
 
     # Commit the changes
     database.commit()
@@ -321,20 +325,20 @@ def UpdateEntry(Table: str, Information: dict, Condition: dict):
     return print("Entry {} in table {} was updated".format(Condition["id"], Table))
 
 
-def DBEntry(Table: str, Information: dict, Minimal: dict = {}) -> tuple:
+def DBEntry(Table: str, LipidInformation: dict, Minimal: dict = {}) -> tuple:
     '''
-    Manages entries in the DB. If the Minimal information is not found in an
+    Manages entries in the DB. If the Minimal LipidInformation is not found in an
     existing entry, a new one is created; else, the matching entry is updated
-    when a discrepancy between the minimal and the total information appears.
+    when a discrepancy between the minimal and the total LipidInformation appears.
 
     Parameters
     ----------
     Table : str
         Name of the table
-    Information : dict
-        Total infomation of the entry.
+    LipidInformation : dict
+        Total LipidInfomation of the entry.
     Minimal : dict, optional
-        Minimal information of the entry.
+        Minimal LipidInformation of the entry.
 
     Returns
     -------
@@ -343,32 +347,32 @@ def DBEntry(Table: str, Information: dict, Minimal: dict = {}) -> tuple:
     '''
 
     # --- TEMPORAL -----
-    # Delete the Nan from the Information dictionary
+    # Delete the Nan from the LipidInformation dictionary
     # The presence of NaN in the DB leads to problems dealing with the data
     # A solution must be found for this problem in the future.
-    for entry in Information:
-        if Information[entry] == "nan":
-            Information[entry] = 0
+    for entry in LipidInformation:
+        if LipidInformation[entry] == "nan":
+            LipidInformation[entry] = 0
     # --------------------
 
     # Check the existence of the entry
     EntryID = CheckEntry(Table, Minimal)
 
-    # If there is an ID associated to the minimal information...
+    # If there is an ID associated to the minimal LipidInformation...
     if EntryID:
 
-        # Check if the Minimal information matches the whole Information
+        # Check if the Minimal LipidInformation matches the whole LipidInformation
         # If they don't match...
-        if Information != Minimal:
+        if LipidInformation != Minimal:
 
-            # Add the ID of the entry to the minimal information
+            # Add the ID of the entry to the minimal LipidInformation
             Minimal["id"] = EntryID
 
             # Update the entry
-            UpdateEntry(Table, Information, Minimal)
+            UpdateEntry(Table, LipidInformation, Minimal)
             return EntryID
 
-        # If the minimal information and the total information match,
+        # If the minimal LipidInformation and the total LipidInformation match,
         # no update is required.
         else:
             print("It was not necessary to update entry {} in table {}"
@@ -377,8 +381,8 @@ def DBEntry(Table: str, Information: dict, Minimal: dict = {}) -> tuple:
 
     # If there is not an entry...
     else:
-        # Create a new one with the data from Information
-        EntryID = CreateEntry(Table, Information)
+        # Create a new one with the data from LipidInformation
+        EntryID = CreateEntry(Table, LipidInformation)
         return EntryID
 
 
@@ -415,19 +419,19 @@ def load_lipid_metadata(metadata_path, database):
     with open(metadata_path, 'r') as f:
         meta = yaml.safe_load(f)
 
-    lipid_info = meta.get('NMRlipids', {})
+    lipid_LipidInfo = meta.get('NMRlipids', {})
     bioschema = meta.get('bioschema_properties', {})
     sameas = meta.get('sameAs', {})
 
     # Insert lipid into lipids table
-    molecule_id = lipid_info.get('id', '')
+    molecule_id = lipid_LipidInfo.get('id', '')
     if not molecule_id:
         raise ValueError(f"Error in metadata path {metadata_path}Lipid ID cannot be empty")
         
     lipid_data = {
         'molecule': molecule_id,
-        'name': lipid_info.get('name', '') or molecule_id, 
-        'mapping': lipid_info.get('mapping', molecule_id),
+        'name': lipid_LipidInfo.get('name', '') or molecule_id, 
+        'mapping': lipid_LipidInfo.get('mapping', molecule_id),
     }
     lipid_id = DBEntry('lipids', lipid_data, {'molecule': molecule_id})
 
@@ -514,13 +518,13 @@ if __name__ == '__main__':
 
     # ...existing code...
     # 
-    exit(0)
+    #exit(0)
 
 # -- TABLE `experiments_OP`
 
     # Find files with order parameters experiments
     EXP_OP = []
-    PATH_EXPERIMENTS_OP = osp.join(PATH_EXPERIMENTS, "OrderParameters")
+    PATH_EXPERIMENTS_OP = osp.join(NMLDB_EXP_PATH, "OrderParameters")
 
     # Get the path to every README.yaml file with experimental data
     for path, _, files in os.walk(PATH_EXPERIMENTS_OP):
@@ -538,18 +542,18 @@ if __name__ == '__main__':
         for file in os.listdir(osp.join(PATH_EXPERIMENTS_OP, expOP)):
             if file.endswith(".json"):
 
-                Info = {"doi": README["DOI"],
+                LipidInfo = {"doi": README["DOI"],
                         "path": genRpath(osp.join(PATH_EXPERIMENTS_OP, expOP, file))}
 
-                # Entry in the DB with the info of the experiment
-                Exp_ID = DBEntry('experiments_OP', Info, Info)
+                # Entry in the DB with the LipidInfo of the experiment
+                Exp_ID = DBEntry('experiments_OP', LipidInfo, LipidInfo)
 
 
 # -- TABLE `experiments_FF`
 
     # Find files with form factor experiments
     EXP_FF = []
-    PATH_EXPERIMENTS_FF = osp.join(PATH_EXPERIMENTS, "FormFactors")
+    PATH_EXPERIMENTS_FF = osp.join(NMLDB_EXP_PATH, "FormFactors")
 
     # Get the path to every README.yaml file with experimental data
     for path, _, files in os.walk(PATH_EXPERIMENTS_FF):
@@ -567,23 +571,26 @@ if __name__ == '__main__':
         for file in os.listdir(osp.join(PATH_EXPERIMENTS_FF, expFF)):
             if file.endswith(".json"):
 
-                Info = {"doi": README["DOI"],
+                LipidInfo = {"doi": README["DOI"],
                         "path": genRpath(osp.join(PATH_EXPERIMENTS_FF, expFF, file))}
 
-                # Entry in the DB with the info of the experiment
-                Exp_ID = DBEntry('experiments_FF', Info, Info)
+                # Entry in the DB with the LipidInfo of the experiment
+                Exp_ID = DBEntry('experiments_FF', LipidInfo, LipidInfo)
 
+    
+    systems = dbl.core.initialize_databank()
+    
     # Iterate over the loaded systems
     for _README in systems:
         README = _README.readme
 
         try:
             # if True:
-            print("\nCollecting data from system:")
-            print(README["path"] + "\n")
+            #print("\nCollecting data from system:")
+            #print(README["path"] + "\n")
 
             # The location of the files
-            PATH_SIMULATION = osp.join(PATH_SIMULATIONS, README["path"])
+            PATH_SIMULATION = osp.join(NMLDB_SIMU_PATH, README["path"])
 
             # In the case a field in the README does not exist, set its value to 0
             for field in [
@@ -597,18 +604,18 @@ if __name__ == '__main__':
                     README[field] = 0
 
     # -- TABLE `forcefields`
-            # Collect the information about the forcefield
-            Info = {
+            # Collect the LipidInformation about the forcefield
+            LipidInfo = {
                 "name":   README["FF"],
                 "date":   README["FF_DATE"],
                 "source": README["FF_SOURCE"]
                 }
 
-            # Entry in the DB with the info of the FF
-            FF_ID = DBEntry('forcefields', Info, Info)
+            # Entry in the DB with the LipidInfo of the FF
+            FF_ID = DBEntry('forcefields', LipidInfo, LipidInfo)
 
-    # -- TABLE `lipids`
-            # Empty dictionaries for the info of the lipids
+    # -- TABLE `lipids_forcefields`
+            # Empty dictionaries for the LipidInfo of the lipids
             Lipids = {}
             Lipids_ID = {}
             Lipid_Ranking = {}
@@ -619,18 +626,27 @@ if __name__ == '__main__':
                     # Save the quality of the lipid
                     Store = True
 
-                    # Collect the info of the lipids
-                    Info = {
-                        "forcefield_id": FF_ID,
+                    # Collect the LipidInfo of the lipids
+                    LipidInfo = {
                         "molecule":      key,
                         "name":          README["COMPOSITION"][key]["NAME"],
                         "mapping":       README["COMPOSITION"][key]["MAPPING"]
                         }
 
-                    # Entry in the DB with the info of the lipid
-                    Lip_ID = DBEntry('lipids', Info, Info)
-
-                    # Store information for further steps
+                    # The entry should already exist in the lipids table
+                    # (loaded at the beginning of the script)
+                    Lip_ID = CheckEntry('lipids', {"molecule": key})
+                    if not Lip_ID:
+                        print("WARNING: Lipid {} not found in the DB. Adding it.".format(key))
+                        # If it does not exist, create it
+                        Lip_ID = DBEntry('lipids', LipidInfo, LipidInfo)
+                    # Link the lipid with the forcefield
+                    LinkEntries('lipids_forcefields',
+                                {"lipid_id": Lip_ID,
+                                 "forcefield_id": FF_ID,
+                                 "mapping": README["COMPOSITION"][key]["MAPPING"]
+                                 })
+                    # Store LipidInformation for further steps
                     Lipids[key] = README["COMPOSITION"][key]["COUNT"]
                     Lipids_ID[key] = Lip_ID
 
@@ -641,6 +657,7 @@ if __name__ == '__main__':
     # part). At this moment the ranking is not necessary in the DB, the web
     # already provides the result sorted by quality.
     # Same for the heteromolecules.
+                    PATH_RANKING = osp.join(NMLDB_DATA_PATH, "ranking")
                     Lipid_Ranking[key] = {}
                     # Find the position of the system in the ranking
                     for file in glob.glob(osp.join(PATH_RANKING, key) + "*"):
@@ -668,7 +685,7 @@ if __name__ == '__main__':
                             # If it does not have an assigned value, use None
                             if kind not in Lipid_Ranking[key]:
                                 Lipid_Ranking[key][kind] = 0
-
+                    # If the ranking file was not found, set all values to 0
                     # Read the quality file of the lipid (this will remain if the rest
                     # is removed)
                     try:
@@ -691,24 +708,24 @@ if __name__ == '__main__':
     # ------------------
 
     # -- TABLE `ions`
-            # Empty dictionary for the info of the ions
+            # Empty dictionary for the LipidInfo of the ions
             Ions = {}
             # Find the ions in the composition
             for key in README["COMPOSITION"]:
                 if key in NMRDict.molecules_set and key != "SOL" and \
                         key not in HETEROMOLECULES_LIST:
-                    # Collect the info of the ions
-                    Info = {
+                    # Collect the LipidInfo of the ions
+                    LipidInfo = {
                         "forcefield_id": FF_ID,
                         "molecule":      key,
                         "name":          README["COMPOSITION"][key]["NAME"],
                         "mapping":       README["COMPOSITION"][key]["MAPPING"]
                         }
 
-                    # Entry in the DB with the info of the ion
-                    Ion_ID = DBEntry('ions', Info, Info)
+                    # Entry in the DB with the LipidInfo of the ion
+                    Ion_ID = DBEntry('ions', LipidInfo, LipidInfo)
 
-                    # Store information for further steps: Ions[name]=[ID,number]
+                    # Store LipidInformation for further steps: Ions[name]=[ID,number]
                     Ions[key] = [Ion_ID, README["COMPOSITION"][key]["COUNT"]]
 
     # -- TABLE `water_models`
@@ -717,21 +734,21 @@ if __name__ == '__main__':
 
                 WatNum = README["COMPOSITION"]["SOL"]["COUNT"]
 
-                # Collect the info on the water
-                Info = {
+                # Collect the LipidInfo on the water
+                LipidInfo = {
                     "short_name":    WatName,
                     "mapping":       README["COMPOSITION"]["SOL"]["MAPPING"]
                     }
 
-                # Get an entry in the DB with the info of the water
-                Wat_ID = DBEntry('water_models', Info, Info)
+                # Get an entry in the DB with the LipidInfo of the water
+                Wat_ID = DBEntry('water_models', LipidInfo, LipidInfo)
 
     # -- TABLE `heteromolecules`
     # Heteromolecules are defined as the lipids for whom a distinction between the
     # different parts (headgroup, sn-1, sn-2) was not made. They could be included
     # in the lipids table and leaving some fields empty.
 
-            # Empty dictionaries for the info of the heteromolecules
+            # Empty dictionaries for the LipidInfo of the heteromolecules
             Heteromolecules = {}
             Heteromolecules_ID = {}
             Heteromolecules_Ranking = {}
@@ -744,23 +761,24 @@ if __name__ == '__main__':
             for key in README["COMPOSITION"]:
                 if key in NMRDict.lipids_set and key in HETEROMOLECULES_LIST:
 
-                    # Collect the info of the lipids
-                    Info = {
+                    # Collect the LipidInfo of the lipids
+                    LipidInfo = {
                         "forcefield_id": FF_ID,
                         "molecule":      key,
                         "name":          README["COMPOSITION"][key]["NAME"],
                         "mapping":       README["COMPOSITION"][key]["MAPPING"]
                         }
 
-                    # Entry in the DB with the info of the heteromolecules
-                    Mol_ID = DBEntry('heteromolecules', Info, Info)
+                    # Entry in the DB with the LipidInfo of the heteromolecules
+                    Mol_ID = DBEntry('heteromolecules', LipidInfo, LipidInfo)
 
-                    # Store information for further steps
+                    # Store LipidInformation for further steps
                     Heteromolecules[key] = README["COMPOSITION"][key]["COUNT"]
                     Heteromolecules_ID[key] = Mol_ID
 
     # --- TEMPORAL -----
     # See the lipids table for the reasons
+                    
                     Heteromolecules_Ranking[key] = {}
 
                     # Find the position of the system in the raking
@@ -808,7 +826,7 @@ if __name__ == '__main__':
                         except Exception:
                             Heteromolecules_Quality[key][t] = 0
     # ------------------
-
+        
     # -- TABLE `membranes`
             # Find the proportion of each lipid in the leaflets
             Names = [[], []]
@@ -833,8 +851,8 @@ if __name__ == '__main__':
             Names = [':'.join(Names[0]), ':'.join(Names[1])]
             Number = [':'.join(Number[0]), ':'.join(Number[1])]
 
-            # Collect the information about the membrane
-            Info = {
+            # Collect the LipidInformation about the membrane
+            LipidInfo = {
                 "forcefield_id":   FF_ID,
                 "lipid_names_l1":  Names[0],
                 "lipid_names_l2":  Names[1],
@@ -843,12 +861,12 @@ if __name__ == '__main__':
                 "geometry":        README["TYPEOFSYSTEM"]
                 }
 
-            # Entry in the DB with the info of the membrane
-            Mem_ID = DBEntry('membranes', Info, Info)
+            # Entry in the DB with the LipidInfo of the membrane
+            Mem_ID = DBEntry('membranes', LipidInfo, LipidInfo)
 
     # -- TABLE `trajectories`
-            # Collect the information about the simulation
-            Info = {
+            # Collect the LipidInformation about the simulation
+            LipidInfo = {
                 "id":              README["ID"],
                 "forcefield_id":   FF_ID,
                 "membrane_id":     Mem_ID,
@@ -868,7 +886,7 @@ if __name__ == '__main__':
                 "trj_length":      README["TRJLENGTH"]
                 }
 
-            # The information that defines the trajectory
+            # The LipidInformation that defines the trajectory
             Minimal = {
                 "id":            README["ID"],
                 "forcefield_id": FF_ID,
@@ -877,14 +895,14 @@ if __name__ == '__main__':
                 "system":        README["SYSTEM"]
                 }
 
-            # Entry in the DB with the info of the trajectory
-            Trj_ID = DBEntry('trajectories', Info, Minimal)
+            # Entry in the DB with the LipidInfo of the trajectory
+            Trj_ID = DBEntry('trajectories', LipidInfo, Minimal)
 
     # -- TABLE `trajectories_lipids`
             TrjL_ID = {}
             for lipid in Lipids:
-                # Collect the information of each lipid in the simulation
-                Info = {
+                # Collect the LipidInformation of each lipid in the simulation
+                LipidInfo = {
                     "trajectory_id": Trj_ID,
                     "lipid_id":      Lipids_ID[lipid],
                     "lipid_name":    lipid,
@@ -892,55 +910,55 @@ if __name__ == '__main__':
                     "leaflet_2":     Lipids[lipid][1]
                     }
 
-                # The minimal information that identifies the lipid
+                # The minimal LipidInformation that identifies the lipid
                 Minimal = {
                     "trajectory_id": Trj_ID,
                     "lipid_id":      Lipids_ID[lipid]
                     }
 
-                # Entry in the DB with the info of the lipids in the simulation
-                TrjL_ID[lipid] = DBEntry('trajectories_lipids', Info, Minimal)
+                # Entry in the DB with the LipidInfo of the lipids in the simulation
+                TrjL_ID[lipid] = DBEntry('trajectories_lipids', LipidInfo, Minimal)
 
     # -- TABLE `trajectories_water`
             if "SOL" in README["COMPOSITION"]:
-                # Collect the information of the water in the simulation
-                Info = {
+                # Collect the LipidInformation of the water in the simulation
+                LipidInfo = {
                     "trajectory_id": Trj_ID,
                     "water_id":      Wat_ID,
                     "water_name":    WatName,
                     "number":        WatNum}
 
-                # The minimal information of the water in the simulation
+                # The minimal LipidInformation of the water in the simulation
                 Minimal = {
                     "trajectory_id": Trj_ID,
                     "water_id":      Wat_ID}
 
-                # Entry in the DB with the info of the water in the simulation
-                _ = DBEntry('trajectories_water', Info, Minimal)
+                # Entry in the DB with the LipidInfo of the water in the simulation
+                _ = DBEntry('trajectories_water', LipidInfo, Minimal)
 
     # -- TABLE `trajectories_ions`
             TrjI_ID = {}
             for ion in Ions:
-                # Collect the information of each ion in the simulation
-                Info = {
+                # Collect the LipidInformation of each ion in the simulation
+                LipidInfo = {
                     "trajectory_id": Trj_ID,
                     "ion_id":        Ions[ion][0],
                     "ion_name":      ion,
                     "number":        Ions[ion][1]}
 
-                # The minimal information that identifies the ion
+                # The minimal LipidInformation that identifies the ion
                 Minimal = {
                     "trajectory_id": Trj_ID,
                     "ion_id":        Ions[ion][0]}
 
-                # Entry in the DB with the info of the ions in the simulation
-                TrjI_ID[ion] = DBEntry('trajectories_ions', Info, Minimal)
+                # Entry in the DB with the LipidInfo of the ions in the simulation
+                TrjI_ID[ion] = DBEntry('trajectories_ions', LipidInfo, Minimal)
 
     # -- TABLE `trajectories_heteromolecules`
             TrjM_ID = {}
             for hetero in Heteromolecules:
-                # Collect the information of each heteromolecule in the simulation
-                Info = {
+                # Collect the LipidInformation of each heteromolecule in the simulation
+                LipidInfo = {
                     "trajectory_id": Trj_ID,
                     "molecule_id":   Heteromolecules_ID[hetero],
                     "molecule_name": hetero,
@@ -948,22 +966,22 @@ if __name__ == '__main__':
                     "leaflet_2":     Heteromolecules[hetero][1]
                     }
 
-                # The minimal information that identifies the heteromolecule
+                # The minimal LipidInformation that identifies the heteromolecule
                 Minimal = {
                     "trajectory_id": Trj_ID,
                     "molecule_id":   Heteromolecules_ID[hetero]}
 
-                # Entry in the DB with the info of the heteromolecules in the simulation
-                TrjM_ID[hetero] = DBEntry('trajectories_heteromolecules', Info, Minimal)
+                # Entry in the DB with the LipidInfo of the heteromolecules in the simulation
+                TrjM_ID[hetero] = DBEntry('trajectories_heteromolecules', LipidInfo, Minimal)
 
     # -- TABLE `trajectories_membranes``
 
-            Info = {
+            LipidInfo = {
                 "trajectory_id": Trj_ID,
                 "membrane_id": Mem_ID,
                 "name": README["SYSTEM"]}
 
-            _ = DBEntry('trajectories_membranes', Info, Info)
+            _ = DBEntry('trajectories_membranes', LipidInfo, LipidInfo)
 
     # -- TABLE `trajectories_analysis`
             # Find the bilayer thickness
@@ -1010,15 +1028,15 @@ if __name__ == '__main__':
             except Exception:
                 FFExp = ''
 
-            # Collect the information of the analysis of the trajectory
-            Info = {
+            # Collect the LipidInformation of the analysis of the trajectory
+            LipidInfo = {
                 "trajectory_id":          Trj_ID,
                 "bilayer_thickness":      BLT,
                 "area_per_lipid":         APL,
                 "area_per_lipid_file":    genRpath(
-                    osp.join(PATH_SIMULATIONS, README["path"], 'apl.json')),
+                    osp.join(NMLDB_SIMU_PATH, README["path"], 'apl.json')),
                 "form_factor_file":       genRpath(
-                    osp.join(PATH_SIMULATIONS, README["path"], 'FormFactor.json')),
+                    osp.join(NMLDB_SIMU_PATH, README["path"], 'FormFactor.json')),
                 "quality_total":          QUALITY_SYSTEM["total"],
                 "quality_headgroups":     QUALITY_SYSTEM["headgroup"],
                 "quality_tails":          QUALITY_SYSTEM["tails"],
@@ -1027,11 +1045,11 @@ if __name__ == '__main__':
                 "form_factor_scaling":    FFQ[1]
                 }
 
-            # Collect the minimal information of the analysis of the trajectory
+            # Collect the minimal LipidInformation of the analysis of the trajectory
             Minimal = {"trajectory_id": Trj_ID}
 
-            # Entry in the DB with the info of the analysis of the simulation
-            _ = DBEntry('trajectories_analysis', Info, Minimal)
+            # Entry in the DB with the LipidInfo of the analysis of the simulation
+            _ = DBEntry('trajectories_analysis', LipidInfo, Minimal)
 
     # -- TABLE `trajectories_analysis_lipids`
             for lipid in Lipids:
@@ -1044,8 +1062,8 @@ if __name__ == '__main__':
                 except Exception:
                     OPExp = ''
 
-                # Collect the information of each lipid in the simulation
-                Info = {
+                # Collect the LipidInformation of each lipid in the simulation
+                LipidInfo = {
                     "trajectory_id":                Trj_ID,
                     "lipid_id":                     Lipids_ID[lipid],
                     "quality_total":                Lipid_Quality[lipid]["total"],
@@ -1053,21 +1071,21 @@ if __name__ == '__main__':
                     "quality_sn-1":                 Lipid_Quality[lipid]["sn-1"],
                     "quality_sn-2":                 Lipid_Quality[lipid]["sn-1"],
                     "order_parameters_file":        genRpath(
-                        osp.join(PATH_SIMULATIONS, README["path"],
+                        osp.join(NMLDB_SIMU_PATH, README["path"],
                                  lipid + 'OrderParameters.json')),
                     "order_parameters_experiment":  OPExp,
                     "order_parameters_quality":     genRpath(
-                        osp.join(PATH_SIMULATIONS, README["path"],
+                        osp.join(NMLDB_SIMU_PATH, README["path"],
                                  lipid + '_OrderParameters_quality.json'))
                     }
 
-                # The minimal information that identifies the lipid in the simulation
+                # The minimal LipidInformation that identifies the lipid in the simulation
                 Minimal = {"trajectory_id": Trj_ID,
                            "lipid_id":      Lipids_ID[lipid]}
 
-                # Entry in the DB with the info of the analysis of the lipid
+                # Entry in the DB with the LipidInfo of the analysis of the lipid
                 # in the simulation
-                _ = DBEntry('trajectories_analysis_lipids', Info, Minimal)
+                _ = DBEntry('trajectories_analysis_lipids', LipidInfo, Minimal)
 
     # -- TABLE `trajectories_analysis_heteromolecules`
             for hetero in Heteromolecules:
@@ -1082,56 +1100,56 @@ if __name__ == '__main__':
                 except Exception:
                     OPExp = ''
 
-                # Collect the information of each heteromolecule in the simulation
-                Info = {
+                # Collect the LipidInformation of each heteromolecule in the simulation
+                LipidInfo = {
                     "trajectory_id":   Trj_ID,
                     "molecule_id":     Heteromolecules_ID[hetero],
                     "quality_total":   Heteromolecules_Quality[hetero]["total"],
                     "quality_hg":      Heteromolecules_Quality[hetero]["headgroup"],
                     "quality_tails":   Heteromolecules_Quality[hetero]["tail"],
                     "order_parameters_file": genRpath(
-                        osp.join(PATH_SIMULATIONS, README["path"],
+                        osp.join(NMLDB_SIMU_PATH, README["path"],
                                  hetero + 'OrderParameters.json')),
                     "order_parameters_experiment":  OPExp,
                     "order_parameters_quality":     genRpath(
-                        osp.join(PATH_SIMULATIONS, README["path"],
+                        osp.join(NMLDB_SIMU_PATH, README["path"],
                                  hetero + '_OrderParameters_quality.json'))
                     }
 
-                # The minimal information that identifies the heteromolecule in the
+                # The minimal LipidInformation that identifies the heteromolecule in the
                 # simulation
                 Minimal = {"trajectory_id": Trj_ID,
                            "molecule_id":   Heteromolecules_ID[hetero]}
 
-                # Entry in the DB with the info of the analysis of the heteromolecule
+                # Entry in the DB with the LipidInfo of the analysis of the heteromolecule
                 # in the simulation
-                _ = DBEntry('trajectories_analysis_heteromolecules', Info, Minimal)
+                _ = DBEntry('trajectories_analysis_heteromolecules', LipidInfo, Minimal)
 
     # -- TABLE `trajectory_analysis_ions`
             for ion in Ions:
-                # Collect the information of the ions in the simulation
-                Info = {"trajectory_id": Trj_ID,
+                # Collect the LipidInformation of the ions in the simulation
+                LipidInfo = {"trajectory_id": Trj_ID,
                         "ion_id":        Ions[ion][0]}
 
-                # The minimal information that identifies the ion in the simulation
+                # The minimal LipidInformation that identifies the ion in the simulation
                 # Minimal = { "trajectory_id": Trj_ID,
                 #            "ion_id":        Ions[ ion ][0] }
 
-                # Entry in the DB with the info of the analysis of the ion in the
+                # Entry in the DB with the LipidInfo of the analysis of the ion in the
                 # simulation
-                _ = DBEntry('trajectories_analysis_ions', Info, Info)
+                _ = DBEntry('trajectories_analysis_ions', LipidInfo, LipidInfo)
 
     # -- TABLE `trajectory_analysis_water`
             if "SOL" in README["COMPOSITION"]:
-                # Collect the information of the water in the simulation
-                Info = {"trajectory_id": Trj_ID,
+                # Collect the LipidInformation of the water in the simulation
+                LipidInfo = {"trajectory_id": Trj_ID,
                         "water_id":      Wat_ID}
                 # -     "density_file":  args.densities_folder + README["path"]
                 # -                       + '/SOLdensity.xvg' }
 
-                # Entry in the DB with the info of the analysis of the water in the
+                # Entry in the DB with the LipidInfo of the analysis of the water in the
                 # simulation
-                _ = DBEntry('trajectories_analysis_water', Info, Info)
+                _ = DBEntry('trajectories_analysis_water', LipidInfo, LipidInfo)
 
     # --- TEMPORAL -----
     # The table may be removed in the future, and the quality included in the
@@ -1139,8 +1157,9 @@ if __name__ == '__main__':
 
     # -- TABLE `ranking_global`
             # Empty dictionary for the ranking
+            
             Ranking = {}
-
+            
             for file in glob.glob(osp.join(PATH_RANKING, "SYSTEM") + "*"):
 
                 # Type of ranking
@@ -1158,9 +1177,10 @@ if __name__ == '__main__':
                     # If it does not have an assigned value, use None
                     if kind not in Ranking:
                         Ranking[kind] = 4242
-
-            # Collect the information of the position of the system in the ranking
-            Info = {
+            """
+            """
+            # Collect the LipidInformation of the position of the system in the ranking
+            LipidInfo = {
                 "trajectory_id": Trj_ID,
                 "ranking_total": Ranking["total"],
                 "ranking_hg":    Ranking["headgroup"],
@@ -1170,16 +1190,16 @@ if __name__ == '__main__':
                 "quality_tails": QUALITY_SYSTEM["tails"]
                 }
 
-            # The minimal information about the system
+            # The minimal LipidInformation about the system
             Minimal = {"trajectory_id": Trj_ID}
 
-            # Entry in the DB with the info of ranking
-            _ = DBEntry('ranking_global', Info, Minimal)
-
+            # Entry in the DB with the LipidInfo of ranking
+            _ = DBEntry('ranking_global', LipidInfo, Minimal)
+    # ------------------
     # -- TABLE `ranking_lipids`
             # Empty dictionary for the ranking
             Ranking_lipids = {}
-
+            
             for lipid in Lipids:
                 Ranking_lipids[lipid] = {}
 
@@ -1203,8 +1223,8 @@ if __name__ == '__main__':
                     except Exception:
                         Ranking_lipids[lipid][t] = 4242
 
-                # Collect the information of the position of the system in the ranking
-                Info = {
+                # Collect the LipidInformation of the position of the system in the ranking
+                LipidInfo = {
                     "trajectory_id": Trj_ID,
                     "lipid_id":      Lipids_ID[lipid],
                     "ranking_total": Ranking_lipids[lipid]["total"],
@@ -1217,13 +1237,14 @@ if __name__ == '__main__':
                     "quality_sn-2":  Lipid_Quality[lipid]["sn-2"]
                     }
 
-                # The minimal information about the system
+                # The minimal LipidInformation about the system
                 Minimal = {"trajectory_id": Trj_ID,
                            "lipid_id":      Lipids_ID[lipid]}
 
-                # Entry in the DB with the info of ranking
-                _ = DBEntry('ranking_lipids', Info, Minimal)
-
+                # Entry in the DB with the LipidInfo of ranking
+                _ = DBEntry('ranking_lipids', LipidInfo, Minimal)
+    # ------------------
+            
     # -- TABLE `ranking_heteromolecules`
             # Empty dictionary for the ranking
             Ranking_heteromolecules = {}
@@ -1253,21 +1274,21 @@ if __name__ == '__main__':
                     except Exception:
                         Ranking_heteromolecules[hetero][t] = 4242
 
-                # Collect the information of the position of the system in the ranking
-                Info = {
+                # Collect the LipidInformation of the position of the system in the ranking
+                LipidInfo = {
                     "trajectory_id": Trj_ID,
                     "molecule_id":   Heteromolecules_ID[hetero],
                     "ranking_total": Ranking_heteromolecules[hetero]["total"],
                     "quality_total": Heteromolecules_Quality[hetero]["total"]
                     }
 
-                # The minimal information about the system
+                # The minimal LipidInformation about the system
                 Minimal = {"trajectory_id": Trj_ID,
                            "molecule_id":      Heteromolecules_ID[hetero]}
 
-                # Entry in the DB with the info of ranking
-                _ = DBEntry('ranking_heteromolecules', Info, Minimal)
-
+                # Entry in the DB with the LipidInfo of ranking
+                _ = DBEntry('ranking_heteromolecules', LipidInfo, Minimal)
+    # ------------------
             if "EXPERIMENT" in README:
                 if "ORDERPARAMETER" in README["EXPERIMENT"]:
                     # -- TABLE `trajectories_experiments_OP`
@@ -1282,7 +1303,7 @@ if __name__ == '__main__':
                                 for file in os.listdir(
                                         osp.join(PATH_EXPERIMENTS_OP, path)):
                                     if file.endswith(".json"):
-                                        Info = {
+                                        LipidInfo = {
                                             "trajectory_id": Trj_ID,
                                             "lipid_id": {**Lipids_ID,
                                                          **Heteromolecules_ID}[mol],
@@ -1298,7 +1319,7 @@ if __name__ == '__main__':
                                                }
 
                                         _ = DBEntry('trajectories_experiments_OP',
-                                                    Info, Info)
+                                                    LipidInfo, LipidInfo)
 
     # -- TABLE `trajectories_experiments_FF`
                 if "FORMFACTOR" in README["EXPERIMENT"]:
@@ -1314,7 +1335,7 @@ if __name__ == '__main__':
                                 for file in os.listdir(osp.join(
                                         PATH_EXPERIMENTS_FF, path)):
                                     if file.endswith(".json"):
-                                        Info = {
+                                        LipidInfo = {
                                             "trajectory_id": Trj_ID,
                                             "experiment_id": CheckEntry(
                                                      'experiments_FF', {
@@ -1325,10 +1346,10 @@ if __name__ == '__main__':
                                                  }
 
                                         _ = DBEntry('trajectories_experiments_FF',
-                                                    Info, Info)
+                                                    LipidInfo, LipidInfo)
 
-        except Exception as err:
-            print("Exception: "+str(err))
+        except FileNotFoundError as err:
+            print("Exception loading system: "+ (err.__traceback__))
             FAILS.append(README["path"])
 
     # -- TABLE `trajectories` (again)
@@ -1342,11 +1363,11 @@ if __name__ == '__main__':
             List_IDs = cursor.fetchall()
 
             maxID = int(open(
-                osp.join(PATH_SIMULATIONS, "COUNTER_ID"), "r").readlines()[0])
+                osp.join(NMLDB_SIMU_PATH, "COUNTER_ID"), "r").readlines()[0])
 
             missing_IDs = set(range(1, maxID+1)) - {ID[0] for ID in List_IDs}
 
-            Info = {
+            LipidInfo = {
                 "id":              1,
                 "forcefield_id":   1,
                 "membrane_id":     1,
@@ -1369,13 +1390,13 @@ if __name__ == '__main__':
             for missing_ID in missing_IDs:
 
                 print("\n Adding missing ID:", missing_ID)
-                Info["id"] = missing_ID
+                LipidInfo["id"] = missing_ID
 
                 cursor.execute(
                     "INSERT INTO `trajectories` (" +
-                    ','.join(map(lambda x: '`' + str(x) + '`', Info.keys())) +
+                    ','.join(map(lambda x: '`' + str(x) + '`', LipidInfo.keys())) +
                     ") VALUES (" +
-                    ','.join(map(str, Info.values())) +
+                    ','.join(map(str, LipidInfo.values())) +
                     ") "
                     )
 
@@ -1387,7 +1408,7 @@ if __name__ == '__main__':
     if FAILS:
         print(
             "\nThe following systems failed. Please check the files." +
-            "\n" + "\n".join(FAILS)
+            "\n" #+ "\n".join(FAILS)
             )
 
 ####################

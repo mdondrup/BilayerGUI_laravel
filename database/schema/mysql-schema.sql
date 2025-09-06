@@ -135,7 +135,8 @@ CREATE TABLE `lipids` (
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `mapping` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `lipids_name_key` (`name`)
+  UNIQUE KEY `lipids_name_key` (`name`),
+  KEY `lipids_molecule_key` (`molecule`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -152,7 +153,7 @@ CREATE TABLE `lipids_forcefields` (
   `lipid_id` bigint unsigned NOT NULL,
   `forcefield_id` bigint unsigned NOT NULL,
   `mapping` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`lipid_id`,`forcefield_id`, `mapping`),
+  -- PRIMARY KEY (`lipid_id`,`forcefield_id`, `mapping`),
   KEY (`lipid_id`,`forcefield_id`),
   CONSTRAINT `lipids_forcefields_ibfk_1` FOREIGN KEY (`lipid_id`) REFERENCES `lipids` (`id`),
   CONSTRAINT `lipids_forcefields_ibfk_2` FOREIGN KEY (`forcefield_id`) REFERENCES `forcefields` (`id`)
