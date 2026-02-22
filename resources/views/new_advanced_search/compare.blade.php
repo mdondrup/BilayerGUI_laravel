@@ -583,14 +583,14 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
                 $lista2['order'] = $value->order_parameters_file;
                 $lista2['ff'] = $value->name;
                 $lista2['temperature'] = $value->temperature;
-                $lista2['quality_total'] = $value->quality_total;
-                $lista2['quality_headgroups'] = $value->quality_headgroups;
-                $lista2['quality_tails'] = $value->quality_tails;
+                $lista2['quality_total'] = $value->op_quality_total;
+                $lista2['quality_headgroups'] = $value->op_quality_headgroups;
+                $lista2['quality_tails'] = $value->op_quality_tails;
 
 
-                $qualityTotal[] = $value->quality_total; // for histogram of qualitygg
-                $quality_headgroups[] = $value->quality_headgroups; // for histogram of qualitygg
-                $quality_tails[] = $value->quality_tails; // for histogram of qualitygg
+                $qualityTotal[] = $value->op_quality_total; // for histogram of qualitygg
+                $quality_headgroups[] = $value->op_quality_headgroups; // for histogram of qualitygg
+                $quality_tails[] = $value->op_quality_tails; // for histogram of qualitygg
                 // Nuevo
                 $bilayer_thickness[] = $value->bilayer_thickness; // for histogram of qualitygg
                 $area_per_lipid[] = $value->area_per_lipid; // for histogram of qualitygg
@@ -623,7 +623,9 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
             $maxrows = 0;
             $maxcols = count($lista);
             $linea[] = array();
-            $Nothing2Show = true;
+            $Nothing2Show = false;
+            /*
+            // ICICIC this is not working, we need to create the array with the max number of rows and columns, and then fill it with the data, if there is no data, fill it with 0
             foreach ($lista as $key => $value) {
                 //echo (count($value)."<br>");
                 //echo ($key."<br>");
@@ -647,9 +649,11 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
                 for ($m = 0; $m < $maxcols; $m++) {
                     $mmm[] = "<td></td><td></td><td></td>";
                 }
+                // ICICIC this is not working, 
+                
                 $linea[$indices[$n]] = $mmm;
             }
-
+            */
 
             //var_dump($linea);
             //die();

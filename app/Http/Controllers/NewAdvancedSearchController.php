@@ -539,7 +539,8 @@ class NewAdvancedSearchController extends Controller
       $ResultadoDB = DB::table('trajectories_analysis')
         ->join('trajectories_analysis_lipids', 'trajectories_analysis.trajectory_id', '=', 'trajectories_analysis_lipids.trajectory_id')
         ->join('lipids', 'trajectories_analysis_lipids.lipid_id', '=', 'lipids.id')
-        ->join('forcefields', 'lipids.forcefield_id', '=', 'forcefields.id')
+        ->join('lipids_forcefields', 'lipids.id', '=', 'lipids_forcefields.lipid_id')
+        ->join('forcefields', 'lipids_forcefields.forcefield_id', '=', 'forcefields.id')
         ->join('trajectories', 'trajectories.id', '=', 'trajectories_analysis.trajectory_id')
         ->select('trajectories.temperature as temperature', 'trajectories_analysis.*', 'trajectories_analysis_lipids.*', 'lipids.name as lipid_name', 'lipids.molecule', 'forcefields.name as name')
         ->whereIn('trajectories_analysis.trajectory_id', $listIDs)->get();
