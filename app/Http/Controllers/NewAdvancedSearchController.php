@@ -28,19 +28,7 @@ class NewAdvancedSearchController extends Controller
   public function resultsGeneral(Request $request)
   {
 
-    //`lipids`.full_name,
-    //`peptides`.name as peptide_name,`peptides`.total_charge,`peptides`.sequence,`peptides`.activity,
-    //`trajectories_peptides`.number_peptides,
-    //,`forcefields`.resolution ,
-    //`water_models`.full_name as wm_full_name,
-    //`membranes`.name as mem_name,`membranes`.model as mem_model,
-    //`ions`.full_name as ion_full_name,
-    //`water_models`.short_name as wm_short_name,
-
-//(SELECT COUNT(trajectories_analysis_lipids.id) FROM trajectories_analysis_lipids
-  //WHERE trajectories_analysis_lipids.trajectory_id = trajectories.id AND trajectories_analysis_lipids.order_parameters_experiment ='') AS experimentdatacount,
-
-
+    
     $Selects = "`lipids`.molecule as lipid_name,
     `forcefields`.name as ff_name,
 
@@ -100,14 +88,7 @@ class NewAdvancedSearchController extends Controller
     ORDER BY `trajectories_analysis`.`op_quality_total` DESC
     ";
 
-    //
-
-    //echo ($baseQuery);
-    //die();
-    //DB::enableQueryLog();
-    /*var_dump($request->path());
-      var_dump($request->input('lipidos'));
-      var_dump($request->input('lipidos_operador'));*/
+    
     $filtrosPrincipales = Filtros::all(); //Filtros::filtrosEntidades();
 
     // Consulta de las valores analiticos
@@ -150,12 +131,6 @@ class NewAdvancedSearchController extends Controller
     }
 
     $sqlAnalytics = implode(" AND ", $ArraySqlAnalytics);
-
-    //  echo ($sqlAnalytics);
-    // echo('<br><br><br>');
-    // var_dump($filtrosPrincipales);
-    // die();
-    // echo('<br><br><br>');
     $cadSql = "";
     $cadSqlnueva = "";
     $cadSqlNot = "";
@@ -174,32 +149,10 @@ class NewAdvancedSearchController extends Controller
     //var_dump($filtrosPrincipales['label']);
     foreach ($filtrosPrincipales as $key => $value) {
 
-      /*
-      var_dump($request->input($key));
-      var_dump($request->input($key . '_operador'));
-      echo ('<br>');
-      echo $key . " :: <BR>";
-      var_dump($value);
-      echo ('<br>');
-
-      die();
-
-
-      array(2) { [1]=> string(4) "DDPC" [2]=> string(4) "CHOL" }
-      array(2) { [1]=> string(3) "and" [2]=> string(3) "and" }
-      lipidos ::
-      object(App\Filtros\Lipidos)#330 (14) { ["codigo"]=> string(7) "lipidos" ["columna"]=> string(10) "short_name" ["tipo"]=> int(2) ["label"]=> string(6) "Lipids" ["modelo"]=> object(App\Lipido)#333 (27) { ["table":protected]=> string(6) "lipids" ["connection":protected]=> NULL ["primaryKey":protected]=> string(2) "id" ["keyType":protected]=> string(3) "int" ["incrementing"]=> bool(true) ["with":protected]=> array(0) { } ["withCount":protected]=> array(0) { } ["perPage":protected]=> int(15) ["exists"]=> bool(false) ["wasRecentlyCreated"]=> bool(false) ["attributes":protected]=> array(0) { } ["original":protected]=> array(0) { } ["changes":protected]=> array(0) { } ["casts":protected]=> array(0) { } ["classCastCache":protected]=> array(0) { } ["dates":protected]=> array(0) { } ["dateFormat":protected]=> NULL ["appends":protected]=> array(0) { } ["dispatchesEvents":protected]=> array(0) { } ["observables":protected]=> array(0) { } ["relations":protected]=> array(0) { } ["touches":protected]=> array(0) { } ["timestamps"]=> bool(true) ["hidden":protected]=> array(0) { } ["visible":protected]=> array(0) { } ["fillable":protected]=> array(0) { } ["guarded":protected]=> array(1) { [0]=> string(1) "*" } } ["operador"]=> string(3) "and" ["valor"]=> string(0) "" ["tooltip"]=> string(14) "POPC, POPG ..." ["visible"]=> bool(true) ["table"]=> string(6) "lipids" ["fields"]=> string(8) "molecule" ["join_count"]=> string(85) " COUNT(CASE WHEN trajectories_lipids.lipid_name = '%s' THEN 1 ELSE NULL END) AS `%s` " ["where"]=> string(13) "lipid.%s = 1 " ["join"]=> string(592) " INNER JOIN( SELECT lipid.id FROM ( SELECT trajectories_lipids.trajectory_id AS id, %s FROM `trajectories_lipids` WHERE 1 GROUP BY trajectories_lipids.trajectory_id ) lipid WHERE %s ) lipid_select ON trajectories.id = lipid_select.id " }
-      */
-
+      
       $act_request = $request->input($key);
       $act_request_operador = $request->input($key . '_operador');
-      /*var_dump($act_request);
-      echo '<br>';
-      var_dump($act_request_operador);
-      echo '<br>';
-*/
-      // HACK para el CHOL!!
-      // var_dump($key);
+    
       if ($key == "lipidos" && !is_null($act_request)) {
         $cn = 1;
         $hackHeteromolecule = array();
@@ -244,40 +197,7 @@ class NewAdvancedSearchController extends Controller
           }
           //echo ($key2." ->> ".$value2."<br>");
         }
-
-        /*var_dump($key);
-        echo '<br>';*/
-        if ($key == "moleculas" && isset($hackHeteromolecule[1])) {
-          //unset($hackHeteromolecule[0]);
-          //unset($hackHeteromoleculeOp[0]);
-
-          $act_request = $hackHeteromolecule;
-          $act_request_operador = $hackHeteromoleculeOp;
-
-          $tableName = 'heteromolecules';
-          $fieldName = 'name';
-          ### ICICICICICICI
-          $join_count = "
-          --- ICICIC
-          COUNT( CASE WHEN trajectories_heteromolecules.molecule_name = '%s' THEN 1 ELSE NULL END) AS `%s`";
-          $where = "  heteromolecule.%s = 1 ";
-          $join = "INNER JOIN(
-                       SELECT heteromolecule.id
-                       FROM (
-                           SELECT trajectories_heteromolecules.trajectory_id AS id, %s
-                           FROM trajectories_heteromolecules
-                           WHERE 1
-                           GROUP BY trajectories_heteromolecules.trajectory_id
-                   		 ) heteromolecule
-                       WHERE %s
-                       ) heteromolecule_select
-                      ON trajectories.id = heteromolecule_select.id";
-        }
-
-        /*
-        var_dump($join);
-        die();
-        */
+      
 
         // PARCHE
         if ($fieldName == "force_field") {
@@ -286,10 +206,7 @@ class NewAdvancedSearchController extends Controller
         }
         // ------
 
-        //$tableName =$value->table;
-        //$fieldName =$value->fields; // esto deveria de ser un array
-        // Recorro los array de consultas
-        //$limit = count($request->input($key.'_operador')); // Este parametro ya no se usa
+       
         $ind = 1;
         $join_count_array = [];
         $cadSqlnueva = "";
@@ -322,8 +239,7 @@ class NewAdvancedSearchController extends Controller
 
 
                 $cadSql .= " " . $tableName . "." . $fieldName;
-                //$cadSql.= " like ";
-                //$cadSql.=  "'%".$value3."%'";
+                
                 $cadSql .= " = ";
                 $cadSql .=  "'" . $value3 . "'";
 
@@ -355,8 +271,7 @@ class NewAdvancedSearchController extends Controller
                 }
                 if ($cadSqlNotNueva != "")  $cadSqlNotNueva .= " AND ";
                 $cadSqlNot .= " " . $tableName . "." . $fieldName;
-                //$cadSqlNot.= " like ";
-                //$cadSqlNot.=  "'%".$value3."%'";
+             
                 $cadSqlNot .= " = ";
                 $cadSqlNot .=  "'" . $value3 . "'";
 
@@ -426,13 +341,7 @@ class NewAdvancedSearchController extends Controller
     $ConsultaIDs = "SELECT trajectories.id FROM trajectories " . $JoinFinal . " LEFT JOIN `trajectories_analysis` ON `trajectories`.`id` = `trajectories_analysis`.`trajectory_id`";
     if (strlen($sqlAnalytics) > 0) $ConsultaIDs .= " WHERE " . $sqlAnalytics;
 
-    //echo $ConsultaIDs."<br>";
-
-    // var_dump($ConsultaIDs);
-    // die();
-
-    //SELECT trajectories.id FROM trajectories INNER JOIN( SELECT lipid.id FROM ( SELECT trajectories_lipids.trajectory_id AS id, COUNT(CASE WHEN trajectories_lipids.lipid_name = 'CHOL' THEN 1 ELSE NULL END) AS CHOL1 FROM `trajectories_lipids` WHERE 1 GROUP BY trajectories_lipids.trajectory_id ) lipid WHERE lipid.CHOL1 = 1 ) lipid_select ON trajectories.id = lipid_select.id LEFT JOIN `trajectories_analysis` ON `trajectories`.`id` = `trajectories_analysis`.`trajectory_id`
-
+    
     // Buscamos los ID positivos
     $trayectoriasID = DB::select($ConsultaIDs);
     // Pasamos los IDs a un Array
@@ -447,13 +356,8 @@ class NewAdvancedSearchController extends Controller
     // Si tenemos IDs negativos los resto del array
 
     $cadSql = "trajectories.id in (%s)";
-    //var_dump ($IdList);
-    //echo implode(', ',$IdList);
-    //echo count($IdList);
+    
     $cadSql2 = sprintf($cadSql, implode(', ', $IdList));
-
-    // var_dump($cadSql2);
-    // die();
 
     // Vamos a cambiar la forma de comparar
     // Limpiaremos la sesion de varibles de comparacion
@@ -461,43 +365,16 @@ class NewAdvancedSearchController extends Controller
     // y pasaremos toda la lista de nuevos IDs a la session.
 
     $listaIdsSesson = session()->all();
-    // Borrramos los IDs que estaban en session
-    /*
-         foreach ($listaIdsSesson as $key => $value) {
-           if (gettype($value)!='array' && strpos($key, 'CompareID')!==false){
-             $request->session()->forget($key);
-           }
-         }
-         // Damos de alta los nuevos IDs
-         if ( count($IdList) > 0 )
-         {
-           for ($i=0; $i < count($IdList); $i++) {
-             $cadid = 'CompareID'.$IdList[$i];
-             $request->session()->put($cadid,'1');
-           }
-         }
-         */
-    // Fin --- update session lists IDs
-
+    
     $ConsultaFinal = sprintf($baseQuery, "trajectories.*,", $Selects, $Joins, $cadSql2, "");
 
-    // echo $ConsultaIDs."<br>";
-    //  echo $ConsultaFinal;
-    //  die();
+    
 
     $trayectorias = "";
     if (!empty($IdList))
       $trayectorias = collect(DB::select($ConsultaFinal))->groupBy('id');
 
-    //$dd = collect($trayectorias);
-    //$dd->groupBy('id');
-    //var_dump($trayectorias);die();
-    //echo($baseQuery.$cadSql);
-    //var_dump($trayectorias);
-    //$this->consultaBase($cadSql);
-
-
-    //dd(DB::getQueryLog());
+    
 
     return $trayectorias;
   }
@@ -513,25 +390,16 @@ class NewAdvancedSearchController extends Controller
       $page = $request->input('page', 1);
       $perPage = 15;
       $offset = $page * $perPage - $perPage;
-      /*$allTrayectorias = new LengthAwarePaginator($trayectorias->slice($offset, $perPage, true), $trayectorias->count(), $perPage, $page,[
-            'path'  => $request->url(),
-            'query' => $request->query(),
-        ]);*/
+     
 
       $allTrayectorias = new LengthAwarePaginator($trayectorias->slice($offset, $perPage, true), $trayectorias->count(), $perPage, $page);
 
       $allTrayectorias->setPath(Paginator::resolveCurrentPath());
 
-      /*
-        echo("--->>");
-        var_dump($allTrayectorias);
-        die();
-  */
+     
     } else {
-      /*var_dump($trayectorias);
-        die();*/
+     
       $allTrayectorias = $trayectorias;
-      //echo $trayectorias;  // Esto es para mostrar el error
 
     }
 
@@ -551,62 +419,37 @@ class NewAdvancedSearchController extends Controller
     if ($request->input('selected') == 1) {
       $filtroSelect = true;
     }
-    //var_dump(session());die();
 
     foreach ($allTrayectorias as $trayectoria) {
       foreach ($trayectoria->groupBy('id') as $key) {
         $tempData = array();
         foreach ($key as $key2 => $value2) {
 
-          //echo ($key."<br>");
-          //var_dump($value2);
-          //die();
-          //echo (session("CompareID".$value2->id)."<br>");
 
           if (($filtroSelect && (session("CompareID" . $value2->id)) == 1) or ($filtroSelect == false)) {
 
             $trayectoriaTratada = [
               'trajectories.id' => $value2->id,
               'trajectories.force_field' => $value2->ff_name,
-              //'trajectories.resolution' => $value2->resolution,
-              //'trajectories.membrane_model' => $value2->mem_model,
+             
               'trajectories.length' => $value2->trj_length,
-              //'electric_field' =>   (string)$value2->electric_field,
+             
               'trajectories.temperature' => $value2->temperature,
-              //  'trajectories.pressure' => $value2->pressure,
+             
               'trajectories.number_of_particles' => $value2->number_of_atoms,
               'trajectories.software_name' => $value2->software,
-              //'trajectories.supercomputer' => $value2->supercomputer,
-              //'trajectories.performance' => $value2->performance,
+             
               'lipids.short_name' => $value2->lipid_name,
               'lipids.leaflet_1' => $value2->leaflet_1,
               'lipids.leaflet_2' => $value2->leaflet_2,
-              //'peptides.name' => $value2->peptide_name,
-              //'peptides.sequence' => $value2->sequence,
-              //'peptides.activity' => $value2->activity,
-              //'peptides.membrane' => null,
-              //'peptides.bulk' => null,
+             
               'ions.short_name' => $value2->ion_short_name,
-              //'ions.bulk' => null,
-              //'heteromolecules.bulk' => null,
-              //'water_models.short_name' => $value2->wm_short_name,
-              //'membranes.name' => $value2->mem_name,
+             
             ];
 
             $trayectoriasTratadas[] = $trayectoriaTratada;
           }
 
-          /*foreach ($value2 as $key3 => $value3) {
-                  echo ($key3." >> ".$value3."<br>");
-                  if( isset($tempData[$key3]) ){
-                    if (!in_array($value3,$tempData[$key3] )){
-                        $tempData[$key3][] = $value3;
-                    }
-                  } else{
-                    $tempData[$key3][] = $value3;
-                  }
-                }*/
-          //echo("<br>");
         }
       }
     }
