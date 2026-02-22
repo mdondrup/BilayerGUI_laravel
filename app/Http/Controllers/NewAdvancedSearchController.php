@@ -624,17 +624,18 @@ class NewAdvancedSearchController extends Controller
     $filtrosPrincipales = Filtros::filtrosEntidades();
     $filtroTrayectoria = Filtros::get('trayectoria');
     $filtrosTrayectorias = Filtros::filtrosTrayectoria();
-
-    $QualityFactor = DB::table('ranking_global')
-      ->select(DB::raw('MIN(quality_total) AS quality_totalStart, MAX(quality_total) AS quality_totalEnd'))->get();
-    $Quality_HG = DB::table('ranking_global')
-      ->select(DB::raw('MIN(quality_hg) AS quality_hgStart, MAX(quality_hg) AS quality_hgEnd'))->get();
-    $Quality_Tails = DB::table('ranking_global')
-      ->select(DB::raw('MIN(quality_tails) AS quality_tailsStart, MAX(quality_tails) AS quality_tailsEnd'))->get();
+    //ICICICICICICIICICI This is not working because the values are in the 
+    // trajectories_analysis table and not in the ranking_global  
+    $QualityFactor = DB::table('trajectories_analysis')
+      ->select(DB::raw('MIN(op_quality_total) AS quality_totalStart, MAX(op_quality_total) AS quality_totalEnd'))->get();
+    $Quality_HG = DB::table('trajectories_analysis')
+      ->select(DB::raw('MIN(op_quality_headgroups) AS quality_hgStart, MAX(op_quality_headgroups) AS quality_hgEnd'))->get();
+    $Quality_Tails = DB::table('trajectories_analysis')
+      ->select(DB::raw('MIN(op_quality_tails) AS quality_tailsStart, MAX(op_quality_tails) AS quality_tailsEnd'))->get();
 
 
     $Area_per_lipid = DB::table('trajectories_analysis')
-      ->select(DB::raw('MIN(Area_per_lipid) AS Area_per_lipidStart, MAX(Area_per_lipid) AS Area_per_lipidEnd'))->get();
+      ->select(DB::raw('MIN(area_per_lipid) AS Area_per_lipidStart, MAX(area_per_lipid) AS Area_per_lipidEnd'))->get();
 
 // HACK :: para que salga la temperatura con un slide de seleccion...
 
@@ -642,44 +643,14 @@ class NewAdvancedSearchController extends Controller
         ->select(DB::raw('MIN(temperature) AS temperatureStart, MAX(temperature) AS temperatureEnd'))->get();
 
     $Form_factor_quality = DB::table('trajectories_analysis')
-      ->select(DB::raw('MIN(Form_factor_quality) AS Form_factor_qualityStart, MAX(Form_factor_quality) AS Form_factor_qualityEnd'))
-      ->where('form_factor_quality', '!=', '4242')
+      ->select(DB::raw('MIN(ff_quality) AS Form_factor_qualityStart, MAX(ff_quality) AS Form_factor_qualityEnd'))
+      ->where('ff_quality', '!=', '4242')
       ->get();
 
-    /*$Area_per_lipid_upper_leaflet= DB::table('trajectories_analysis')
-            ->select(DB::raw('MIN(Area_per_lipid_upper_leaflet) AS Area_per_lipid_upper_leafletStart, MAX(Area_per_lipid_upper_leaflet) AS Area_per_lipid_upper_leafletEnd'))->get();
-      $Area_per_lipid_lower_leaflet= DB::table('trajectories_analysis')
-            ->select(DB::raw('MIN(Area_per_lipid_lower_leaflet) AS Area_per_lipid_lower_leafletStart, MAX(Area_per_lipid_lower_leaflet) AS Area_per_lipid_lower_leafletEnd'))->get();
-      $COG_of_protein= DB::table('trajectories_analysis')
-            ->select(DB::raw('MIN(COG_of_protein) AS COG_of_proteinStart, MAX(COG_of_protein) AS COG_of_proteinEnd'))->get();
-      $COG_BB_first= DB::table('trajectories_analysis')
-            ->select(DB::raw('MIN(COG_BB_first) AS COG_BB_firstStart, MAX(COG_BB_first) AS COG_BB_firstEnd'))->get();
-      $COG_BB_last= DB::table('trajectories_analysis')
-            ->select(DB::raw('MIN(COG_BB_last) AS COG_BB_lastStart, MAX(COG_BB_last) AS COG_BB_lastEnd'))->get();
-      $COG_of_membrane= DB::table('trajectories_analysis')
-            ->select(DB::raw('MIN(COG_of_membrane) AS COG_of_membraneStart, MAX(COG_of_membrane) AS COG_of_membraneEnd'))->get();
-      $COG_headgroups_upper_leaflet= DB::table('trajectories_analysis')
-            ->select(DB::raw('MIN(COG_headgroups_upper_leaflet) AS COG_headgroups_upper_leafletStart, MAX(COG_headgroups_upper_leaflet) AS COG_headgroups_upper_leafletEnd'))->get();
-      $COG_headgroups_lower_leaflet= DB::table('trajectories_analysis')
-            ->select(DB::raw('MIN(COG_headgroups_lower_leaflet) AS COG_headgroups_lower_leafletStart, MAX(COG_headgroups_lower_leaflet) AS COG_headgroups_lower_leafletEnd'))->get();
-*/
     $Bilayer_thickness = DB::table('trajectories_analysis')
-      ->select(DB::raw('MIN(Bilayer_thickness) AS Bilayer_thicknessStart, MAX(Bilayer_thickness) AS Bilayer_thicknessEnd'))->get();
+      ->select(DB::raw('MIN(bilayer_thickness) AS Bilayer_thicknessStart, MAX(bilayer_thickness) AS Bilayer_thicknessEnd'))->get();
 
 
-
-    /*    $Protein_depthness= DB::table('trajectories_analysis')
-            ->select(DB::raw('MIN(`Protein_depthness`) AS Protein_depthnessStart, MAX(`Protein_depthness`) AS Protein_depthnessEnd'))->get();
-      $Contacts_Protein_solvent= DB::table('trajectories_analysis')
-            ->select(DB::raw("MIN(`Contacts_Protein-solvent`) AS Contacts_Protein_solventStart, MAX(`Contacts_Protein-solvent`) AS Contacts_Protein_solventEnd"))->get();
-      $Contacts_Protein_headgroups= DB::table('trajectories_analysis')
-            ->select(DB::raw("MIN(`Contacts_Protein-headgroups`) AS Contacts_Protein_headgroupsStart, MAX(`Contacts_Protein-headgroups`) AS Contacts_Protein_headgroupsEnd"))->get();
-
-      $Contacts_Protein_tailgroups= DB::table('trajectories_analysis')
-            ->select(DB::raw("MIN(`Contacts_Protein-tailgroups`) AS Contacts_Protein_tailgroupsStart, MAX(`Contacts_Protein-tailgroups`) AS Contacts_Protein_tailgroupsEnd"))->get();
-      $Tilt= DB::table('trajectories_analysis')
-             ->select(DB::raw("MIN(Tilt) AS TiltStart, MAX(Tilt) AS TiltEnd"))->get();
-*/
     return view('new_advanced_search.form', [
       'filtros_principales' => $filtrosPrincipales,
       'filtro_trayectoria' => $filtroTrayectoria,
