@@ -187,14 +187,10 @@ class NewAdvancedSearchController extends Controller
           if ($key2 == "table") $tableName = $value2;
           if ($key2 == "fields") $fieldName = $value2;
           if ($key2 == "columna") $fieldName = $value2;
-
-          if ($key == 'lipidos' && (str_contains(strtoupper($lip_request), 'CH') || str_contains(strtoupper($lip_request), 'CLOL'))) {
-          } else {
-            // Nueva BusquedaAvanzadaExport––
-            if ($key2 == "join_count") $join_count = $value2;
-            if ($key2 == "where") $where = $value2;
-            if ($key2 == "join") $join = $value2;
-          }
+          // Nueva BusquedaAvanzadaExport––
+          if ($key2 == "join_count") $join_count = $value2;
+          if ($key2 == "where") $where = $value2;
+          if ($key2 == "join") $join = $value2;
           //echo ($key2." ->> ".$value2."<br>");
         }
       
@@ -214,9 +210,6 @@ class NewAdvancedSearchController extends Controller
 
         if ($act_request_operador !== null) { // comprobamos si existe el paremetro de busqueda
           foreach ($act_request as $key3 => $value3) {
-            if ($key == 'lipidos' && (str_contains(strtoupper($value3), 'CH') || str_contains(strtoupper($value3), 'CLOL'))) {
-            } else {
-
               // Limpiamos la cadena para no tener problemas en la sql
               $valueClean = str_replace($search_char, "_", $value3) . $ind;
               if (is_numeric($value3)) $valueClean = "n" . $valueClean;
@@ -278,7 +271,6 @@ class NewAdvancedSearchController extends Controller
                 $join_count_array[] = sprintf($join_count, $value3, $valueClean);
                 $cadSqlNotNueva .= sprintf($where, $valueClean);
               }
-            } // HACK
 
             $ind = $ind + 1;
           } // fin del bucle para los campos repetidos
