@@ -21,26 +21,16 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class NewAdvancedSearchController extends Controller
 {
-
-
-
   // Se manda los datos a la vista de resultado
   public function resultsGeneral(Request $request)
   {
-
-    
     $Selects = "`lipids`.molecule as lipid_name,
     `forcefields`.name as ff_name,
-
-
     `ions`.molecule as ion_short_name,
     `trajectories_ions`.number as number_ions,
     `trajectories_analysis`.ff_quality,
     `trajectories_analysis`.op_quality_total,
-
     `trajectories_lipids`.leaflet_1,`trajectories_lipids`.leaflet_2,
-
-
     (SELECT
             COUNT(trajectories_experiments_OP.id)
         FROM
@@ -57,12 +47,8 @@ class NewAdvancedSearchController extends Controller
     AS experimentdatacountFF,
     `trajectories`.temperature as temperature
     ";
-
     
     $Joins = " left join `trajectories_lipids` on `trajectories`.`id` = `trajectories_lipids`.`trajectory_id`
-
-    
-
 
     left join `trajectories_ions` on `trajectories`.`id` = `trajectories_ions`.`trajectory_id`
  
@@ -73,9 +59,7 @@ class NewAdvancedSearchController extends Controller
     left join `lipids` on `lipids`.`id` = `trajectories_lipids`.`lipid_id`
 
     left join `ions` on `ions`.`id` = `trajectories_ions`.`ion_id`
- 
-
-     left join `membranes` on `membranes`.`id` = `trajectories_membranes`.`membrane_id` ";
+    left join `membranes` on `membranes`.`id` = `trajectories_membranes`.`membrane_id` ";
 
     $GroupBy = " group By trajectories.id, `trajectories_analysis`.`op_quality_total` ";
 
@@ -89,7 +73,7 @@ class NewAdvancedSearchController extends Controller
     ";
 
     
-    $filtrosPrincipales = Filtros::all(); //Filtros::filtrosEntidades();
+    $filtrosPrincipales = Filtros::all(); 
 
     // Consulta de las valores analiticos
     $ArraySqlAnalytics = [];
@@ -145,7 +129,6 @@ class NewAdvancedSearchController extends Controller
     $search_char = array(" ", "-", ".", ","); // Espacios y guiones se cambia por barra baja
     
 
-    //var_dump($filtrosPrincipales['label']);
     foreach ($filtrosPrincipales as $key => $value) {
 
       
@@ -167,7 +150,6 @@ class NewAdvancedSearchController extends Controller
           if ($key2 == "join_count") $join_count = $value2;
           if ($key2 == "where") $where = $value2;
           if ($key2 == "join") $join = $value2;
-          //echo ($key2." ->> ".$value2."<br>");
         }
       
 
@@ -177,7 +159,6 @@ class NewAdvancedSearchController extends Controller
           $fieldName = "name";
         }
         // ------
-
        
         $ind = 1;
         $join_count_array = [];
@@ -205,10 +186,7 @@ class NewAdvancedSearchController extends Controller
                   }
                 }
                 // ------------------------
-
-
                 $cadSql .= " " . $tableName . "." . $fieldName;
-                
                 $cadSql .= " = ";
                 $cadSql .=  "'" . $value3 . "'";
 
@@ -217,7 +195,7 @@ class NewAdvancedSearchController extends Controller
                 $num_placeholders = substr_count($join_count, '%');
 
                 if ($num_placeholders==3) {
-                  // Esto es un Hack para el ranking_global
+                  // ICICIC Esto es un Hack para el ranking_global
                   $magnitud = strlen(substr(strrchr($value3, "."), 1));
 
                   // Calcula la tolerancia relativa
@@ -227,16 +205,11 @@ class NewAdvancedSearchController extends Controller
                 } else {
                   $join_count_array[] = sprintf($join_count, $value3, $valueClean);
                 }
-
-
-
                 $cadSqlnueva .= sprintf($where, $valueClean);
                 // ----
-
               } else {
                 if ($cadSqlNot != "") {
                   $cadSqlNot .= " AND "; // esto es la lista de NOTs asi que los uno con ANDs
-
                 }
                 if ($cadSqlNotNueva != "")  $cadSqlNotNueva .= " AND ";
                 $cadSqlNot .= " " . $tableName . "." . $fieldName;
@@ -260,20 +233,11 @@ class NewAdvancedSearchController extends Controller
               $cadSqlnueva .= "  NOT (" . $cadSqlNotNueva . ")";
             }
           }
-          //echo ($cadSqlNotNueva);
-          //die();
+        
           $JoinFinal .= sprintf($join, implode(', ', $join_count_array), $cadSqlnueva) . " ";
         }
       }
-
-      //echo('<br><br><br>');
     }
-
-    /*
-    var_dump($JoinFinal);
-    die();
-*/
-
     // Sumamos al WHERE los Campos de Analitycs solo si hay algo
     if (trim($sqlAnalytics) != "") {
       if (trim($cadSql) == "") {
@@ -282,25 +246,19 @@ class NewAdvancedSearchController extends Controller
         $cadSql = $cadSql . " AND (" . $sqlAnalytics . ")";
       }
     }
-    /*
-    var_dump($cadSql) . "<br>";
-    var_dump($cadSqlNot) . "<br>";
-    die();
-*/
     //Extraemos los IDs de la consulta
     // Consulta Negativa
     $IdListNot = array();
-    //echo $cadSqlNot."<br>";
+    
     if ($cadSqlNot != "") {
       $ConsultaIDsNot = sprintf($baseQuery, "trajectories.id", "", $Joins, $cadSqlNot, $GroupBy);
-      // echo $ConsultaIDsNot."<br>";
+      
       $trayectoriasIDNot = DB::select($ConsultaIDsNot);
 
       foreach ($trayectoriasIDNot as $keyNot => $valueNot) {
         $IdListNot[] = $valueNot->id;
       }
-      // var_dump($IdListNot);
-    }
+         }
     // Consulta Positiva
     if ($cadSql == "") $cadSql = " 1=1 ";
     $ConsultaIDsOld = sprintf($baseQuery, "trajectories.id", "", $Joins, $cadSql, $GroupBy);
@@ -347,7 +305,6 @@ class NewAdvancedSearchController extends Controller
     return $trayectorias;
   }
 
-
   // Se manda los datos a la vista de resultado
   function results(Request $request)
   {
@@ -358,17 +315,12 @@ class NewAdvancedSearchController extends Controller
       $page = $request->input('page', 1);
       $perPage = 15;
       $offset = $page * $perPage - $perPage;
-     
-
       $allTrayectorias = new LengthAwarePaginator($trayectorias->slice($offset, $perPage, true), $trayectorias->count(), $perPage, $page);
-
       $allTrayectorias->setPath(Paginator::resolveCurrentPath());
-
      
     } else {
      
       $allTrayectorias = $trayectorias;
-
     }
 
     return view('new_advanced_search.results', [
@@ -448,14 +400,12 @@ class NewAdvancedSearchController extends Controller
     $Area_per_lipid = DB::table('trajectories_analysis')
       ->select(DB::raw('MIN(area_per_lipid) AS Area_per_lipidStart, MAX(area_per_lipid) AS Area_per_lipidEnd'))->get();
 
-// HACK :: para que salga la temperatura con un slide de seleccion...
-
     $temperature = DB::table('trajectories')
         ->select(DB::raw('MIN(temperature) AS temperatureStart, MAX(temperature) AS temperatureEnd'))->get();
 
     $Form_factor_quality = DB::table('trajectories_analysis')
       ->select(DB::raw('MIN(ff_quality) AS Form_factor_qualityStart, MAX(ff_quality) AS Form_factor_qualityEnd'))
-      ->where('ff_quality', '!=', '4242')
+      ->whereNotNull('ff_quality')
       ->get();
 
     $Bilayer_thickness = DB::table('trajectories_analysis')
@@ -473,20 +423,8 @@ class NewAdvancedSearchController extends Controller
       'Quality_Tails' => $Quality_Tails,
       'temperature'=> $temperature,
       'Form_factor_quality' => $Form_factor_quality,
-      //'Area_per_lipid_upper_leaflet' => $Area_per_lipid_upper_leaflet,
-      //'Area_per_lipid_lower_leaflet' => $Area_per_lipid_lower_leaflet,
-      //'COG_of_protein' => $COG_of_protein,
-      //'COG_BB_first' => $COG_BB_first,
-      //'COG_BB_last' => $COG_BB_last,
-      //'COG_of_membrane' => $COG_of_membrane,
-      //'COG_headgroups_upper_leaflet' => $COG_headgroups_upper_leaflet,
-      //'COG_headgroups_lower_leaflet' => $COG_headgroups_lower_leaflet,
       'Bilayer_thickness' => $Bilayer_thickness,
-      //'Protein_depthness' => $Protein_depthness,
-      //'Contacts_Protein_solvent' => $Contacts_Protein_solvent,
-      //'Contacts_Protein_headgroups' => $Contacts_Protein_headgroups,
-      //'Contacts_Protein_tailgroups' => $Contacts_Protein_tailgroups,
-      //'Tilt' => $Tilt
+
     ]);
   }
 
@@ -495,20 +433,17 @@ class NewAdvancedSearchController extends Controller
   {
     $data = session()->all();
     $listIDs = array();
-    //var_dump($data);
-    //die();
-
+   
     foreach ($data as $key => $value) {
       if (gettype($value) != 'array' && strpos($key, 'CompareID') !== false) {
 
         if ($value == "1") {
           $listIDs[] = substr($key, 9);
         }
-        //echo($key." :: ".$value."<br>");
+      
       }
     }
 
-    //var_dump($listIDs);die();
     $ResultadoDB = null;
 
     if (count($listIDs) > 0) {
@@ -520,25 +455,8 @@ class NewAdvancedSearchController extends Controller
         ->join('trajectories', 'trajectories.id', '=', 'trajectories_analysis.trajectory_id')
         ->select('trajectories.temperature as temperature', 'trajectories_analysis.*', 'trajectories_analysis_lipids.*', 'lipids.name as lipid_name', 'lipids.molecule', 'forcefields.name as name')
         ->whereIn('trajectories_analysis.trajectory_id', $listIDs)->get();
-
-
-      //
-      /*  $ResultadoDBSQL = DB::table('trajectories_analysis')
-    ->join('trajectories_analysis_lipids','trajectories_analysis.trajectory_id','=','trajectories_analysis_lipids.trajectory_id')
-    ->join('lipids','trajectories_analysis_lipids.lipid_id','=','lipids.id')
-    ->join('forcefields','lipids.forcefield_id','=','forcefields.id')
-    ->join('trajectories','trajectories.id','=','trajectories_analysis.trajectory_id')
-    ->select('trajectories.temperature as temperature','trajectories_analysis.*','trajectories_analysis_lipids.*','lipids.*','forcefields.name as name')
-    ->whereIn('trajectories_analysis.trajectory_id', $listIDs)->toSql();
- */
     }
-    //dd($ResultadoDBSQL);
-    /*
-DB::enableQueryLog();
-$quries = DB::getQueryLog();
-dd($quries);
-*/
-
+    
     return view('new_advanced_search.compare', [
       'datos' => $ResultadoDB,
     ]);
@@ -552,7 +470,7 @@ dd($quries);
     $response = collect($request);
 
     foreach ($response as $key => $value) {
-      //Session::put($key, $value);
+     
       session([$key => $value]);
     }
 
@@ -586,12 +504,8 @@ dd($quries);
         'trajectory_id' => $resultado->trajectory_id,
         'Bilayer_thickness' => $resultado->Bilayer_thickness,
         'Bilayer_thickness_std' => $resultado->Bilayer_thickness_std,
-        'Protein_depthness' => $resultado->Protein_depthness,
-        'Protein_depthness_std' => $resultado->Protein_depthness_std,
         'Tilt' => $resultado->Tilt,
         'Tilt_std' => $resultado->Tilt_std,
-        'COG_of_protein' => $resultado->COG_of_protein,
-        'COG_of_protein_std' => $resultado->COG_of_protein_std,
         'COG_BB_first' => $resultado->COG_BB_first,
         'COG_BB_first_std' => $resultado->COG_BB_first_std,
         'COG_BB_last' => $resultado->COG_BB_last,
@@ -612,39 +526,10 @@ dd($quries);
         'Area_per_lipid_upper_leaflet_std' => $resultado->Area_per_lipid_upper_leaflet_std,
         'Area_per_lipid_lower_leaflet' => $resultado->Area_per_lipid_lower_leaflet,
         'Area_per_lipid_lower_leaflet_std' => $resultado->Area_per_lipid_lower_leaflet_std,
-
-        'Contacts_Protein-lipids' => $resultado->{'Contacts_Protein-lipids'},
-        'Contacts_Protein-lipids_std' => $resultado->{'Contacts_Protein-lipids_std'},
-        'Contacts_Protein-headgroups' => $resultado->{'Contacts_Protein-headgroups'},
-        'Contacts_Protein-headgroups_std' => $resultado->{'Contacts_Protein-headgroups_std'},
-        'Contacts_Protein-tailgroups' => $resultado->{'Contacts_Protein-tailgroups'},
-        'Contacts_Protein-tailgroups_std' => $resultado->{'Contacts_Protein-tailgroups_std'},
-        'Contacts_Protein-solvent' => $resultado->{'Contacts_Protein-solvent'},
-        'Contacts_Protein-solvent_std' => $resultado->{'Contacts_Protein-solvent_std'},
-        'PepDF_5_distance' => $resultado->PepDF_5_distance,
-        'PepDF_5_distance_std' => $resultado->PepDF_5_distance_std,
-        'PepDF_5_angle' => $resultado->PepDF_5_angle,
-        'PepDF_5_angle_std' => $resultado->PepDF_5_angle_std,
-        'PepDF_50_distance' => $resultado->PepDF_50_distance,
-        'PepDF_50_distance_std' => $resultado->PepDF_50_distance_std,
-        'PepDF_50_angle' => $resultado->PepDF_50_angle,
-        'PepDF_50_angle_std' => $resultado->PepDF_50_angle_std,
-        'PepDF_100_distance' => $resultado->PepDF_100_distance,
-        'PepDF_100_distance_std' => $resultado->PepDF_100_distance_std,
-        'PepDF_100_angle' => $resultado->PepDF_100_angle,
-        'PepDF_100_angle_std' => $resultado->PepDF_100_angle_std,
-        'PepDF_200_distance' => $resultado->PepDF_200_distance,
-        'PepDF_200_distance_std' => $resultado->PepDF_200_distance_std,
-        'PepDF_200_angle' => $resultado->PepDF_200_angle,
-        'PepDF_200_angle_std' => $resultado->PepDF_200_angle_std
-
       ];
 
       $comparaciones[] = $comparacion;
     }
-
-    //var_dump($comparaciones);
-    //die();
 
     return Excel::download(new  NewAdvancedSearchCompareExport($comparaciones), 'NMR_export_compare.csv');
   }
@@ -704,7 +589,7 @@ dd($quries);
       }
     }
 
-    return Excel::download(new AdvancedSearchExport($trayectoriasTratadas), 'supepmem_export2.csv');
+    return Excel::download(new AdvancedSearchExport($trayectoriasTratadas), 'trajectory_export.csv');
   }
 
 
@@ -729,7 +614,7 @@ dd($quries);
       }
     }
 
-    // var_dump($filtrosAplicados);
+   
     return $filtrosAplicados;
   }
 
@@ -749,9 +634,6 @@ dd($quries);
     $filtros = Filtros::all();
     $datosFomulario = $request->all();
     $filtrosAplicables = collect();
-
-    //var_dump($datosFomulario);
-    //die();
 
     foreach ($datosFomulario as $codigoFiltro => $valor) {
       if (is_array($valor)) {
@@ -828,7 +710,6 @@ dd($quries);
   private function getTrayectoriasConFiltroAplicados($request)
   {
 
-    //  var_dump($request);
 
     DB::enableQueryLog();
     $filtrosAplicables = $this->filtrosAplicables($request);

@@ -209,14 +209,9 @@ $numero_id =0;
                 let actual_url_html_busqueda_avanzada = '';
                 actual_url_html_busqueda_avanzada = url_html_busqueda_avanzada.replace(':codigo', grupo_filtros.data('codigo'));
                 actual_url_html_busqueda_avanzada = actual_url_html_busqueda_avanzada.replace(':numero', numero_filtros);
-                //console.log(contenedor_filtro);
-                //console.log(grupo_filtros.data);
-                //console.log(numero_filtros);
-              //  $('.contenedor-filtro-busqueda-avanzada').closest('.grupo-filtros').show();
-                $.ajax({
+                 $.ajax({
                     url: actual_url_html_busqueda_avanzada,
                     success: function (response) {
-                        //console.log(response);
                         contenedor_filtro.after(response)
                         aplicar_eventos_filtro();
                         aplicar_evento_duplicar_filtro();
@@ -252,7 +247,6 @@ $numero_id =0;
           var container = document.getElementById("formulario-busqueda-avanzada-submit");
 
           $(".multi-range").each(function( index ) {
-              //  console.log( index + ": " + $( this ).text() );
                 var newslider = this;
                 var init = parseFloat(this.getAttribute('data-initvalue'));
                 var end = parseFloat(this.getAttribute('data-endvalue'));
@@ -267,15 +261,7 @@ $numero_id =0;
                         'min': [init],
                         'max': [end]
                     },
-                    /*pips: {
-                          mode: 'steps',
-                          density: 5,
-                          format: wNumb({
-                                  decimals: 2,
-                                  prefix: '',
-                                  suffix: ''
-                                  })
-                        }*/
+                
                 });
 
                 var a = document.createElement('input');
@@ -291,11 +277,9 @@ $numero_id =0;
               var inputs = [startInputSlide, endInputSlide];
               // Evento cambia los valores
               newslider.noUiSlider.on('slide', function (values, handle) {
-                      //console.log(inputs[handle].name);
-                      //inputs[handle].value = values[handle];
+                      
                       if (! $('input[name="'+inputs[handle].name+'"]').length) {
                         //Your code when inputName does not exist!
-                      //  console.log('no existe');
                           $('#formulario-busqueda-avanzada-submit').append('<input type="hidden" name="' + inputs[0].name +'" value="' + values[0] +'" />');
                           $('#formulario-busqueda-avanzada-submit').append('<input type="hidden" name="' + inputs[1].name +'" value="' + values[1] +'" />');
 
@@ -314,31 +298,20 @@ $numero_id =0;
 
         function DeleteAll() {
           $(".contenedor-filtro-busqueda-avanzada").remove();
-          //$(".grupo-filtros").hide();
         }
 
         $('#formulario-busqueda-avanzada').submit(function () {
-
-           //$('#formulario-busqueda-avanzada-submit').html(''); // initialize Form! be carrefull
-
-           // Cualquier hidden con valor 0 es borrado para no mandarlos por el sumbit
-           /*$("input:hidden").each(function (){
-             if ($(this).val()==0) $(this).remove();
-           })*/
-
 
             $('input').each(function ()
             {
                 if($(this).attr('type') && $(this).prop('checked')) {
                     $('#formulario-busqueda-avanzada-submit').append('<input type="hidden" name="' + $(this).attr('name') +'" value="' + $(this).val() +'" />');
                 }
-                // para el input text de la secuencia de aminoacidos
-
-                //console.log($(this).attr('type'));
+                
                 if ($(this).attr('type')=="text"){
                     $('#formulario-busqueda-avanzada-submit').append('<input type="hidden" name="' + $(this).attr('name') +'" value="' + $(this).val() +'" />');
                 }
-                //console.log($(this).attr('type') +" _ "+ $(this).val() + " _ " +$(this).attr('name'));
+ 
                 if ( ($(this).val() == '')){
                   if ($(this).attr('type')!="text") $(this).remove();
                 }
@@ -360,7 +333,6 @@ $numero_id =0;
                   }
                 }
             })
-            // HACK
             $('#formulario-busqueda-avanzada-submit').append('<input type="hidden" name="nothinghere" value="1" />');
 
             $('#formulario-busqueda-avanzada-submit').submit();
@@ -377,18 +349,13 @@ $numero_id =0;
                 if (window.getComputedStyle($('[data-codigo=' + codigo + ']').get(0)).display === "none") {
                       contenedor_filtros.show();
                 } else {
-
                 let numero_filtros = $('[data-codigo=' + codigo + ']').find('.contenedor-filtro-busqueda-avanzada').length;
-                //console.log( $('[data-codigo=' + codigo + ']').find('.contenedor-filtro-busqueda-avanzada'));
-                //console.log(numero_filtros);
                 let actual_url_html_busqueda_avanzada = '';
                 actual_url_html_busqueda_avanzada = url_html_busqueda_avanzada.replace(':codigo', codigo);
                 actual_url_html_busqueda_avanzada = actual_url_html_busqueda_avanzada.replace(':numero', numero_filtros);
-                //console.log(actual_url_html_busqueda_avanzada);
                 $.ajax({
                     'url': actual_url_html_busqueda_avanzada,
                     'success': function(response) {
-                      //console.log(response);
                         contenedor_filtros.append(response);
                         aplicar_eventos_filtro();
                         aplicar_evento_duplicar_filtro();
@@ -400,9 +367,5 @@ $numero_id =0;
             }
             $('#selector-filtros').find('option[value=0]').prop('selected', true);
         })
-
-
-
-
     </script>
 @endsection

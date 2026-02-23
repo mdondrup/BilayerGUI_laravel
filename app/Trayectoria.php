@@ -50,10 +50,8 @@ class Trayectoria extends AppModel
     }
 
     function lipidos() {
-      //  DB::enableQueryLog();
       $lipidosData =$this->belongsToMany(Lipido::class, TrayectoriasLipidos::getTableName())->withPivot('leaflet_1', 'leaflet_2');
-      // dd(DB::getQueryLog());
-        return $lipidosData;
+      return $lipidosData;
     }
 
     function analisi_lipidos() {

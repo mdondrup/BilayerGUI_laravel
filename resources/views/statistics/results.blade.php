@@ -7,10 +7,7 @@ use \Illuminate\Filesystem\Filesystem;
 /**
  * @var Trayectoria $trayectoria
  */
- /**@php
- *  var_dump($trayectoria);
- *  @endphp
-   */
+ 
 ?>
 @extends('layouts.app')
 
@@ -23,7 +20,7 @@ use \Illuminate\Filesystem\Filesystem;
 
 
 function countInRange($numbers,$lowest,$highest){
-  //bounds are included, for this example
+//bounds are included, for this example
       return count(array_filter($numbers,function($number) use ($lowest,$highest){
     return ($lowest<=$number && $number <=$highest);
     }));
@@ -40,10 +37,7 @@ function recalcDataChart($values){
 
   $m1 = array();
   $m1_labels = array();
-
-//   echo($minval." >> ".$maxval." :: ".count($values)."<br>");
   $step = ($maxval-$minval)/$interval;
-//  echo($step."<br>");
   for ($i=0; $i < $interval ; $i++) {
      $ini = $minval+($step*$i);
      $con = countInRange($values,$ini,$ini+$step);
@@ -59,18 +53,15 @@ function recalcDataChart($values){
   $datas[]= $minval;
   $datas[]= $maxval;
 
-  //var_dump($dataNum);
-//echo("<br>");
+
   return $datas;
 }
 
 
 // Datos de Membrana
-//echo('Membrane model <hr>');
 $mem_model_name = array();
 $mem_model_value = array();
   foreach ($membranas as $key => $value) {
-   //echo $value->name.':'.$value->total.'<br>';
      $mem_model_name[] = ucfirst($value->name);
      $mem_model_value[] = $value->total;
  }
@@ -251,7 +242,6 @@ function DrawChartHistogram(canvasId,names,data,step,chartType,title,labelX,labe
      }]
    };
 
-//console.log(minlim+ " " + maxlim );
    var options = {
      maintainAspectRatio: true,
      responsive: responsive,

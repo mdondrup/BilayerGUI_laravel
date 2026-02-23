@@ -15,7 +15,7 @@ class SearchController extends Controller
     public function results(Request $request)
     {
 
-        //DB::enableQueryLog();
+       
         $texto = trim($request->get('text'));
 
         // Para poner el ID con un numero
@@ -54,7 +54,6 @@ class SearchController extends Controller
         }
 
         $temperature = Trayectoria::where('temperature', 'LIKE', "%$texto%")->orderBy('temperature', 'asc')->get()->unique('temperature'); // Unique se usa por que los lipidos estan duplicados por el campo forcefield
-        // dd(DB::getQueryLog());
 
         return view('search.results', [
             'texto' => $texto,

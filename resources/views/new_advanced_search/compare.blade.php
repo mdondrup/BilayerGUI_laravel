@@ -12,6 +12,8 @@
  */
 use App\Trayectoria;
 
+die("This is currently not working. Coming soon with a new version of the compare page with better design and more features.");
+
 /**
  * @var Trayectoria[] $trayectorias
  */
@@ -69,18 +71,14 @@ function recalcDataChart($values)
 
     $m1 = [];
     $m1_labels = [];
-
-    //echo($minval." >> ".$maxval."<br>");
     $step = ($maxval - $minval) / $interval;
-    //echo($step."<br>");
     for ($i = 0; $i <= $interval; $i++) {
         $ini = $minval + $step * $i;
 
         $dataNum[] = countInRange($values, $ini, $ini + $step);
-        $labels[] = $ini + $step * 0.5; //.">".round(($ini+$step),2);
-        //echo($ini." :: ".($ini+$step)."<br>");
+        $labels[] = $ini + $step * 0.5; 
+      
     }
-    //var_dump($dataNum);
 
     $datas = [];
     $datas[] = $labels;
@@ -175,8 +173,6 @@ function genData2($GitHubURL, $FileUrl, &$labelData, &$data, &$maxData, &$minDat
 
 function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror, &$maxData, &$minData, $Grupo, $DataSetId, $ff)
 {
-    //    $jsonFileUrl = $GitHubURL.substr($FileUrl,31);//10
-
     $jsonFileUrl = $GitHubURL . $FileUrl; //10
 
    
@@ -190,7 +186,7 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
             if (str_contains($label, $Grupo)) {
                 $labelCleaned = CleanLabel($label); // save al labels to create a unique array
                 if ($labelCleaned == 'G1H1' || $labelCleaned == 'G1H2' || $labelCleaned == 'G2H1') {
-                    // HACK THIS LABEL IS GONNA GOT TO HEAD GROUP
+                   
                 } else {
                     $labelData[] = $labelCleaned;
 
@@ -516,7 +512,6 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
                     $newlinkSel = 'exportcompare?selected=1';
                     ?>
                     <div class="p2">
-                        <!--<a class="btn btn-primary btn-sm" href="{{ $newlinkSel }}"> @lang('Exportar seleccionado')</a>-->
                     </div>
                 </div>
             </div>
@@ -526,25 +521,17 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
 
 <div class="card-body ">
     <div class="table-responsive txt-white">
-
         <?php
-
         $DosCol = "col-xs-12 col-sm-12 col-md-6 col-lg-6 p-4 ";
         $TresCol = "col-xs-12 col-sm-12 col-md-12 col-lg-4 p-4 ";
-
-        //var_dump($datos);die();
-
         if (empty($datos)) {
             echo "Select trayectories to compare</div></div>";
         } else {
-            //var_dump($datos);
-            //die();
         ?>
     </div>
 </div>
 
 <div class="container" style="background-Color:#51515126;">
-    <!--  p-4 p-lg-5 h-100 -->
 
 
     <div class="ttCompare text-center" style="color:white">
@@ -571,9 +558,6 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
             // ---- FILE LIST ----
             // LISTA ID:: Fichero
             foreach ($datos as $key => $value) {
-                //dd($value);
-
-                // HACK!!!!!  ESTO NO SE PUEDE HACER, POR QUE SE CARGA LAS GRAFICAS
                 // ICICIC: We cannot do this, because it loads the charts with the data of the first trajectory, 
                 // we need to load the data of all trajectories and then create the charts with the data of all trajectories
                 //if ($value->quality_total != 0 && $value->quality_headgroups != 0 && $value->quality_tails) {
@@ -604,16 +588,13 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
 
             $qualityTotal_value_process = array();
 
-            //if (is_array($qualityTotal) && count($qualityTotal) > 0)
             $qualityTotal_value_process = recalcDataChart($qualityTotal);
 
             // NUEVO
             $bilayer_thickness_value_process = array();
-            //if (is_array($bilayer_thickness) && count($bilayer_thickness) > 0)
             $bilayer_thickness_value_process = recalcDataChart($bilayer_thickness);
 
             $area_per_lipid_value_process = array();
-            //if (is_array($area_per_lipid) && count($area_per_lipid) > 0) 
             $area_per_lipid_value_process = recalcDataChart($area_per_lipid);
 
 
@@ -624,6 +605,7 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
             $maxcols = count($lista);
             $linea[] = array();
             $Nothing2Show = false;
+
             /*
             // ICICIC this is not working, we need to create the array with the max number of rows and columns, and then fill it with the data, if there is no data, fill it with 0
             foreach ($lista as $key => $value) {
@@ -638,11 +620,8 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
                     if (!in_array($value2["trajectory_id"], $indices))  $indices[] = $value2["trajectory_id"];
                 }
                 //$indices[] = $value["trajectory_id"];
-                //var_Dump($value);
             }
-            //var_dump($indices);
             //echo $maxrows."<br>".$maxcols;
-            //die();
             for ($n = 0; $n < $maxrows; $n++) {
                 // code...
                 $mmm = array();
@@ -655,16 +634,12 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
             }
             */
 
-            //var_dump($linea);
-            //die();
-
             if ($Nothing2Show == false) {
                 echo ('<table class="tableComp">');
 
                 // CABECERA
                 echo ("<th>ID</th>");
-                //echo ("<th colspan=3>Quality</th>");
-
+                
                 foreach ($lista as $key2 => $value2) {
                     echo ('<th colspan=3 > ' . $key2 . ' Quality </th>');
                 }
@@ -679,12 +654,7 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
                     echo ("<td>Tails</td>");
                 }
                 echo ("</tr>");
-                /*
-                var_dump($datos);
-                die();
-            */
-
-
+                
                 // DATOS TABLA
                 $volteo = array();
 
@@ -697,18 +667,11 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
 
                     foreach ($value as $key2 => $value2) {
 
-
                         if (!isset($volteo[$pos2])) {
                             $volteo[$pos2] = "<tr>" . "<td>" . $value[$pos2]["trajectory_id"] . "</td>";
-                            //$indices[] = $value[$pos2]["trajectory_id"];
                         }
-
-                        // code...
-                        //.$value[$pos2]["trajectory_id"]."->".$key."->"
                         $textcomp = "<td>" . round($value2["quality_total"], 2) . "</td>" . "<td>" . round($value2["quality_headgroups"], 2) . "</td>" . "<td>" . round($value2["quality_tails"], 2) . "</td>";
-
                         $volteo[$pos2] = $volteo[$pos2] . $textcomp;
-
                         $linea[$value[$pos2]["trajectory_id"]][$pos] = $textcomp;
 
                         if ($pos == (count($lista) - 1))
@@ -720,7 +683,6 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
                     $pos2 = 0;
                     $pos = $pos + 1;
                 }
-
 
                 foreach ($linea as $key => $value) {
                     if ($key != '0') {
@@ -811,11 +773,8 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
                     $DataStr = array();
                     $DataValue = array();
                     $DataStrAdd = array();
-
-                    //var_Dump($value2);die();
                     // Por cada LIPIDO abro todos los ficheros
                     foreach ($value2 as $key3 => $value3) {
-                        //echo($value3['id']." --> ".$value3['order']."<br>");
                         if (urlFileExist2($GitHubURL . $value3['order'])) {
                             genDataParamOrde($GitHubURL, $value3['order'], $DataStr, $DataValue, $DataError, $maxValue, $minValue, "G" . $i, $value3['trajectory_id'], $value3['ff']);
                             // necesitamos datos adicionales que salgan en la grafica junto al id de trajectoria
@@ -830,25 +789,17 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
 
                     $DataStr = array_values(array_unique($DataStr)); // el array unique borra los repetidos pero no reindexa con array values si.
                     $NumLabels = count($DataStr);
-                    //var_dump($DataStr);die();
                     // los separamos en Datasets
-                    //echo("Numero de labels en X : ".count($DataStr));
                     $nInxLabel = 0;
                     foreach ($DataStr as $LabelInx) {
-                        //$datasetStr = $datasetStr . "{label : ".$datasetStr.$DataValue[$keyVal]['trajectory_id'].",data:[";
-
                         foreach ($DataValue[$LabelInx] as $keyid => $valueid) {
                             $nInxLabel = array_search($LabelInx, $DataStr);
                             $dataSet[$valueid['trajectory_id']][$nInxLabel] = $valueid['value'];
                         }
                     }
 
-                    /*foreach ($DataStr as $key => $value) {
-                        echo($key."->".$value."<br>");
-                    }*/
                     $datasetStr = "[";
                     foreach ($dataSet as $key => $value) {
-                        //echo($key."<br>");
                         $DataLabelExtra = "";
                         if (isset($DataStrAdd[$key]['ff']))
                             $DataLabelExtra .= ", " . $DataStrAdd[$key]['ff'];
@@ -859,7 +810,6 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
 
                         $dataFloats = array();
                         foreach ($value as $key4 => $value4) {
-                            //  echo($key2."->".$value2."<br>");
                             $dataFloats[] = $value4;
                         }
                         $datasetStr .= implode(",", $dataFloats) . "],type : 'scatter',borderColor: '#aaaaaa',backgroundColor: '" . $listaColores[$key] . "' },";
@@ -875,23 +825,6 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
                 }
                 echo ('</div>');
             }
-
-            /*
-            if (!is_null($trayectoria->analisis)) {
-
-                if (urlFileExist2($GitHubURL . $trayectoria->analisis->form_factor_file)) {
-                    if (!is_null($trayectoria->analisis->form_factor_experiment)) {
-                        if (genData2('https://www.databank.nmrlipids.fi/storage/', $trayectoria->analisis->form_factor_experiment . '/FormFactor.json', $DataExpStr, $DataExpValue, $maxValue, $minValue, $trayectoria->analisis->form_factor_scaling)) {
-                        }
-                    }
-
-                    if (genData2($GitHubURL, $trayectoria->analisis->form_factor_file, $DataStr, $DataValue, $maxValue, $minValue, 1)) {
-                        echo 'DrawChart("formfactor",[' . $DataStr . '],[' . $DataValue . '],[' . $DataExpValue . '],1,"line","Normalized Form factor","Qz (\u{212B}\u{AF}\u{B9}) ","Normalized |F(qz)|  (theta/\u{212B}\u{B2})",1,0,true,true,true,false);';
-                    }
-                }
-            }
-*/
-
     ?>
 </div>
 </div>
@@ -937,9 +870,7 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
     @include('layouts.foot')
 </div>
 </div>
-<?php
-            //if (is_array($qualityTotal) && count($qualityTotal) > 0 && is_array($bilayer_thickness) && count($bilayer_thickness) > 0 && is_array($area_per_lipid) && count($area_per_lipid) > 0) {
-?>
+
 <script>
     <?php
             if (is_array($qualityTotal) && count($qualityTotal) > 0 && array_sum($qualityTotal) != 0) {
@@ -959,7 +890,7 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
             }
     ?>
 
-    //if (!$bilayer_thickness_value_process.length === 0) {
+
     DrawChartHistogram("Bilayer_thickness",
         <?php echo json_encode($bilayer_thickness_value_process[0]); ?>,
         <?php echo json_encode($bilayer_thickness_value_process[1]); ?>,
@@ -971,8 +902,6 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
         <?php echo $bilayer_thickness_value_process[4]; ?>,
         true);
 
-    //}
-    //if (!$area_per_lipid_value_process.length === 0) {
     DrawChartHistogram("Area_per_lipid",
         <?php echo json_encode($area_per_lipid_value_process[0]); ?>,
         <?php echo json_encode($area_per_lipid_value_process[1]); ?>,
@@ -983,11 +912,10 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
         <?php echo $area_per_lipid_value_process[3]; ?>,
         <?php echo $area_per_lipid_value_process[4]; ?>,
         true);
-    //}
 </script>
 
 <?php
-            // } // if hay datos
+           
         }
 
 ?>

@@ -132,7 +132,7 @@ class Filtro
         $tableName = "";
         $fieldName = "";
         foreach ($this as $key => $value) {
-            //echo $key.":".$value."<br>";
+
             if ($key == "table") $tableName = $value;
             if ($key == "fields") $fieldName = $value;
             if ($key == "columna") $fieldName = $value;

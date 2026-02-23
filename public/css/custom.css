@@ -546,21 +546,6 @@ background-color: rgb(255 255 255 / 20%);
  opacity: 1;
 }
 
-/* by amino acid */
-.polar{
-  color:yellow;
-}
-.acido{
-  color:red;
-}
-.hidrofobico{
-  color:#39f139;
-}
-.basico{
-  color:blue;
-}
-
-
 .DistanceCol
 {
   color:#ffc107;
