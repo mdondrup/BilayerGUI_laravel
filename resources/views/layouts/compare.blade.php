@@ -43,17 +43,13 @@ foreach ($allSession as $key => $value) {
                         <!-- Authentication Links -->
                         @guest
                             @if ($numSelected > 0)
-                                <!--<li class="nav-item">
-                                <a class="nav-link" href="{{ route('new_advanced_search.compare') }}">{{ __('Compare') }}</a>
-                            </li>-->
+                               
                             @endif
                             <li class="nav-item">
                                 <a class="nav-link"
                                     href="{{ route('new_advanced_search.form') }}">{{ __('Advanced Search') }}</a>
                             </li>
-                            <!--  <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>-->
+                           
                             @if (Route::has('register'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>

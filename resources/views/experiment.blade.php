@@ -127,7 +127,6 @@ function DrawPlot(canvasId, data, labelsArray , step, chartType, title, labelX, 
                     callbacks: {
                         title: (items) => {
                             const item = items[0].parsed;
-                            //  console.log(item);
                             if (item.yMax != null) {
                                 cad = items[0].label + ` : ` + item.y.toFixed(2) + ` max: ` + item.yMax
                                     .toPrecision(2) + ` min: ` + item
@@ -136,7 +135,6 @@ function DrawPlot(canvasId, data, labelsArray , step, chartType, title, labelX, 
                                 cad = items[0].label + ` : ` + item.y.toFixed(2);
                             }
                             return cad;
-                            //return items[0].label+` : ` + items[0].parsed;
                         },
                         label: (items) => {
                             return ``;
@@ -146,8 +144,7 @@ function DrawPlot(canvasId, data, labelsArray , step, chartType, title, labelX, 
             },
             scales: {
                 x: {
-                    //offset: true,
-                    //type: 'linear',
+
                     grid: {
                         display: gridOn,
                         drawBorder: gridOn,

@@ -89,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     pointHitRadius: 0
                 }]
             };      
-            // console.log("Rendering chart for element:", canvas.id, "with dataset:", dataset);
             drawApLChart(canvas, dataset, title);                      
         } catch (e) {
             console.error("Could not render chart for element:", canvas.id, e);

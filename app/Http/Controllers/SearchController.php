@@ -15,7 +15,7 @@ class SearchController extends Controller
     public function results(Request $request)
     {
 
-        //DB::enableQueryLog();
+       
         $texto = trim($request->get('text'));
 
         // Para poner el ID con un numero
@@ -41,28 +41,10 @@ class SearchController extends Controller
 
             }
 
-        // Al buscar si era un numero era el ID que se pasaba ...pero
-        // esto falla si pones un numero a buscar en el el input de busqueda simple
-
-        // OJO ... LO DESCONECTO PARA PROBAR QUE PUEDA PONER TEMPERATUAS
-       /* if (is_numeric($texto)) {
-            $trayectoria = Trayectoria::where('id', $texto)->first();
-            if (!is_null($trayectoria)) {
-                return redirect(route('trayectorias.show', $texto));
-            }
-        }*/
-
-
-        //$peptidos = Peptido::where('name', 'LIKE', "%$texto%")->get();
-        //$peptidosSequence = Peptido::where('sequence', 'LIKE', "%$texto%")->get();
-        //$lipidos = Lipido::where('full_name', 'LIKE', "%$texto%")->get();
         $lipidos = Lipido::where('molecule', 'LIKE', "%$texto%")->get()->unique('molecule'); // Unique se usa por que los lipidos estan duplicados por el campo forcefield
-        //$moleculas = Molecula::where('molecule', 'LIKE', "%$texto%")->get()->unique('molecule');
+        
         $iones = Ion::where('molecule', 'LIKE', "%$texto%")->get()->unique('molecule');
-        //$agua = Agua::where('short_name', 'LIKE', "%$texto%")->get()->unique('short_name'); //->orWhere('short_name', 'LIKE', "%$texto%")
-        //$membrana = Membrana::where('name', 'LIKE', "%$texto%")->orWhere('lipid_names_l1', 'LIKE', "%$texto%")->orWhere('lipid_names_l2', 'LIKE', "%$texto%")->get();
-
-       
+                
         if ($cadregexp==""){
             // Busqueda simple de un texto... modo LIKE
             $membrana = Membrana::where('lipid_names_l1', 'LIKE', "%$texto%")->orWhere('lipid_names_l2', 'LIKE', "%$texto%")->get();
@@ -72,19 +54,16 @@ class SearchController extends Controller
         }
 
         $temperature = Trayectoria::where('temperature', 'LIKE', "%$texto%")->orderBy('temperature', 'asc')->get()->unique('temperature'); // Unique se usa por que los lipidos estan duplicados por el campo forcefield
-        // dd(DB::getQueryLog());
 
         return view('search.results', [
             'texto' => $texto,
             'cadregexp' => $cadregexp,
             'claves' => $claves,
-            //'peptidos' => $peptidos,
-            //'moleculas' => $moleculas,
             'iones' => $iones,
             'lipidos' => $lipidos,
             'membranas' => $membrana,
             'temperatures' => $temperature, // new field to search
-            //'sequence'=>$peptidosSequence,
+          
         ]);
     }
 }

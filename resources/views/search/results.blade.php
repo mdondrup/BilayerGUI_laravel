@@ -1,11 +1,10 @@
 <?php
 
-use App\Peptido;
 use App\Lipido;
 require_once '../bootstrap/helpers.php';
 
 /**
- * @var Peptido[] $peptidos
+ * 
  * @var Lipido[] $lipidos
  */
 
@@ -39,12 +38,6 @@ foreach ($listaIdsSesson as $key => $value) {
                 </form>
 
                 <div class=" ">
-
-                    <?php
-                    //var_dump ($claves);
-                    //var_dump ($cadregexp);
-                    ?>
-
                     <div class="search_result" style="padding: 1rem">
                         @if (count($lipidos) == 0 and
                                 count($iones) == 0 and
@@ -169,7 +162,6 @@ foreach ($listaIdsSesson as $key => $value) {
         // pulsas uno y marca el estado del gemelo
         function PressCheck(aa) {
 
-            //console.log(aa.value);
             valuecheck = aa.value;
             status = 0;
             // Esto es por algo visual, realmente cuando pulso tengo que pasarlo por una varible de sesion
