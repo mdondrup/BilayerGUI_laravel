@@ -143,8 +143,7 @@ class NewAdvancedSearchController extends Controller
     $join = "";
     $JoinFinal = "";
     $search_char = array(" ", "-", ".", ","); // Espacios y guiones se cambia por barra baja
-    $hackHeteromolecule = array();
-    $hackHeteromoleculeOp = array();
+    
 
     //var_dump($filtrosPrincipales['label']);
     foreach ($filtrosPrincipales as $key => $value) {
@@ -153,30 +152,7 @@ class NewAdvancedSearchController extends Controller
       $act_request = $request->input($key);
       $act_request_operador = $request->input($key . '_operador');
     
-      if ($key == "lipidos" && !is_null($act_request)) {
-        $cn = 1;
-        $hackHeteromolecule = array();
-        $hackHeteromoleculeOp = array();
-        $hackHeteromolecule[] = "";
-        $hackHeteromoleculeOp[] = "";
-        foreach ($act_request as $lip_request) {
-          if (str_contains(strtoupper($lip_request), 'CH') || str_contains(strtoupper($lip_request), 'CLOL')) {
-            $hackHeteromolecule[] = strtoupper($lip_request);
-            $hackHeteromoleculeOp[] = $act_request_operador[$cn];
-          }
-          $cn++;
-        }
-        if (isset($hackHeteromolecule[0])) {
-          unset($hackHeteromolecule[0]);
-          unset($hackHeteromoleculeOp[0]);
-        }
-
-        if (isset($hackHeteromolecule[1])) {
-          $request->merge(['moleculas' => $hackHeteromolecule]);
-          $request->merge(['moleculas_operador' => $hackHeteromoleculeOp]);
-        }
-      }
-
+      
 
 
       if (!is_null($act_request)) {
@@ -679,10 +655,8 @@ dd($quries);
 
     foreach ($trayectorias as $k => $trayectoria) {
       $trayectorias[$k]['max_elementos'] = max(
-        count($trayectoria['peptidos']),
         count($trayectoria['lipidos']),
         count($trayectoria['iones']),
-        //count($trayectoria['moleculas']),
         count($trayectoria['modelos_acuaticos']),
         count($trayectoria['membranas']),
       );
@@ -708,29 +682,12 @@ dd($quries);
           'lipids.short_name' => null,
           'lipids.leaflet_1' => null,
           'lipids.leaflet_2' => null,
-          //'peptides.name' => null,
-          //'peptides.sequence' => null,
-          //'peptides.activity' => null,
-          //'peptides.membrane' => null,
-          //'peptides.bulk' => null,
+         
           'ions.short_name' => null,
-          //'ions.bulk' => null,
-          //'heteromolecules.short_name' => null,
-          //'heteromolecules.leaflet_1' => null,
-          //'heteromolecules.leaflet_2' => null,
-          //'heteromolecules.bulk' => null,
-          //'water_models.short_name' => null,
+          
           'membranes.name' => null,
         ];
 
-        /*if(!empty($trayectoria['peptidos'][$i]))
-            {
-                $trayectoriaTratada['peptides.name'] = $trayectoria['peptidos'][$i]['name'];
-                $trayectoriaTratada['peptides.sequence'] = $trayectoria['peptidos'][$i]['sequence'];
-                $trayectoriaTratada['peptides.activity'] = $trayectoria['peptidos'][$i]['activity'];
-                $trayectoriaTratada['peptides.membrane'] = $trayectoria['peptidos'][$i]['membrane'];
-                $trayectoriaTratada['peptides.bulk'] = $trayectoria['peptidos'][$i]['bulk'];
-            }*/
         if (!empty($trayectoria['lipidos'][$i])) {
           $trayectoriaTratada['lipids.short_name'] = $trayectoria['lipidos'][$i]['short_name'];
           $trayectoriaTratada['lipids.leaflet_1'] = $trayectoria['lipidos'][$i]['leaflet_1'];
@@ -742,10 +699,7 @@ dd($quries);
         }
         
 
-        /*if (!empty($trayectoria['modelos_acuaticos'][$i])) {
-          $trayectoriaTratada['water_models.short_name'] = $trayectoria['modelos_acuaticos'][$i]['short_name'];
-        }*/
-
+       
         $trayectoriasTratadas[] = $trayectoriaTratada;
       }
     }
@@ -845,33 +799,21 @@ dd($quries);
       // Lipidos
       'lipids.*',
       'trajectories_lipids.*',
-      // Peptidos
-      //'peptides.*',
-      //'trajectories_peptides.*',
-      // Moleculas
-      'heteromolecules.*',
-      'trajectories_heteromolecules.*',
+      
+  
+      
       // Iones
       'ions.*',
-      //Aguas
-      //'water_models.*',
+     
+     
 
       'membranes.*'
     )
-      //->leftJoin('trajectories_peptides', 'trajectories.id', '=', 'trajectories_peptides.trajectory_id')
-      //->leftJoin('peptides', 'peptides.id', '=', 'trajectories_peptides.peptide_id')
-
       ->leftJoin('trajectories_lipids', 'trajectories.id', '=', 'trajectories_lipids.trajectory_id')
       ->leftJoin('lipids', 'lipids.id', '=', 'trajectories_lipids.lipid_id')
 
-      //->leftJoin('trajectories_water', 'trajectories.id', '=', 'trajectories_water.trajectory_id')
-      //->leftJoin('water_models', 'water_models.id', '=', 'trajectories_water.water_id')
-
       ->leftJoin('trajectories_ions', 'trajectories.id', '=', 'trajectories_ions.trajectory_id')
       ->leftJoin('ions', 'ions.id', '=', 'trajectories_ions.ion_id')
-
-      ->leftJoin('trajectories_heteromolecules', 'trajectories.id', '=', 'trajectories_heteromolecules.trajectory_id')
-      ->leftJoin('heteromolecules', 'heteromolecules.id', '=', 'trajectories_heteromolecules.molecule_id')
 
       ->leftJoin('trajectories_membranes', 'trajectories.id', '=', 'trajectories_membranes.trajectory_id')
       ->leftJoin('membranes', 'membranes.id', '=', 'trajectories_membranes.membrane_id')
@@ -891,12 +833,9 @@ dd($quries);
     DB::enableQueryLog();
     $filtrosAplicables = $this->filtrosAplicables($request);
 
-    //    var_dump($filtrosAplicables);
 
     $filtrosNot = $filtrosAplicables->where('operador', OPERADOR_NOT);
-    /** @var Filtro[] $filtrosNot */
-    //      var_dump($filtrosNot);
-    //die();
+    
     $trayectoriasDescartadasPorFiltroNot = [];
     foreach ($filtrosNot as $filtro) {
 
@@ -910,15 +849,11 @@ dd($quries);
 
 
     $trayectorias = Trayectoria::select('trajectories.*')->orderBy('trajectories.id')
-      ->with('lipidos', 'peptidos', 'iones', 'modelos_acuaticos', 'moleculas', 'membranas') //,'membranas'
+      ->with('lipidos', 'iones', 'modelos_acuaticos', 'moleculas', 'membranas') //,'membranas'
       ->whereNotIn('trajectories.id', $trayectoriasDescartadasPorFiltroNot)->get();
-    //var_dump($trayectoriasDescartadasPorFiltroNot);
-    //die();
-    //dd(DB::getQueryLog());
-
+    
     $filtrosAnd = $filtrosAplicables->where('operador', OPERADOR_AND);
     $filtrosOr = $filtrosAplicables->where('operador', OPERADOR_OR);
-    //var_dump($filtrosOr);
 
     if ($filtrosAnd->isEmpty() && $filtrosOr->isEmpty()) {
       $trayectoriasFiltradas = $trayectorias;
@@ -942,10 +877,7 @@ dd($quries);
                   $columan = "name";
                 }
               }
-              //var_dump($trayectoria);
-              //var_dump($propiedad);
-              //var_dump($entidades);
-              //die();
+             
               foreach ($entidades as $entidad) {
                 // OJO :: entidad->columan no es el campo para la sql
                 if (preg_match("%$filtro->valor%i", $entidad->$columna)) {

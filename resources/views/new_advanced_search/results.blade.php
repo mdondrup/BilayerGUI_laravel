@@ -19,17 +19,7 @@ use App\Trayectoria;
             return $val;
         }
     }
-    //var_dump($_GET);
-    // Al entrar en el formulario borramos la seleccion de la session para empezar una nueva busqueda
-    /*
-                $listaIdsSesson = session()->all();
-                // Borrramos los IDs que estaban en session
-
-                foreach ($listaIdsSesson as $key => $value) {
-                    if (gettype($value) != 'array' && strpos($key, 'CompareID') !== false) {
-                        session()->forget($key);
-                    }
-                }*/
+    
     ?>
 
     <div class="container-fluid">
@@ -249,10 +239,7 @@ use App\Trayectoria;
                                         <th>@lang('Compare')</th>
                                         <th>Order parameters quality</th>
                                         <th>@lang('ID')</th>
-                                        <!--<th>@lang('FF') (@lang('resolución'))</th>-->
                                         <th>@lang('Lipidos')</th>
-
-                                        <!--<th>@lang('Heteromoléculas')</th>-->
                                         <th>@lang('Iones')</th>
                                         {{-- <th>@lang('Modelodeagua')</th> --}}
                                         <th>@lang('Parametros de simulación')</th>

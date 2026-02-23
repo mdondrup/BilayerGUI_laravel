@@ -17,10 +17,6 @@ use App\TrayectoriaAnalisisLipidos;
  * @property string supercomputer
  * @property int performance
  * @property Lipido[]|Coleccion lipidos
- * @property Peptido[]|Coleccion peptidos
- * @property Peptido[]|Coleccion iones
- * @property Peptido[]|Coleccion modelos_acuaticos
- * @property Peptido[]|Coleccion moleculas
  * @property Membrana[]|Coleccion membranas
  * @package App
  */

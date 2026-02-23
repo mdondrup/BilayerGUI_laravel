@@ -1,11 +1,10 @@
 <?php
 
-use App\Peptido;
 use App\Lipido;
 require_once '../bootstrap/helpers.php';
 
 /**
- * @var Peptido[] $peptidos
+ * 
  * @var Lipido[] $lipidos
  */
 

@@ -1,5 +1,15 @@
 <?php
-
+/**
+ * ICICIC: This code is convoluted and does not adhere to MVC principles, 
+ * we need to refactor it to separate the data processing from the view, 
+ * we should move the data processing to a controller and then
+ *  pass the processed data to the view, this will make the code 
+ * cleaner and easier to maintain, also we should use Eloquent 
+ * models to interact with the database instead of raw SQL queries, 
+ * this will make the code more secure and easier to read, also we should 
+ * use Laravel's built-in validation instead of manual validation, 
+ * this will make the code more secure and easier to maintain.
+ */
 use App\Trayectoria;
 
 /**
@@ -116,6 +126,9 @@ function CleanLabel($label)
 }
 
 // No todo los json tiene el mismo formato,
+// Not all json files have the same format, 
+// we need to create a function that can read the json 
+// file and extract the data we need, depending on the type of data we want to extract, we need to create a different function, for example, for the order parameters, we need to extract the data in a different way than for the quality factor, because the json file has a different format
 function genData2($GitHubURL, $FileUrl, &$labelData, &$data, &$maxData, &$minData, $mult)
 {
 
@@ -166,11 +179,7 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
 
     $jsonFileUrl = $GitHubURL . $FileUrl; //10
 
-    /*
-    echo("--> ". $jsonFileUrl);
-    echo("--> ". $FileUrl);
-    die();
-    */
+   
     $jsonFile = file_get_contents($jsonFileUrl);
     $jsonFileData = json_decode($jsonFile);
 
@@ -193,11 +202,7 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
 
                     $data[CleanLabel($label)][] = $data2;
                 }
-                /*
-                    $ymax = $Values[0][0]+$Values[0][2];
-                    $ymin = $Values[0][0]-$Values[0][2];
-                    $dataerror = $dataerror."{y:".$Values[0][0].", yMin:".$ymax.",yMax:".$ymin."},";
-                */
+              
             } else {
                 //
                 $labelCleaned = CleanLabel($label); // save al labels to create a unique array
@@ -560,22 +565,17 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
 
             $bilayer_thickness = array();
             $area_per_lipid = array();
-            //$GitHubURL = "https://raw.githubusercontent.com/NMRLipids/Databank/main/";
-
-
-            // Old version
-            //$GitHubURL = "https://raw.githubusercontent.com/NMRLipids/Databank/main/Data/Simulations/";
-            // New path
-            $GitHubURL = 'https://raw.githubusercontent.com/NMRLipids/Databank/main/Data/';
-            //https://raw.githubusercontent.com/NMRLipids/Databank/main/Data/Simulations/
-
-            //var_dump($datos);die();
+            
+             // New path
+            $GitHubURL = 'https://raw.githubusercontent.com/NMRLipids/Databank/main/Data/';           
             // ---- FILE LIST ----
             // LISTA ID:: Fichero
             foreach ($datos as $key => $value) {
                 //dd($value);
 
                 // HACK!!!!!  ESTO NO SE PUEDE HACER, POR QUE SE CARGA LAS GRAFICAS
+                // ICICIC: We cannot do this, because it loads the charts with the data of the first trajectory, 
+                // we need to load the data of all trajectories and then create the charts with the data of all trajectories
                 //if ($value->quality_total != 0 && $value->quality_headgroups != 0 && $value->quality_tails) {
 
                 $lista2 = array(); // array temporal
@@ -743,19 +743,10 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
 
                 echo ("</table>");
             }
-            /// ---- fin de la tabla de quality
-            /*
-        <div class="pt-4" style="text-align:center;">
-            <h2>Form factor</h2>
-        </div>
-        <canvas id="formfactor"></canvas>
-    </div>
-    */
 
 
             echo ('<div class="row p-4"><div><div class="ttCompare text-center"><h2>Lipids</h2></div></div></div>');
 
-            //  Creamos las solapas de cada peptido
             echo ('<div role="tabpanel" class="pt-4"><ul class="nav nav-tabs nav-tabs-conf" role="tablist">');
             $firstActive = 'active';
             foreach ($lista as $key2 => $value2) {
@@ -764,7 +755,6 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
   </li>');
                 $firstActive = '';
             }
-
 
             echo ('</ul>');
 

@@ -104,10 +104,6 @@ $numero_id =0;
                                               <div id="slide_3" class="col multi-range" data-initvalue="{{$Area_per_lipid_lower_leaflet[0]->Area_per_lipid_lower_leafletStart}}" data-endvalue="{{$Area_per_lipid_lower_leaflet[0]->Area_per_lipid_lower_leafletEnd}}" data-prec= "2" data-namefield="Area_per_lipid_lower_leaflet"></div>
 
 
-                                              <div class="titulo">Contacts <div class="tooltip-2 bi bi-info-circle">
-                                                  <span class="tooltiptext">Number of contacts between the peptide and the water or the lipids (headgroups and tailgroups).</span>
-                                              </div></div>
-
                                               <div class="col txt-titulo">Backbone - Water: </div>
                                               <div class="col multi-range" id="slide_12" data-initvalue="{{$Contacts_Protein_solvent[0]->Contacts_Protein_solventStart}}" data-endvalue="{{$Contacts_Protein_solvent[0]->Contacts_Protein_solventEnd}}" data-prec= "1" data-namefield="Contacts_Protein-solvent"></div>
 
@@ -117,11 +113,7 @@ $numero_id =0;
 
 
                                               <div class="col txt-titulo">Backbone - Tail groups: </div>
-                                              <div class="col multi-range" id="slide_14" data-initvalue="{{$Contacts_Protein_tailgroups[0]->Contacts_Protein_tailgroupsStart}}" data-endvalue="{{$Contacts_Protein_tailgroups[0]->Contacts_Protein_tailgroupsEnd}}" data-prec= "1" data-namefield="Contacts_Protein-tailgroups"></div>
-                                              <hr>
-                                              <div class="col titulo">Tilt (&deg;): <div class="tooltip-2 bi bi-info-circle">
-                                                  <span class="tooltiptext">Peptide tilt angle evolution, defined as the angle between the peptide helical axis and the bilayer normal.</span>
-                                              </div></div>
+                                              
                                               <div class="col multi-range" id="slide_15" data-initvalue="{{$Tilt[0]->TiltStart}}" data-endvalue="{{$Tilt[0]->TiltEnd}}" data-prec= "0" data-namefield="Tilt"></div>
 
 
@@ -130,12 +122,7 @@ $numero_id =0;
                                             <div class="col-xs-12 col-md-6">
 
 
-                                              <div class="titulo">Average Z coordinate <div class="tooltip-2 bi bi-info-circle">
-                                                  <span class="tooltiptext">Z-coordinate (nm), averaged for the different parts of the system: peptide, membrane, first and last backbone (BB) residue and upper or lower lipid headgroups (HG).</span>
-                                              </div></div>
 
-
-                                              <div class="col txt-titulo">Peptide (nm):</div>
                                               <div id="slide_4" class="col multi-range" data-initvalue="{{$COG_of_protein[0]->COG_of_proteinStart}}" data-endvalue="{{$COG_of_protein[0]->COG_of_proteinEnd}}" data-prec= "1" data-namefield="COG_of_protein"></div>
 
                                               <div class="col txt-titulo"> - First Residue (nm):</div>
@@ -168,9 +155,7 @@ $numero_id =0;
                                               <div class="col multi-range" id="slide_10" data-initvalue="{{$Bilayer_thickness[0]->Bilayer_thicknessStart}}" data-endvalue="{{$Bilayer_thickness[0]->Bilayer_thicknessEnd}}" data-prec= "1" data-namefield="Bilayer_thickness"></div>
 
 
-                                              <div class="col titulo">Peptide depth (nm): <div class="tooltip-2 bi bi-info-circle">
-                                                  <span class="tooltiptext">Distance between the average Z coordinates of the peptide backbone and of the lipid headgroups of the closest leaflet. Negative values correspond to relative positions with the peptide within the membrane.</span>
-                                              </div></div>
+                                              
 
                                               <div class="col multi-range" id="slide_11" data-initvalue="{{$Protein_depthness[0]->Protein_depthnessStart}}" data-endvalue="{{$Protein_depthness[0]->Protein_depthnessEnd}}" data-prec= "2" data-namefield="Protein_depthness"></div>
 

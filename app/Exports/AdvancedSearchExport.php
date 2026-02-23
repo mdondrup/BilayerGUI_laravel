@@ -25,9 +25,7 @@ class AdvancedSearchExport implements FromArray, WithHeadings
             'lipids.short_name', 'lipids.leaflet_1', 'lipids.leaflet_2',
             // Iones
             'ions.short_name', 'ions.bulk',
-            // Moleculas
-            'heteromolecules.short_name', 'heteromolecules.leaflet_1', 'heteromolecules.leaflet_2', 'heteromolecules.bulk',
-            //Aguas
+             //Aguas
             'water_models.short_name'
         ];
     }

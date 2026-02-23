@@ -4,11 +4,9 @@ namespace App\Console\Commands;
 
 use App\Ion;
 use App\Lipido;
-use App\Peptido;
 use App\Trayectoria;
 use App\TrayectoriasIones;
 use App\TrayectoriasLipidos;
-use App\TrayectoriasPeptidos;
 use App\Usuario;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;

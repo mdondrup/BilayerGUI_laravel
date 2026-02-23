@@ -312,12 +312,7 @@ font-weight: bold;
   border-bottom-left-radius: 30px;
   border-bottom-right-radius: 30px;
 }
-.bg-peptide{
-padding: 10px;
-background-color: white;
-border-radius: 10px;
-margin-top: 25px;
-}
+
 
 .Chart_subtxt{
 position: relative;
