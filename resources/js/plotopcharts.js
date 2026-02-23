@@ -325,8 +325,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     borderWidth: 3
                 }))
             };   
-            // console.log("Rendering chart for element:", canvas.id, "with dataset:", dataset);
-
             drawOneChart(canvas, dataset, rawLegend, title);                      
         } catch (e) {
             console.error("Could not render chart for element:", canvas.id, e);

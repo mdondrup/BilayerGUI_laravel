@@ -17,10 +17,6 @@ use App\TrayectoriaAnalisisLipidos;
  * @property string supercomputer
  * @property int performance
  * @property Lipido[]|Coleccion lipidos
- * @property Peptido[]|Coleccion peptidos
- * @property Peptido[]|Coleccion iones
- * @property Peptido[]|Coleccion modelos_acuaticos
- * @property Peptido[]|Coleccion moleculas
  * @property Membrana[]|Coleccion membranas
  * @package App
  */
@@ -54,10 +50,8 @@ class Trayectoria extends AppModel
     }
 
     function lipidos() {
-      //  DB::enableQueryLog();
       $lipidosData =$this->belongsToMany(Lipido::class, TrayectoriasLipidos::getTableName())->withPivot('leaflet_1', 'leaflet_2');
-      // dd(DB::getQueryLog());
-        return $lipidosData;
+      return $lipidosData;
     }
 
     function analisi_lipidos() {

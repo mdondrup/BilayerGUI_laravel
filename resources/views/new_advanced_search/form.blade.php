@@ -379,12 +379,7 @@ use App\Filtros\Filtro;
 
         $('#formulario-busqueda-avanzada').submit(function() {
 
-            //$('#formulario-busqueda-avanzada-submit').html(''); // initialize Form! be carrefull
-
-            // Cualquier hidden con valor 0 es borrado para no mandarlos por el sumbit
-            /*$("input:hidden").each(function (){
-              if ($(this).val()==0) $(this).remove();
-            })*/
+          
 
 
             $('input').each(function() {
@@ -392,9 +387,7 @@ use App\Filtros\Filtro;
                     $('#formulario-busqueda-avanzada-submit').append('<input type="hidden" name="' + $(this)
                         .attr('name') + '" value="' + $(this).val() + '" />');
                 }
-                // para el input text de la secuencia de aminoacidos
-
-                //console.log($(this).attr('type'));
+               
                 if ($(this).attr('type') == "text") {
                     $('#formulario-busqueda-avanzada-submit').append('<input type="hidden" name="' + $(this)
                         .attr('name') + '" value="' + $(this).val() + '" />');

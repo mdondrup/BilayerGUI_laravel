@@ -19,17 +19,7 @@ use App\Trayectoria;
             return $val;
         }
     }
-    //var_dump($_GET);
-    // Al entrar en el formulario borramos la seleccion de la session para empezar una nueva busqueda
-    /*
-                $listaIdsSesson = session()->all();
-                // Borrramos los IDs que estaban en session
-
-                foreach ($listaIdsSesson as $key => $value) {
-                    if (gettype($value) != 'array' && strpos($key, 'CompareID') !== false) {
-                        session()->forget($key);
-                    }
-                }*/
+    
     ?>
 
     <div class="container-fluid">
@@ -70,8 +60,7 @@ use App\Trayectoria;
                                 $numSelected = $numSelected + 1;
                             }
                         }
-                        //var_dump($allSession);
-                        // die();
+                      
                         ?>
 
 
@@ -127,7 +116,7 @@ use App\Trayectoria;
                                         }
                                     }
                                 }
-                                //var_dump($tempData);die();
+
                                 $id = implode(', ', $tempData['id']); // Acorto ID
 
                         ?>
@@ -249,10 +238,7 @@ use App\Trayectoria;
                                         <th>@lang('Compare')</th>
                                         <th>Order parameters quality</th>
                                         <th>@lang('ID')</th>
-                                        <!--<th>@lang('FF') (@lang('resolución'))</th>-->
                                         <th>@lang('Lipidos')</th>
-
-                                        <!--<th>@lang('Heteromoléculas')</th>-->
                                         <th>@lang('Iones')</th>
                                         {{-- <th>@lang('Modelodeagua')</th> --}}
                                         <th>@lang('Parametros de simulación')</th>
@@ -315,7 +301,6 @@ use App\Trayectoria;
                                                 $listCampos = [];
                                                 foreach ($key as $keyr => $valuer) {
                                                     $listCampos[] = $valuer->lipid_name . ' (' . $valuer->leaflet_1 . ':' . $valuer->leaflet_2 . ')';
-                                                    //echo $valuer->lipid_name." (".$valuer->leaflet_1.":".$valuer->leaflet_2.")<br>";
                                                 }
                                                 $listUnique = array_unique($listCampos);
 
@@ -528,7 +513,6 @@ use App\Trayectoria;
         // pulsas uno y marca el estado del gemelo
         function PressCheck(aa) {
 
-            //console.log(aa.value);
             valuecheck = aa.value;
             status = 0;
             // Esto es por algo visual, realmente cuando pulso tengo que pasarlo por una varible de sesion
@@ -552,8 +536,6 @@ use App\Trayectoria;
 
         $('#formulario-compare-submit').submit(function() {
 
-            //$('#formulario-compare-submit').html('');
-
             $.ajax({
                 type: "POST",
                 url: "{{ route('new_advanced_search.updatecompare') }}",
@@ -562,14 +544,12 @@ use App\Trayectoria;
                 //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 // },
                 complete: function(response) {
-                    //console.log("complete"+ response);
                     // Do what you want to do when the session has been updated
                     console.log("complete> " + JSON.stringify(response) + " <");
                 },
                 success: function(response) {
                     console.log("success");
                     // Do what you want to do when the session has been updated
-                    //console.log("success> "+ JSON.stringify(response)+" <");
                 }
             });
 
