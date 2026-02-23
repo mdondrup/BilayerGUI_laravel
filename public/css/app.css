@@ -5274,63 +5274,59 @@ input[type=button].btn-block {
   color: #6c757d;
 }
 
+/* Custom pagination styling for dark theme */
+
 .pagination {
-  display: flex;
-  padding-left: 0;
-  list-style: none;
-  border-radius: 0.25rem;
+    --bs-pagination-color: #fff;
+    --bs-pagination-bg: #343a40;
+    --bs-pagination-border-color: #495057;
+    --bs-pagination-hover-color: #fff;
+    --bs-pagination-hover-bg: #495057;
+    --bs-pagination-hover-border-color: #6c757d;
+    --bs-pagination-focus-color: #fff;
+    --bs-pagination-focus-bg: #495057;
+    --bs-pagination-focus-box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+    --bs-pagination-active-color: #fff;
+    --bs-pagination-active-bg: #0d6efd;
+    --bs-pagination-active-border-color: #0d6efd;
+    --bs-pagination-disabled-color: #6c757d;
+    --bs-pagination-disabled-bg: #343a40;
+    --bs-pagination-disabled-border-color: #495057;
+    font-size: 0.875rem;
+    display: flex;
+    padding-left: 0;
+    list-style: none; 
+    border-radius: 0.25rem;
+    flex-direction: row;
 }
-
 .page-link {
-  position: relative;
-  display: block;
-  padding: 0.5rem 0.75rem;
-  margin-left: -1px;
-  line-height: 1.25;
-  color: #3490dc;
-  background-color: #fff;
-  border: 1px solid #dee2e6;
+    color: var(--bs-pagination-color);
+    background-color: var(--bs-pagination-bg);
+    border-color: var(--bs-pagination-border-color);
+    padding: 0.375rem 0.75rem;
 }
-
 .page-link:hover {
-  z-index: 2;
-  color: rgb(28.75, 104.3214285714, 166.75);
-  text-decoration: none;
-  background-color: #e9ecef;
-  border-color: #dee2e6;
+    color: var(--bs-pagination-hover-color);
+    background-color: var(--bs-pagination-hover-bg);
+    border-color: var(--bs-pagination-hover-border-color);
 }
-
 .page-link:focus {
-  z-index: 3;
-  outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.25);
+    color: var(--bs-pagination-focus-color);
+    background-color: var(--bs-pagination-focus-bg);
+    box-shadow: var(--bs-pagination-focus-box-shadow);
 }
-
-.page-item:first-child .page-link {
-  margin-left: 0;
-  border-top-left-radius: 0.25rem;
-  border-bottom-left-radius: 0.25rem;
-}
-
-.page-item:last-child .page-link {
-  border-top-right-radius: 0.25rem;
-  border-bottom-right-radius: 0.25rem;
-}
-
 .page-item.active .page-link {
-  z-index: 3;
-  color: #fff;
-  background-color: #3490dc;
-  border-color: #3490dc;
+    color: var(--bs-pagination-active-color);
+    background-color: var(--bs-pagination-active-bg);
+    border-color: var(--bs-pagination-active-border-color);
+}
+.page-item.disabled .page-link {
+    color: var(--bs-pagination-disabled-color);
+    background-color: var(--bs-pagination-disabled-bg);
+    border-color: var(--bs-pagination-disabled-border-color);
 }
 
-.page-item.disabled .page-link {
-  color: #6c757d;
-  pointer-events: none;
-  cursor: auto;
-  background-color: #fff;
-  border-color: #dee2e6;
-}
+
 
 .pagination-lg .page-link {
   padding: 0.75rem 1.5rem;

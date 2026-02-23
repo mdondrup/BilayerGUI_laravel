@@ -46,6 +46,13 @@ use App\Http\Controllers\StatisticsController;
                    
                     <br><small>Latest updates: </small>
                     <ul>
+                        <li>Implemented paginated list of lipids with links to detail pages.</li>
+                        <li>Added an embed mode for the lipids list. <pre>http://localhost/lipids?items_per_page=all&embed=true</pre></li>
+                        
+                    </ul>
+                    <!-- span class="text-muted" style="font-size: 0.8em;">
+                    Previous updates:
+                    <ul>
                         <li>Re-implemented the OP data plotting for simulations.</li>
                         <li>OP plot now supports multiple groups and experiments per lipid, with data properly organized by lipid and group.</li>
                         <li>Added ApL and FF data plots on the trajectory pages.</li>
@@ -55,8 +62,12 @@ use App\Http\Controllers\StatisticsController;
                         <li>Added a checkbox to toggle normalization of FF data between 0 and 1.</li>
                         <li>Improved mobile responsive design.</li>
                     </ul>
+                    </span -->
                     Quick links to new functionality:
-                    <ul>                        
+                    <ul>
+                        <li><a href="{{ route('lipids.list') }}" style="color: green;">Lipids list with pagination</a></li>
+                        <li><a href="{{ route('lipids.list', ['items_per_page' => 'all', 'embed' => true]) }}" style="color: green;">Lipids list with all entries and embed mode (for iframes)</a></li>
+                        <li><a href="{{ route('lipid.show', 1) }}" style="color: green;">Lipid detail page with properties and cross-references</a></li>
                         <li><a href="/trajectories/5" style="color: green;">Simulation with multiple experimental data and quality annotation</a></li>
                         <li><a href="/trajectories/768" style="color: green;">Simulation with diverse lipid set (check Membrane and Analysis tab)</a></li>
                         <li><a href="/experiments?page=1" style="color: green;">Experiments list</a></li>
@@ -117,11 +128,11 @@ use App\Http\Controllers\StatisticsController;
 
 
                         <p class="text-white-75 mb-3">Search based on lipid composition for example by: 
-                            <span style="text-decoration: underline;" id="expopc">POPC</span> or
-                           <span style="text-decoration: underline;" id="expopcpope">POPC:POPE</span>. Please refer to the
+                            <a href="#" id="expopc">POPC</a> or
+                           <a href="#" id="expopcpope">POPC:POPE</a>. Please refer to the
                              <a
-                                href="https://nmrlipids.github.io/schemas/moleculesAndMapping.html#molecule-names">
-                                list of universal molecule and ion names that can be used in searches</a>.
+                                href="{{ route('lipids.list') }}">
+                                list of universal molecule names that can be used in searches</a>.
                             You can search for trajectories by their ID by typing 'ID' followed by their numeric ID, for example,
                             ID123. More options are available in Advanced search.
                         </p>

@@ -29,12 +29,6 @@
 -->
 
 
-<script>
-    $(document).ready(function() {
-        $('a.portfolio-box').simpleLightbox();
-        $('[id^=jmolApplet]').css('z-index', 1);
-    });
-</script>
 
 </body>
 
