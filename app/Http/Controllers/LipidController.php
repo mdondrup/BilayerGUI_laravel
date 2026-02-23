@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\DB;
+use App\Lipido;
 
 class LipidController extends Controller
 {
@@ -56,6 +57,36 @@ class LipidController extends Controller
             }
         }
         return json_encode($jsonAr, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+    }
+
+    
+
+    public function list(Request $request): \Illuminate\View\View 
+    {
+        $itemsPerPage = $request->query('items_per_page', 10);
+        $embed = $request->query('embed', false);
+        $embed = filter_var($embed, FILTER_VALIDATE_BOOLEAN);
+        // Special value to show all
+        if ($itemsPerPage === 'all' || $itemsPerPage == -1) {
+            $lipids = Lipido::all() //sorted by molecule name
+                ->sortBy('molecule')
+                ->values();
+            // Pass a flag to the view so it knows not to render pagination controls
+            return view('lipids.list', ['lipids' => $lipids, 'showAll' => true, 'embed' => $embed]);
+        }
+
+        
+        // Validate for normal pagination
+        if (!is_numeric($itemsPerPage) || $itemsPerPage < 1 || $itemsPerPage > 100) {
+            $itemsPerPage = 10; // default to 10 if invalid
+        }
+        $lipids = Lipido::orderBy('molecule', 'asc')->paginate($itemsPerPage);
+
+
+        return view('lipids.list', [
+            'lipids' => $lipids, 
+            'showAll' => false, 
+            'embed' => $embed  ]);
     }
 
     /**
@@ -124,7 +155,7 @@ class LipidController extends Controller
         $lipids_data['jsonLd'] = $this->formatJsonLd($lipids_data);
         // Return a view with the lipid data    
 
-     return View::make('lipid', ['entity' => $lipids_data]);
+     return View::make('lipids.show', ['entity' => $lipids_data]);
 
 
         

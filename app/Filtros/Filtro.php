@@ -8,11 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class Filtro
 {
-    const PEPTIDOS = 'peptidos';
     const LIPIDOS = 'lipidos';
     const IONES = 'iones';
     const AGUA = 'agua';
-    //const AGUA = 'modelos acuaticos';
     const MOLECULAS = 'moleculas';
     const MEMBRANAS = 'membranas';
 
@@ -59,15 +57,8 @@ class Filtro
 
     function aplicarFiltroJoin(Builder &$builder)
     {
-        //var_dump($this->columna);
         if ($this->tipo == self::TIPO_ENTIDAD) {
-            /**
-             * $builder
-             * ->join('trajectories_peptides', 'trajectories.id', '=', 'trajectories_peptides.trajectory_id')
-             * ->join('peptides', 'peptides.id', '=', 'trajectories_peptides.peptide_id')
-             * ->where('peptides.name', 'LIKE', "%$valor%");
-             */
-
+           
             $aplicarJoin = true;
             if (is_array($builder->getQuery()->joins)) {
                 foreach ($builder->getQuery()->joins as $join) {
@@ -141,7 +132,7 @@ class Filtro
         $tableName = "";
         $fieldName = "";
         foreach ($this as $key => $value) {
-            //echo $key.":".$value."<br>";
+
             if ($key == "table") $tableName = $value;
             if ($key == "fields") $fieldName = $value;
             if ($key == "columna") $fieldName = $value;

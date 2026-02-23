@@ -6,17 +6,8 @@
         <section>
 
             <div class="row justify-content-center align-items-center ">
-                <span> Copyright &copy;{{ date('Y') }} - NMRlipids - Universidade de Santiago de Compostela, Universitetet i Bergen </span>
-                <!--<div class="col-md-3 col-sm-12  justify-content-center  logos" style="max-width: 250px;">
-           <a href="https://www.AAA.com"><img class="img-fluid"  src="{{ asset('storage/images/AAA.jpg') }}"/></a>
-          </div>
-        <div class="col-md-3 col-sm-12 justify-content-center   logos"  style="max-width: 250px;">
-              <a href="https://www.AAA.com"><img class="img-fluid"  src="{{ asset('storage/images/AAA.jpg') }}"/></a>
-        </div>
-        <div class="col-md-3 col-sm-12  justify-content-center  logos"  style="max-width: 250px;">
-           <a href="https://www.AAA.com"><img class="img-fluid"  src="{{ asset('storage/images/AAA.jpg') }}"/></a>
-        </div>
-      -->
+                <span> Copyright &copy;{{ date('Y') }} - FAIRMD Lipids (Formerly known as NMRlipids) - Universidade de Santiago de Compostela, Universitetet i Bergen </span>
+        
             </div>
 
         </section>
@@ -38,16 +29,6 @@
 -->
 
 
-<script>
-    $(document).ready(function() {
-
-        // console.log("Initializing SimpleLightbox for portfolio-box links");
-        $('a.portfolio-box').simpleLightbox();
-
-        $('[id^=jmolApplet]').css('z-index', 1);
-
-    });
-</script>
 
 </body>
 

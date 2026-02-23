@@ -90,7 +90,6 @@ foreach ($allSession as $key => $value) {
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
     <script>
         $(function() {
             $('[title]').tooltip()

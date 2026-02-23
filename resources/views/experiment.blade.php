@@ -3,52 +3,7 @@
 @section('content')
 
 <style>
-/* Custom pagination styling for dark theme */
 
-.pagination {
-    --bs-pagination-color: #fff;
-    --bs-pagination-bg: #343a40;
-    --bs-pagination-border-color: #495057;
-    --bs-pagination-hover-color: #fff;
-    --bs-pagination-hover-bg: #495057;
-    --bs-pagination-hover-border-color: #6c757d;
-    --bs-pagination-focus-color: #fff;
-    --bs-pagination-focus-bg: #495057;
-    --bs-pagination-focus-box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
-    --bs-pagination-active-color: #fff;
-    --bs-pagination-active-bg: #0d6efd;
-    --bs-pagination-active-border-color: #0d6efd;
-    --bs-pagination-disabled-color: #6c757d;
-    --bs-pagination-disabled-bg: #343a40;
-    --bs-pagination-disabled-border-color: #495057;
-    font-size: 0.875rem;
-}
-.page-link {
-    color: var(--bs-pagination-color);
-    background-color: var(--bs-pagination-bg);
-    border-color: var(--bs-pagination-border-color);
-    padding: 0.375rem 0.75rem;
-}
-.page-link:hover {
-    color: var(--bs-pagination-hover-color);
-    background-color: var(--bs-pagination-hover-bg);
-    border-color: var(--bs-pagination-hover-border-color);
-}
-.page-link:focus {
-    color: var(--bs-pagination-focus-color);
-    background-color: var(--bs-pagination-focus-bg);
-    box-shadow: var(--bs-pagination-focus-box-shadow);
-}
-.page-item.active .page-link {
-    color: var(--bs-pagination-active-color);
-    background-color: var(--bs-pagination-active-bg);
-    border-color: var(--bs-pagination-active-border-color);
-}
-.page-item.disabled .page-link {
-    color: var(--bs-pagination-disabled-color);
-    background-color: var(--bs-pagination-disabled-bg);
-    border-color: var(--bs-pagination-disabled-border-color);
-}
 </style>
 
 <script>
@@ -127,7 +82,6 @@ function DrawPlot(canvasId, data, labelsArray , step, chartType, title, labelX, 
                     callbacks: {
                         title: (items) => {
                             const item = items[0].parsed;
-                            //  console.log(item);
                             if (item.yMax != null) {
                                 cad = items[0].label + ` : ` + item.y.toFixed(2) + ` max: ` + item.yMax
                                     .toPrecision(2) + ` min: ` + item
@@ -136,7 +90,6 @@ function DrawPlot(canvasId, data, labelsArray , step, chartType, title, labelX, 
                                 cad = items[0].label + ` : ` + item.y.toFixed(2);
                             }
                             return cad;
-                            //return items[0].label+` : ` + items[0].parsed;
                         },
                         label: (items) => {
                             return ``;
@@ -146,8 +99,7 @@ function DrawPlot(canvasId, data, labelsArray , step, chartType, title, labelX, 
             },
             scales: {
                 x: {
-                    //offset: true,
-                    //type: 'linear',
+
                     grid: {
                         display: gridOn,
                         drawBorder: gridOn,

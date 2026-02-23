@@ -611,7 +611,7 @@ def load_experiment_composition(database, Exp_ID, expobj, ExpInfo=None) -> None:
         if op_data:
             lipid_object = Lipid(lipid_name)
             lipid_object.register_mapping()
-            print(f"Nice_OP_dict: for lipid {lipid_name} in experiment {README.get('DOI', 'unknown')}")
+            
             try:
                 op_data = build_nice_OPdict(op_data, lipid_object)
             except Exception as e:
@@ -697,6 +697,7 @@ if __name__ == '__main__':
     systems_counts = 0
     propper_op_count = 0
     systems_with_issues_counts = 0
+    count_op_plot_data_issues = 0
 
     # Define the expected fields in the README for systems. 
     # These are used to check the completeness of the README and
@@ -1257,8 +1258,14 @@ if __name__ == '__main__':
                         op_plot_data = build_nice_OPdict(op_data[lipid], lipid_obj)
                     except Exception as e:
                         logger.warning("Could not build OP plot data for system {} lipid {}.".format(system, lipid))
-                        logger.warning("Exception: {}".format(e))
+                        if args.level.upper() == "TRACE":
+                            logger.exception(e)
+                        else:
+                            logger.warning("Exception: {}".format(e))
+                        count_op_plot_data_issues += 1
                         has_issues = True
+                        if args.strict_systems:
+                            raise e
 
                 if op_plot_data:  
                     try:
@@ -1266,7 +1273,11 @@ if __name__ == '__main__':
                     except Exception as e:
                         logger.warning("Could not serialize OP plot data for system {} lipid {}.".format(system, lipid))
                         logger.warning("This is likely due to NaN or infinite values in the data. Check the OP data for this system and lipid.")  
-                        logger.warning("Exception: {}".format(e))
+                        if args.level.upper() == "TRACE":
+                            logger.exception(e)
+                        else:
+                            logger.warning("Exception: {}".format(e))
+                        count_op_plot_data_issues += 1
                         has_issues = True
 
                         if args.strict_systems:
@@ -1430,6 +1441,7 @@ if __name__ == '__main__':
     logger.success("loaded {} experiments of type OP.".format(experiments_op_counts))
     logger.success("loaded {} experiments of type FF.".format(experiments_ff_counts))
     logger.success("loaded {} systems.".format(systems_counts))
+    logger.warning("There were {} issues with order parameter plot data.".format(count_op_plot_data_issues))
     if propper_op_count:
         logger.success("Properly processed {} system order parameter data.".format(propper_op_count))
     else:
@@ -1452,11 +1464,11 @@ if __name__ == '__main__':
             "\n" + "\n".join(Skipped_Systems_AUTHOR)
             )
     if len(Linked_Experiments_OP) >= 0:
-        logger.info(
+        logger.success(
             "{} order parameter experiments were linked to simulations.".format(len(Linked_Experiments_OP))
             )
     if len(Linked_Experiments_FF) >= 0:
-        logger.info(
+        logger.success(
             "{} form factor experiments were linked to simulations.".format(len(Linked_Experiments_FF))
             )   
     

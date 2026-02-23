@@ -26,19 +26,8 @@ Route::get('/', function () {
 
 Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
 
-// Authentication Routes...
-// These routes are commented to disable user authentication
-//Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
-//Route::post('/login', 'Auth\LoginController@login');
-//Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
-// this route didn't work
-// ICICIC: it is unclear what two routes were meant here. Commenting out for now.
-// Route::get('/advanced-search', 'App\Http\Controllers\BusquedaAvanzadaController@form')->name('advanced-search.form');
-// Route::get('/advanced-search/result', 'App\Http\Controllers\BusquedaAvanzadaController@results')->name('advanced-search.results');
-// Route::post('/advanced-search/export', 'App\Http\Controllers\BusquedaAvanzadaController@export')->name('advanced-search.export');
-
-// TEST advanced search
+// advanced search
 Route::get('/new-advanced-search', 'App\Http\Controllers\NewAdvancedSearchController@form')->name('new_advanced_search.form');
 Route::get('/new-advanced-search/result', 'App\Http\Controllers\NewAdvancedSearchController@results')->name('new_advanced_search.results');
 Route::get('/new-advanced-search/compare', 'App\Http\Controllers\NewAdvancedSearchController@compare')->name('new_advanced_search.compare');
@@ -68,14 +57,6 @@ Route::get('/search', 'App\Http\Controllers\SearchController@results')->name('se
 Route::get('/search/basic', 'App\Http\Controllers\SearchController@basic')->name('search.basic');
 
 
-// -- Image routes: These routes do not work
-// ICICIC: Also these routes prevented caching of the routes they are assigned the same name as other routes
-// Please clarify their purpose before re-enabling
-// Route::get('convert-pdf-to-image', [ImageController::class, 'index'])->name('form');
-// Route::get('OptimizeImages', [ImageController::class, 'index'])->name('form');
-// ---
-
-
 Route::get('/sitemap.xml', [SitemapXmlController::class, 'sitemap']);
 
 // Routes for advanced search autocomplete fields
@@ -92,7 +73,6 @@ Route::get('lipids', function (Illuminate\Http\Request  $request) {
     return $valid_tags;
 });
 
-// Route::get('/peptido/{peptido_id}', 'PeptidosController@show')->name('peptidos.show');
 
 /* Implementing a route for lipids
 /
@@ -102,10 +82,13 @@ Route::get('lipids', function (Illuminate\Http\Request  $request) {
 // In a real application, this should be replaced with a proper controller method
 // that fetches lipid details from the database.
 // Lipid_id can be either the numeric ID or the short_name
-// Example: Route::get('/lipid/{lipid_id}', 'LipidosController@show')->name('lipid.show');
 
 Route::get('/lipid/{lipid_id}', [LipidController::class, 'show']
 )->name('lipid.show');
+
+
+Route::get('/lipids', [LipidController::class, 'list'])
+    ->name('lipids.list');
 
 Route::get('/experiment/{type}/{doi}/{section}', [ExperimentController::class, 'show'])
     ->where(['doi' => '.+', 'section' => '[0-9]+', 'type' => 'FF|OP'])
@@ -114,8 +97,3 @@ Route::get('/experiment/{type}/{doi}/{section}', [ExperimentController::class, '
 Route::get('/experiments', [ExperimentController::class, 'list'])
     ->name('experiments.list');    
 
-// ion
-// agua
-// molecula
-
-// resultado buscador

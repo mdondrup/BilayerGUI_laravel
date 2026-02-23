@@ -18,19 +18,27 @@ class Lipidos extends Filtro
         $this->visible = true;
         $this->table = 'lipids';
         $this->fields = 'molecule';
-        $this->join_count = " COUNT(CASE WHEN  trajectories_lipids.lipid_name  = '%s' THEN 1 ELSE NULL END) AS `%s` ";
-        $this->where = "lipid.%s = 1 ";
-        $this->join = " INNER JOIN(
-                                  SELECT lipid.id
-                                  FROM
-                                      ( SELECT
-                                          trajectories_lipids.trajectory_id AS id,
-                                          %s
-                                        FROM `trajectories_lipids` WHERE 1 GROUP BY trajectories_lipids.trajectory_id
-                                      ) lipid
-                                  WHERE %s
-                                  ) lipid_select
-                      ON trajectories.id = lipid_select.id ";
+        
+        // COUNT/CASE pattern for AND logic support
+        // Creates a boolean column for each selected lipid
+        // First %s: molecule name, Second %s: column alias (e.g., "POPC1")
+        $this->join_count = "COUNT(CASE WHEN l.molecule = '%s' THEN 1 END) AS %s";
+        
+        // HAVING condition: checks if the count column is > 0
+        // %s: column alias from join_count
+        $this->where = "%s > 0";
+        
+        // Join with GROUP BY for proper AND logic
+        // First %s: comma-separated COUNT expressions
+        // Second %s: HAVING conditions (combined with AND/OR by controller)
+        $this->join = "INNER JOIN (
+                          SELECT tl.trajectory_id AS id, %s
+                          FROM trajectories_lipids AS tl
+                          INNER JOIN lipids AS l ON tl.lipid_id = l.id
+                          GROUP BY tl.trajectory_id
+                          HAVING %s
+                      ) AS lipid_filter ON trajectories.id = lipid_filter.id";
+        
         $this->modelo = new Lipido();
     }
 }

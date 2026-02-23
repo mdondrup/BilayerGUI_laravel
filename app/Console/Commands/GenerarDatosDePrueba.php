@@ -4,11 +4,9 @@ namespace App\Console\Commands;
 
 use App\Ion;
 use App\Lipido;
-use App\Peptido;
 use App\Trayectoria;
 use App\TrayectoriasIones;
 use App\TrayectoriasLipidos;
-use App\TrayectoriasPeptidos;
 use App\Usuario;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
@@ -24,14 +22,14 @@ class GenerarDatosDePrueba extends Command
      *
      * @var string
      */
-    protected $signature = 'generar_datos_prueba';
+    protected $signature = 'generate:sample-data';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Generate sample data for testing purposes';
 
     /**
      * Create a new command instance.
@@ -50,13 +48,10 @@ class GenerarDatosDePrueba extends Command
      */
     public function handle()
     {
-        factory(Usuario::class, 50)->create();
         factory(Lipido::class, 50)->create();
-        factory(Peptido::class, 50)->create();
         factory(Ion::class, 50)->create();
         factory(Trayectoria::class, 50)->create();
         factory(TrayectoriasLipidos::class, 50)->create();
-        factory(TrayectoriasPeptidos::class, 50)->create();
         factory(TrayectoriasIones::class, 50)->create();
     }
 }
