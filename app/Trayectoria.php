@@ -80,7 +80,13 @@ class Trayectoria extends AppModel
             'experiment_id'
         );
     }
-
+    public function getExperiments() {
+        return $this->belongsToMany(Experiments::class, 'trajectories_experiments_OP', 'trajectory_id', 'experiment_id')
+            ->withPivot('experiment_id')
+            ->get()
+            ->merge($this->belongsToMany(Experiments::class, 'trajectories_experiments_FF', 'trajectory_id', 'experiment_id')->withPivot('experiment_id')->get())
+            ->sortBy('type');
+    }   
 
     
 

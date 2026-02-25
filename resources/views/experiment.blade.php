@@ -4,7 +4,6 @@
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-lg-10">
-                    <hr class="divider divider-light" />
                     <h3 class="text-white text-center mt-0">
                     @if (! empty($experiments_list)) Experiments @else {{ $entity['type'] }} Experiment @endif</h3>
                     @php
