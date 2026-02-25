@@ -46,7 +46,7 @@ use App\Http\Controllers\StatisticsController;
                    
                     <br><small>Latest updates: </small>
                     <ul>
-                        <li>Added cross references tab to trajectory and experiment pages (content is placeholder for now).</li>
+                        <li><em>Added cross references tab to trajectory and experiment pages.</em></li>
                         <li>Implemented paginated list of lipids with links to detail pages.</li>
                         <li>Added an embed mode for the lipids list. <pre>http://localhost/lipids?items_per_page=all&embed=true</pre></li>
                         
