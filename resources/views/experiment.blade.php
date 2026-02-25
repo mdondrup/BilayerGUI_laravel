@@ -1,196 +1,18 @@
 @extends('layouts.app')
-
 @section('content')
-
-<style>
-
-</style>
-
-<script>
-    
-
-
-
-function DrawPlot(canvasId, data, labelsArray , step, chartType, title, labelX, labelY, border, radio, gridOn,
-        responsive, AutoSkiping, showLegend, xtype) {
-
-        var colorList = ['#ffffff', '#00ffff', '#ff00ff', '#0000ff', '#FFDAC1', '#E2F0CB', ];
-        var borderCol = 'rgb(255, 255, 255)';
-        var borderCol2 = 'rgb(70, 70, 70)';
-        var textCol = '#ffffff';
-
-        var ddd = [];
-        // we start from index 1 to avoid white color for first dataset
-        var indpos = 1;
-        data.forEach((itemArray, i) => {
-            console.log(indpos);
-          var d = {
-              label: labelsArray[indpos-1],
-              backgroundColor: colorList[indpos],
-              borderColor: colorList[indpos],
-              data: itemArray,
-              radius: radio,
-              borderWidth: border,
-              fill: false,
-              spanGaps: false,
-              showLines: true,
-              yAxisID: 'y-axis-1',
-          };
-          ddd.push(d);
-          indpos=indpos+1;
-
-
-        });
-
-        dataTop = {
-            labels: "",
-            datasets: ddd
-        };
-
-        var options = {
-
-            maintainAspectRatio: false,
-            responsive: responsive,
-            errorBarColor: {
-                v: ['#ff0000', '#ff0000']
-            },
-            errorBarWhiskerColor: '#ff0000',
-
-            plugins: {
-                title: {
-                    display: true,
-                    text: title,
-                    color: '#ffffff',
-
-                },
-                legend: {
-                    display: showLegend,
-                    position: 'top',
-                    labels: {
-                        display: true,
-                        color: 'rgb(255, 255, 255)'
-                    },
-                    title: {
-                        display: false,
-                        text: title,
-                        color: 'rgb(255, 255, 255)'
-                    },
-
-                },
-                tooltip: {
-
-                    callbacks: {
-                        title: (items) => {
-                            const item = items[0].parsed;
-                            if (item.yMax != null) {
-                                cad = items[0].label + ` : ` + item.y.toFixed(2) + ` max: ` + item.yMax
-                                    .toPrecision(2) + ` min: ` + item
-                                    .yMin.toPrecision(2);
-                            } else {
-                                cad = items[0].label + ` : ` + item.y.toFixed(2);
-                            }
-                            return cad;
-                        },
-                        label: (items) => {
-                            return ``;
-                        },
-                    },
-                },
-            },
-            scales: {
-                x: {
-
-                    grid: {
-                        display: gridOn,
-                        drawBorder: gridOn,
-                        drawOnChartArea: gridOn,
-                        drawTicks: gridOn,
-                        color: '#74C3D8'
-                    },
-                    display: true,
-                    title: {
-                        display: true,
-                        text: labelX,
-                        color: '#ffffff'
-                    },
-                    ticks: {
-                        display: gridOn,
-                        autoSkip: AutoSkiping,
-                        stepSize: step,
-                        beginAtZero: false,
-                        color: '#eeeeee'
-                    },
-                },
-                
-                'y-axis-1': {
-                    type: 'linear',
-
-                    position: 'left',
-                      beginAtZero: true,
-                    grid: {
-                       display: gridOn,
-                        drawBorder: gridOn,
-                        drawOnChartArea: gridOn,
-                        drawTicks: gridOn,
-                        color: '#00ffff',
-                        drawOnChartArea: true, // Dibujamos la linea horizontal del grid
-                    },
-                    display: true,
-                    title: {
-                        display: true,
-                        text: labelY + " experiment",
-                        color: '#ffffff'
-                    },
-                    ticks: {
-
-                        display: gridOn,
-                        color: '#eeeeee'
-                    },
-                }
-            }
-
-        };
-
-        var config1 = {
-            type: chartType,
-            data: dataTop,
-            options: options,
-        };
-
-        if (xtype != '') {
-            config1.options.scales.x.type = xtype;
-        }
-        //config1.options.scales.y.type = 'linear';
-
-        var ctx1 = document.getElementById(canvasId);
-
-        var myChart1 = new Chart(ctx1, config1);
-
-        var size = '90%';
-        if (myChart1.canvas) {
-            myChart1.canvas.parentNode.style.width = size;
-            myChart1.canvas.parentNode.style.height = size / 2;
-        }
-    }
-
-
-</script>
-
-
-
     <!-- Main page -->
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-lg-10">
                     <hr class="divider divider-light" />
                     <h3 class="text-white text-center mt-0">
-                        @if (! empty($experiments_list)) Experiments @else {{ $entity['type'] }} Experiment @endif</h3>
-                    <?php 
+                    @if (! empty($experiments_list)) Experiments @else {{ $entity['type'] }} Experiment @endif</h3>
+                    @php
                         $experiments_list = $experiments_list ?? [];
                         $entity = $entity ?? [];
                         $properties = $properties ?? []; 
-                    ?>
-                    @if (! empty($experiments_list))
+                    @endphp
+                    @if (!empty($experiments_list))
                         <div class="text-white text-center mt-0">
                         <table class="table table-bordered table-striped table-sm table-dark">
                             <thead>
@@ -236,6 +58,12 @@ function DrawPlot(canvasId, data, labelsArray , step, chartType, title, labelX, 
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="properties-tab" data-bs-toggle="tab"  data-bs-target="#properties" type="button" role="tab">Properties</button>
                         </li>
+                        <!-- Add cross reference links to related simulations if available -->
+                        @if (! empty($related_simulations)) 
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="related-tab" data-bs-toggle="tab" data-bs-target="#related" type="button" role="tab">Cross references</button>
+                        </li>
+                        @endif
                     </ul>
                     <!-- Tab Contents -->
                     <div class="tab-content" id="experimentTabContent">
@@ -401,7 +229,6 @@ function DrawPlot(canvasId, data, labelsArray , step, chartType, title, labelX, 
                             unset($properties['TOTAL_LIPID_CONCENTRATION']);
                             unset($properties['COUNTER_IONS']);
                             unset($properties['XRAY']);
-
                         @endphp
                           
                         @if (count($properties) > 0)
@@ -483,12 +310,10 @@ function DrawPlot(canvasId, data, labelsArray , step, chartType, title, labelX, 
                             </div>
 
                         @else
-                            <!-- Hide the properties tab if there are no properties to show -->
-                            
+                            <!-- Hide the properties tab if there are no properties to show -->                           
                             <style>
                             #properties-tab { display: none; }
                             </style>
-                            
                         @endif
 
                         <!-- Analysis Tab -->
@@ -546,13 +371,51 @@ function DrawPlot(canvasId, data, labelsArray , step, chartType, title, labelX, 
                             @endif
 
                         </div>
+                        <!-- Related Simulations Tab -->
+                        @if (! empty($related_simulations))
+                        <div class="tab-pane fade" id="related" role="tabpanel" aria-labelledby="related-tab">
+                            <p>Related simulations linked to this experiment:</p>
+                            <table class="table table-bordered table-striped table-sm table-dark">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">DOI</th>
+                                        <th scope="col">Software</th>
+                                        <th scope="col">Trajectory length</th>
+                                        <th scope="col">Temperature (K)</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($related_simulations as $simulation)
+                                    @if (!$simulation)
+                                        <!-- Skip if simulation data is not available to avoid errors -->
+                                         <p style="color: red;">Warning: Related simulation data is missing for 
+                                            simulation {{ $simulation }}. This entry will be skipped.</p>
+                                        @continue
+                                    @endif
+                                    <tr>
+                                        <td>{{ $simulation->id }}</td>
+                                        <td>{{ $simulation->doi }}</td>
+                                        <td>{{ $simulation->software}}</td>
+                                        <td>{{ $simulation->trj_length }}</td>
+                                        <td>{{ $simulation->temperature }}</td>
+                                        <td><a href="{{ route('trayectorias.show', ['trayectoria_id' => $simulation->id]) }}" class="btn btn-primary btn-sm">View</a></td>
+                                       
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        
+                        </div>
+                        @endif
                     </div>
                     @endif
                 </div>
             </div>
         </div>
     </header>
-    </main>
+</main>
 @endsection
 
 

@@ -21,4 +21,14 @@ class Experiments extends Model
     {
         return $this->hasMany(MembraneComposition::class, 'experiment_id', 'id')->where('lipid_id', $lipid_id)->get();
     }
+
+    private function getTrajectoriesOP() {
+        return $this->belongsToMany(Trayectoria::class, 'trajectories_experiments_OP', 'experiment_id', 'trajectory_id');
+    }
+    private function getTrajectoriesFF() {
+        return $this->belongsToMany(Trayectoria::class, 'trajectories_experiments_FF', 'experiment_id', 'trajectory_id');
+    }
+    public function getTrajectories() {
+        return $this->getTrajectoriesOP()->get()->merge($this->getTrajectoriesFF()->get())->sortBy('id');
+    }
 }
