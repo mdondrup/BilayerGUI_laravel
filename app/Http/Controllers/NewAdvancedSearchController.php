@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+die("The Advanced Search Controller is currently disabled for maintenance. Please check back later.:x");
 use App\Exports\NewAdvancedSearchExport;
 use App\Exports\NewAdvancedSearchCompareExport;
 use App\Filtros\Filtro;
