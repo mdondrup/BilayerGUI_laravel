@@ -68,7 +68,7 @@
                     <div class="tab-content" id="experimentTabContent">
                         <!-- Overview Tab -->
                         <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
-                                <br/>
+                              <div class="table-responsive">
                                 <table class="table table-bordered table-striped table-sm table-dark">
                                     <tbody>
                                         <tr>
@@ -217,6 +217,7 @@
                                         @endif
                                     </tbody>
                                 </table>
+                            </div>
                         </div>
                         <!-- Properties Tab -->
                         @php
@@ -374,38 +375,39 @@
                         @if (! empty($related_simulations))
                         <div class="tab-pane fade" id="related" role="tabpanel" aria-labelledby="related-tab">
                             <p>Related simulations linked to this experiment:</p>
-                            <table class="table table-bordered table-striped table-sm table-dark">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">ID</th>
-                                        <th scope="col">DOI</th>
-                                        <th scope="col">Software</th>
-                                        <th scope="col">Trajectory length</th>
-                                        <th scope="col">Temperature (K)</th>
-                                        <th scope="col">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($related_simulations as $simulation)
-                                    @if (!$simulation)
-                                        <!-- Skip if simulation data is not available to avoid errors -->
-                                         <p style="color: red;">Warning: Related simulation data is missing for 
-                                            simulation {{ $simulation }}. This entry will be skipped.</p>
-                                        @continue
-                                    @endif
-                                    <tr>
-                                        <td>{{ $simulation->id }}</td>
-                                        <td>{{ $simulation->doi }}</td>
-                                        <td>{{ $simulation->software}}</td>
-                                        <td>{{ $simulation->trj_length }}</td>
-                                        <td>{{ $simulation->temperature }}</td>
-                                        <td><a href="{{ route('trayectorias.show', ['trayectoria_id' => $simulation->id]) }}" class="btn btn-primary btn-sm">View</a></td>
-                                       
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-sm table-dark">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">DOI</th>
+                                            <th scope="col">Software</th>
+                                            <th scope="col">Trajectory length</th>
+                                            <th scope="col">Temperature (K)</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($related_simulations as $simulation)
+                                        @if (!$simulation)
+                                            <!-- Skip if simulation data is not available to avoid errors -->
+                                            <p style="color: red;">Warning: Related simulation data is missing for 
+                                                simulation {{ $simulation }}. This entry will be skipped.</p>
+                                            @continue
+                                        @endif
+                                        <tr>
+                                            <td>{{ $simulation->id }}</td>
+                                            <td>{{ $simulation->doi }}</td>
+                                            <td>{{ $simulation->software}}</td>
+                                            <td>{{ $simulation->trj_length }}</td>
+                                            <td>{{ $simulation->temperature }}</td>
+                                            <td><a href="{{ route('trayectorias.show', ['trayectoria_id' => $simulation->id]) }}" class="btn btn-primary btn-sm">View</a></td>
+                                        
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         @endif
                     </div>

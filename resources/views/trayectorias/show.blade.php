@@ -259,30 +259,32 @@
                         <div role="tabpanel" class="tab-pane fade" id="homeCrossReferences" aria-labelledby="homeCrossReferences-tab">
                             <div class="card-body">
                                 <p>Related experiments:</p>
-                                <table class="table table-bordered table-striped table-sm table-dark">
-                                    <thead>
-                                        <tr>
-                                            <th>Article DOI</th>
-                                            <th>Internal ID</th>
-                                            <th>Type</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($related_experiments as $experiment)
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-sm table-dark">
+                                        <thead>
                                             <tr>
-                                                <td>{{ $experiment->article_doi}}</td>
-                                                <td>{{ $experiment->path }}</td>
-                                                <td>{{ $experiment->type }}</td>
-                                                <td>
-                                                    <a href="{{ route('experiments.show', ['type' => $experiment->type, 'path' => $experiment->path]) }}"
-                                                        @if(isset($embed) && $embed) target="_blank" @endif
-                                                        class="btn btn-sm btn-primary">View</a>
-                                                </td>
+                                                <th>Article DOI</th>
+                                                <th>Internal ID</th>
+                                                <th>Type</th>
+                                                <th>Actions</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($related_experiments as $experiment)
+                                                <tr>
+                                                    <td>{{ $experiment->article_doi}}</td>
+                                                    <td>{{ $experiment->path }}</td>
+                                                    <td>{{ $experiment->type }}</td>
+                                                    <td>
+                                                        <a href="{{ route('experiments.show', ['type' => $experiment->type, 'path' => $experiment->path]) }}"
+                                                            @if(isset($embed) && $embed) target="_blank" @endif
+                                                            class="btn btn-sm btn-primary">View</a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                                 </div>
                         </div>   
 
