@@ -389,12 +389,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($related_simulations as $simulation)
-                                        @if (!$simulation)
-                                            <!-- Skip if simulation data is not available to avoid errors -->
-                                            <p style="color: red;">Warning: Related simulation data is missing for 
-                                                simulation {{ $simulation }}. This entry will be skipped.</p>
-                                            @continue
-                                        @endif
+                                        
                                         <tr>
                                             <td>{{ $simulation->id }}</td>
                                             <td>{{ $simulation->doi }}</td>

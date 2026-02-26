@@ -277,7 +277,6 @@
                                                     <td>{{ $experiment->type }}</td>
                                                     <td>
                                                         <a href="{{ route('experiments.show', ['type' => $experiment->type, 'path' => $experiment->path]) }}"
-                                                            @if(isset($embed) && $embed) target="_blank" @endif
                                                             class="btn btn-sm btn-primary">View</a>
                                                     </td>
                                                 </tr>
