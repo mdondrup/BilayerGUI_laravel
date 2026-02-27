@@ -46,6 +46,7 @@ use App\Http\Controllers\StatisticsController;
                    
                     <br><small>Latest updates: </small>
                     <ul>
+                        <li><b>Check out the new Advanced Search functionality!</b></li>
                         <li>Implemented paginated list of lipids with links to detail pages.</li>
                         <li>Added an embed mode for the lipids list. <pre>http://localhost/lipids?items_per_page=all&embed=true</pre></li>
                         
