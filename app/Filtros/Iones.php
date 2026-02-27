@@ -15,9 +15,11 @@ class Iones extends Filtro
         $this->label = __('Iones');
         $this->tooltip = 'NA, CL ... ';
         $this->valor = '';
-        $this->visible = false;
+        $this->visible = true;
         $this->table = 'ions';
         $this->fields = 'name';
+        $this->logical = true; // Permit logical operators (AND/OR/NOT)
+        $this->cardinality = 2; // Allow multiple selections for AND logic
         $this->modelo = new Ion();
         $this->join_count = "COUNT( CASE WHEN trajectories_ions.ion_name = '%s' THEN 1 ELSE NULL END ) AS `%s`";
         $this->where = "ion.%s = 1";

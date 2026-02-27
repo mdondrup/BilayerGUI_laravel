@@ -8,20 +8,7 @@ use App\Filtros\Filtro;
 @extends('layouts.app')
 
 @section('content')
-    <?php
-    $numero_id = 0;
-
-    // Al entrar en el formulario borramos la seleccion de la session para empezar una nueva busqueda
-    $listaIdsSesson = session()->all();
-    // Borrramos los IDs que estaban en session
-
-    foreach ($listaIdsSesson as $key => $value) {
-        if (gettype($value) != 'array' && strpos($key, 'CompareID') !== false) {
-            session()->forget($key);
-        }
-    }
-
-    ?>
+   
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -32,21 +19,21 @@ use App\Filtros\Filtro;
                             <!-- style="display: flex; justify-content: space-between" -->
                             <div class="row">
                                 <div class="col-xs-12 col-sm-6">
-                                    <span class="titulo"> @lang('Búsqueda avanzada')<span>
+                                    <span class="titulo"> @lang('Advanced Search')<span>
                                 </div>
                                 <div class="col-xs-12 col-sm-6 text-right"
                                     style="display: flex; align-items: aplicar_evento_eliminar_filtro">
                                     <select id="selector-filtros" class="form-control btn-sm" name="" id=""
                                         style="width: inherit; margin-right: 20px">
-                                        <option value="0">@lang('Agregar filtro')</option>
+                                        <option value="0">@lang('Add filter')</option>
                                         @foreach ($filtros_posibles as $filtro)
                                             <option value="{{ $filtro->codigo }}">{{ $filtro->label }}</option>
                                         @endforeach
                                     </select>
 
                                     <button type="button" class="btn btn-primary" style="font-size:8pt;width:100px"
-                                        onclick="DeleteAll()">Delete Filters</button>
-                                    <input type="submit" class="btn btn-primary btn-light ml-4" value="@lang('Buscar')">
+                                        onclick="DeleteAll()">@lang('Delete Filters')</button>
+                                    <input type="submit" class="btn btn-primary btn-light ml-4" value="@lang('Search')">
                                 </div>
                             </div>
                         </div>
@@ -412,6 +399,20 @@ use App\Filtros\Filtro;
                         })
 
                     }
+                }
+            })
+
+            // Handle datalist inputs (input elements with a list attribute)
+            $('input[list]').each(function() {
+                if ($(this).val() !== '') {
+                    $('#formulario-busqueda-avanzada-submit').append('<input type="hidden" name="' + $(
+                        this).attr('name') + '" value="' + $(this).val() + '" />');
+                } else {
+                    // Clean empty datalist input: remove matching operador hidden inputs
+                    var nameCut = $(this).attr('name').slice(0, -3) + "_operador";
+                    $('input[name^="' + nameCut + '"]').each(function() {
+                        if ($(this).attr('type') != "radio") $(this).remove();
+                    })
                 }
             })
             // HACK

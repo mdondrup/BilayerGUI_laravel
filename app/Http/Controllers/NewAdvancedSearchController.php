@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-die("The Advanced Search Controller is currently disabled for maintenance. Please check back later.:x");
 use App\Exports\NewAdvancedSearchExport;
 use App\Exports\NewAdvancedSearchCompareExport;
 use App\Filtros\Filtro;
@@ -11,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
@@ -21,288 +21,266 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class NewAdvancedSearchController extends Controller
 {
-  // Se manda los datos a la vista de resultado
+
+  private $query = null; // Allow the query builder to be accessed across methods 
+
+  /*
+    * Validates the advanced search request parameters.
+    * Ensures that all expected parameters are present and correctly formatted.
+    * Also checks for unexpected parameters to prevent potential issues.
+    *
+    * @param Request $request The incoming HTTP request containing search parameters
+    * @return array The validated and sanitized input parameters
+    * @throws ValidationException If validation fails, an exception is thrown with details about the errors
+    */
+
+  private function validateAdvancedSearchRequest(Request $request): array
+  {
+    $inputs = $request->all();
+    $rules = [
+      // Range slider fields
+      'temperature-start' => 'nullable|numeric',
+      'temperature-end' => 'nullable|numeric',
+      'Area_per_lipid-start' => 'nullable|numeric',
+      'Area_per_lipid-end' => 'nullable|numeric',
+      'quality_total-start' => 'nullable|numeric',
+      'quality_total-end' => 'nullable|numeric',
+      'quality_hg-start' => 'nullable|numeric',
+      'quality_hg-end' => 'nullable|numeric',
+      'quality_tails-start' => 'nullable|numeric',
+      'quality_tails-end' => 'nullable|numeric',
+      'Bilayer_thickness-start' => 'nullable|numeric',
+      'Bilayer_thickness-end' => 'nullable|numeric',
+      'Form_factor_quality-start' => 'nullable|numeric',
+      'Form_factor_quality-end' => 'nullable|numeric',
+
+      // Filter selects
+      'lipidos' => 'array',
+      'lipidos.*' => 'nullable|string|max:255',
+      'lipidos_operador' => 'array',
+      'lipidos_operador.*' => 'in:and,or,not',
+
+      'iones' => 'array',
+      'iones.*' => 'nullable|string|max:255',
+      'iones_operador' => 'array',
+      'iones_operador.*' => 'in:and,or,not',
+
+      'membranas' => 'array',
+      'membranas.*' => 'nullable|integer',
+      'membranas_operador' => 'array',
+      'membranas_operador.*' => 'in:and,or,not',
+
+      'trayectoria' => 'array',
+      'trayectoria.*' => 'nullable|integer',
+      'trayectoria_operador' => 'array',
+      'trayectoria_operador.*' => 'in:and,or,not',
+
+      'trayectoria_force_field' => 'array',
+      'trayectoria_force_field.*' => 'nullable|string|max:255',
+      'trayectoria_force_field_operador' => 'array',
+      'trayectoria_force_field_operador.*' => 'in:equals,contains,starts_with,ends_with',
+
+      // Misc
+      'nothinghere' => 'nullable|in:1',
+      'page' => 'nullable|integer|min:1',
+      'selected' => 'nullable|integer|in:1',
+      'embed' => 'nullable|boolean',
+      'sort' => 'nullable|string|in:id,temperature,length,area_per_lipid,quality_total',
+      'direction' => 'nullable|string|in:asc,desc',
+    ];
+
+    $allowedKeys = array_filter(array_keys($rules), function ($key) {
+      return !str_ends_with($key, '.*');
+    });
+
+    $validator = Validator::make($inputs, $rules);
+    $validator->after(function ($validator) use ($inputs, $allowedKeys) {
+      $unknownKeys = array_diff(array_keys($inputs), $allowedKeys);
+      if (!empty($unknownKeys)) {
+        $validator->errors()->add('params', 'Unexpected parameters: ' . implode(', ', $unknownKeys));
+      }
+    });
+
+    $validator->validate();
+
+    return $inputs;
+  }
+
+
+
+
+
   public function resultsGeneral(Request $request)
   {
-    $Selects = "`lipids`.molecule as lipid_name,
-    `forcefields`.name as ff_name,
-    `ions`.molecule as ion_short_name,
-    `trajectories_ions`.number as number_ions,
-    `trajectories_analysis`.ff_quality,
-    `trajectories_analysis`.op_quality_total,
-    `trajectories_lipids`.leaflet_1,`trajectories_lipids`.leaflet_2,
-    (SELECT
-            COUNT(trajectories_experiments_OP.id)
-        FROM
-            trajectories_experiments_OP
-        WHERE
-            trajectories_experiments_OP.trajectory_id = trajectories.id)
-    AS experimentdatacountOP,
-    (SELECT
-            COUNT(trajectories_experiments_FF.id)
-        FROM
-            trajectories_experiments_FF
-        WHERE
-            trajectories_experiments_FF.trajectory_id = trajectories.id)
-    AS experimentdatacountFF,
-    `trajectories`.temperature as temperature
-    ";
-    
-    $Joins = " left join `trajectories_lipids` on `trajectories`.`id` = `trajectories_lipids`.`trajectory_id`
-
-    left join `trajectories_ions` on `trajectories`.`id` = `trajectories_ions`.`trajectory_id`
- 
-    left join `trajectories_membranes` on `trajectories`.`id` = `trajectories_membranes`.`trajectory_id`
-    left join `trajectories_analysis` on `trajectories`.`id` = `trajectories_analysis`.`trajectory_id`
-
-    left join `forcefields` on `forcefields`.`id` = `trajectories`.`forcefield_id`
-    left join `lipids` on `lipids`.`id` = `trajectories_lipids`.`lipid_id`
-
-    left join `ions` on `ions`.`id` = `trajectories_ions`.`ion_id`
-    left join `membranes` on `membranes`.`id` = `trajectories_membranes`.`membrane_id` ";
-
-    $GroupBy = " group By trajectories.id, `trajectories_analysis`.`op_quality_total` ";
-
-    $baseQuery = "select
-    %s
-    %s
-    from trajectories
-    %s
-    WHERE %s %s
-    ORDER BY `trajectories_analysis`.`op_quality_total` DESC
-    ";
-
     
     $filtrosPrincipales = Filtros::all(); 
-
-    // Consulta de las valores analiticos
-    $ArraySqlAnalytics = [];
-    $inputs = $request->all();
-    $jum = 0;
-    foreach ($inputs as $key => $value) {
-      // code...
-      if (is_string($value)) {
-
-        if (str_contains($key,"temperature")){
-
-          if (str_ends_with($key, "-start")) {
-
-            $a = "(`trajectories`.`" . substr($key, 0, -6) . "`>=" . $value;
-            $a = $a . " AND ";
-            $a = $a . "`trajectories`.`" . substr($key, 0, -6) . "`<=" . $request->input(substr($key, 0, -6) . "-end");
-            $a = $a . ") ";
-
-            if ($value != 0 && $request->input(substr($key, 0, -6) . "-end") != 0)
-              $ArraySqlAnalytics[] = $a;
-          }
-
-        } else {
-
-
-          if (str_ends_with($key, "-start")) {
-
-            $a = "(`trajectories_analysis`.`" . substr($key, 0, -6) . "`>=" . $value;
-            $a = $a . " AND ";
-            $a = $a . "`trajectories_analysis`.`" . substr($key, 0, -6) . "`<=" . $request->input(substr($key, 0, -6) . "-end");
-            $a = $a . ") ";
-
-            if ($value != 0 && $request->input(substr($key, 0, -6) . "-end") != 0)
-              $ArraySqlAnalytics[] = $a;
-          }
-
-        }
-      }
-    }
-
-    $sqlAnalytics = implode(" AND ", $ArraySqlAnalytics);
-    $cadSql = "";
-    $cadSqlnueva = "";
-    $cadSqlNot = "";
-    $cadSqlNotNueva = "";
-    $tableName = "trajectories"; // ForceField no esta en la tabla de trayectorias con nombre,
-    $fieldName = "name"; // como valor por defecto, esto es un problema con los campos de las trayectorias
-    // Nuevo sistema de busqueda
-    $join_count = "";
-    $where = "";
-    $join = "";
-    $JoinFinal = "";
-    $search_char = array(" ", "-", ".", ","); // Espacios y guiones se cambia por barra baja
     
+    $inputs = $this->validateAdvancedSearchRequest($request);
 
-    foreach ($filtrosPrincipales as $key => $value) {
-
-      
-      $act_request = $request->input($key);
-      $act_request_operador = $request->input($key . '_operador');
+    error_log ('Debug: Validated inputs: ' . json_encode($inputs)); // Debug line to check validated inputs
     
-      
+    // Rebuild the SQL query using the facade
+    // This is a complex query builder that dynamically constructs SQL based on the filters provided in the request. 
+    // It handles various conditions, including AND/OR logic and NOT conditions, and also incorporates analytics filters. 
+    // The final result is a list of trajectory IDs that match the specified criteria, 
+    // which are then used to fetch the corresponding trajectory data from the database.
 
+    // We start with a base query and then dynamically build the WHERE clause and JOINs.
+    $this->query = DB::table('trajectories')->select('trajectories.id')->distinct();
+    $this->query->join('trajectories_lipids as tl', 'trajectories.id', '=', 'tl.trajectory_id');
+    $this->query->join('trajectories_analysis as ta', 'trajectories.id', '=', 'ta.trajectory_id');
 
-      if (!is_null($act_request)) {
-        $tableName = "trajectories";
-        $fieldName = "name";
-        // De Value es el donde se obtiene el nombre real de la tabla
-        foreach ($value as $key2 => $value2) {
-          if ($key2 == "table") $tableName = $value2;
-          if ($key2 == "fields") $fieldName = $value2;
-          if ($key2 == "columna") $fieldName = $value2;
-          // Nueva BusquedaAvanzadaExport––
-          if ($key2 == "join_count") $join_count = $value2;
-          if ($key2 == "where") $where = $value2;
-          if ($key2 == "join") $join = $value2;
-        }
-      
-
-        // PARCHE
-        if ($fieldName == "force_field") {
-          $tableName = "forcefields";
-          $fieldName = "name";
-        }
-        // ------
-       
-        $ind = 1;
-        $join_count_array = [];
-        $cadSqlnueva = "";
-        $cadSqlNotNueva = "";
-
-        if ($act_request_operador !== null) { // comprobamos si existe el paremetro de busqueda
-          foreach ($act_request as $key3 => $value3) {
-              // Limpiamos la cadena para no tener problemas en la sql
-              $valueClean = str_replace($search_char, "_", $value3) . $ind;
-              if (is_numeric($value3)) $valueClean = "n" . $valueClean;
-
-              if ($act_request_operador[$ind] != "not") {
-
-                if ($cadSql != "") {
-                  $cadSql .= " " . $act_request_operador[$ind] . " ";
-                }
-                if ($cadSqlnueva != "") {
-                  $cadSqlnueva .= " " . $act_request_operador[$ind] . " ";
-                }
-                // parche para las membranas
-                if ($tableName == "membranes") {
-                  if (is_numeric($value3)) {
-                    $fieldName = "id";
-                  }
-                }
-                // ------------------------
-                $cadSql .= " " . $tableName . "." . $fieldName;
-                $cadSql .= " = ";
-                $cadSql .=  "'" . $value3 . "'";
-
-                // creamos la cadena de los JOINs
-
-                $num_placeholders = substr_count($join_count, '%');
-
-                if ($num_placeholders==3) {
-                  // ICICIC Esto es un Hack para el ranking_global
-                  $magnitud = strlen(substr(strrchr($value3, "."), 1));
-
-                  // Calcula la tolerancia relativa
-                  $tolerancia = pow(10, -$magnitud);
-
-                  $join_count_array[] = sprintf($join_count, $value3-$tolerancia, $value3+$tolerancia, $valueClean);
-                } else {
-                  $join_count_array[] = sprintf($join_count, $value3, $valueClean);
-                }
-                $cadSqlnueva .= sprintf($where, $valueClean);
-                // ----
-              } else {
-                if ($cadSqlNot != "") {
-                  $cadSqlNot .= " AND "; // esto es la lista de NOTs asi que los uno con ANDs
-                }
-                if ($cadSqlNotNueva != "")  $cadSqlNotNueva .= " AND ";
-                $cadSqlNot .= " " . $tableName . "." . $fieldName;
-             
-                $cadSqlNot .= " = ";
-                $cadSqlNot .=  "'" . $value3 . "'";
-
-                $join_count_array[] = sprintf($join_count, $value3, $valueClean);
-                $cadSqlNotNueva .= sprintf($where, $valueClean);
-              }
-
-            $ind = $ind + 1;
-          } // fin del bucle para los campos repetidos
-
-          // Esta cadena es un inner join especia para todos los temas de And OR y NOT.. not no esta del todo OK
-          // Not -> seria un AND not (algo1 and algo2 ) se tiene que agrupar los Nots en un bloque
-          if (strlen($cadSqlNotNueva) > 0) {
-            if (strlen($cadSqlnueva) > 0) {
-              $cadSqlnueva .= " AND NOT (" . $cadSqlNotNueva . ")";
-            } else {
-              $cadSqlnueva .= "  NOT (" . $cadSqlNotNueva . ")";
+    // This is a complex query builder that dynamically constructs SQL based on the filters provided in the request.
+    // We will add joins only for the filters that are present in the request to optimize the query.
+    // Allowing arbitray filters is powerful but can lead to SQL injection if not handled properly. Therefore
+    // we will use parameter binding for all user inputs to ensure that the query is safe. 
+    
+    if ($inputs['lipidos'] ?? false) {
+     
+      // If all lipids are selected with AND or OR, we can use a single join with 
+      // GROUP BY and HAVING to filter trajectories that have all selected lipids.    
+      // CHECK if all lipids are selected with the same operator
+      if (!empty($inputs['lipidos_operador'])) {
+          // Mixed operators, we need to handle AND and OR separately
+          $orLipids = [];
+          $andLipids = [];
+          $notLipids = [];
+          // sort the lipids into their respective operator groups, using AND as default if no operator is specified
+          foreach ($inputs['lipidos'] as $index => $lipid) {
+            $operator = $inputs['lipidos_operador'][$index] ?? 'and';
+            if ($operator === 'or') {
+              $orLipids[] = $lipid;
+            } else if ($operator === 'and') {
+              $andLipids[] = $lipid;
+            } else if ($operator === 'not') {
+              $notLipids[] = $lipid;
             }
           }
-        
-          $JoinFinal .= sprintf($join, implode(', ', $join_count_array), $cadSqlnueva) . " ";
+          // Handle OR lipids with simple WHERE IN
+          if (!empty($orLipids)) {
+            $this->query->whereIn('l.molecule', $orLipids);
+          }
+          // Handle AND lipids with GROUP BY and HAVING
+          // For AND logic, we need to ensure that the trajectory has all selected lipids.
+          // We can achieve this by counting the distinct lipids that match and comparing it to the number of AND lipids selected.
+          if (!empty($andLipids)) {
+            $this->query->join('lipids as l', 'tl.lipid_id', '=', 'l.id');
+            $this->query->groupBy('trajectories.id')
+                        ->havingRaw('COUNT(DISTINCT CASE WHEN l.molecule IN (' . implode(',', array_fill(0, count($andLipids), '?')) .
+                         ') THEN l.molecule END) = ?', array_merge($andLipids, [count($andLipids)]));
+          }
+          // Handle (AND) NOT lipids with HAVING to exclude trajectories that have any of the NOT lipids
+          if (!empty($notLipids)) {
+            $this->query->groupBy('trajectories.id')
+                        ->havingRaw('COUNT(DISTINCT CASE WHEN l.molecule IN (' . implode(',', array_fill(0, count($notLipids), '?')) .
+                         ') THEN l.molecule END) = 0', $notLipids);
+          }
+          
+      }            
+    }
+    if (!empty($inputs['iones'] ?? false)) {
+      $this->query->join('trajectories_ions as ti', 'trajectories.id', '=', 'ti.trajectory_id')
+                  ->join('ions as i', 'ti.ion_id', '=', 'i.id');
+
+      if(!empty($inputs['iones_operador'] ?? false)) {
+        $orIons = [];
+        $andIons = [];
+        $notIons = [];
+        foreach ($inputs['iones'] as $index => $ion) {
+          $operator = $inputs['iones_operador'][$index] ?? 'and';
+          if ($operator === 'or') {
+            $orIons[] = $ion;
+          } else if ($operator === 'and') {
+            $andIons[] = $ion;
+          } else if ($operator === 'not') {
+            $notIons[] = $ion;
+          }
+        }
+        if (!empty($orIons)) {
+          $this->query->whereIn('i.molecule', $orIons);
+        }
+        if (!empty($andIons)) {
+          $this->query->groupBy('trajectories.id')
+                      ->havingRaw('COUNT(DISTINCT CASE WHEN i.molecule IN (' . implode(',', array_fill(0, count($andIons), '?')) .
+                       ') THEN i.molecule END) = ?', array_merge($andIons, [count($andIons)]));
+        }
+        if (!empty($notIons)) {
+          $this->query->groupBy('trajectories.id')
+                      ->havingRaw('COUNT(DISTINCT CASE WHEN i.molecule IN (' . implode(',', array_fill(0, count($notIons), '?')) .
+                       ') THEN i.molecule END) = 0', $notIons);
         }
       }
     }
-    // Sumamos al WHERE los Campos de Analitycs solo si hay algo
-    if (trim($sqlAnalytics) != "") {
-      if (trim($cadSql) == "") {
-        $cadSql = $sqlAnalytics;
-      } else {
-        $cadSql = $cadSql . " AND (" . $sqlAnalytics . ")";
+
+    if (!empty($inputs['trayectoria_force_field'])) {
+      $this->query->join('forcefields as ff', 'trajectories.forcefield_id', '=', 'ff.id');
+      $conditions = [];
+      $bindings = [];
+      foreach ($inputs['trayectoria_force_field'] as $index => $ff) {
+        $operator = $inputs['trayectoria_force_field_operador'][$index] ?? 'equals';
+        if ($operator === 'equals') {
+          $conditions[] = 'ff.name = ?';
+          $bindings[] = $ff;
+        } else if ($operator === 'contains') {
+          $conditions[] = 'ff.name LIKE ?';
+          $bindings[] = '%' . $ff . '%';
+        } else if ($operator === 'starts_with') {
+          $conditions[] = 'ff.name LIKE ?';
+          $bindings[] = $ff . '%';
+        } else if ($operator === 'ends_with') {
+          $conditions[] = 'ff.name LIKE ?';
+          $bindings[] = '%' . $ff;
+        }
       }
+      if (!empty($conditions)) {
+        $this->query->whereRaw(implode(' OR ', $conditions), $bindings);
+      }
+
     }
-    //Extraemos los IDs de la consulta
-    // Consulta Negativa
-    $IdListNot = array();
-    
-    if ($cadSqlNot != "") {
-      $ConsultaIDsNot = sprintf($baseQuery, "trajectories.id", "", $Joins, $cadSqlNot, $GroupBy);
-      
-      $trayectoriasIDNot = DB::select($ConsultaIDsNot);
 
-      foreach ($trayectoriasIDNot as $keyNot => $valueNot) {
-        $IdListNot[] = $valueNot->id;
-      }
-         }
-    // Consulta Positiva
-    if ($cadSql == "") $cadSql = " 1=1 ";
-    $ConsultaIDsOld = sprintf($baseQuery, "trajectories.id", "", $Joins, $cadSql, $GroupBy);
 
-    // NUEVA VERSION
-    $ConsultaIDs = "SELECT trajectories.id FROM trajectories " . $JoinFinal . " LEFT JOIN `trajectories_analysis` ON `trajectories`.`id` = `trajectories_analysis`.`trajectory_id`";
-    if (strlen($sqlAnalytics) > 0) $ConsultaIDs .= " WHERE " . $sqlAnalytics;
-
-    
-    // Buscamos los ID positivos
-    $trayectoriasID = DB::select($ConsultaIDs);
-    // Pasamos los IDs a un Array
-    $IdList = array();
-    foreach ($trayectoriasID as $key => $value) {
-      if (!empty($IdListNot)) {
-        if (!in_array($value->id, $IdListNot)) $IdList[] = $value->id;
-      } else {
-        $IdList[] = $value->id;
-      }
+    if (!empty($inputs['temperature-start']) && !empty($inputs['temperature-end'])) {
+      $this->query->whereBetween('temperature', [$inputs['temperature-start'], $inputs['temperature-end']]);
     }
-    // Si tenemos IDs negativos los resto del array
+    if (!empty($inputs['Area_per_lipid-start']) && !empty($inputs['Area_per_lipid-end'])) {
+      $this->query->whereBetween('ta.area_per_lipid', [$inputs['Area_per_lipid-start'], $inputs['Area_per_lipid-end']]);
+    }
+    if (!empty($inputs['quality_total-start']) && !empty($inputs['quality_total-end'])) {
+      $this->query->whereBetween('ta.op_quality_total', [$inputs['quality_total-start'], $inputs['quality_total-end']]);
+    }
+    if (!empty($inputs['quality_hg-start']) && !empty($inputs['quality_hg-end'])) {
+      $this->query->whereBetween('ta.op_quality_headgroups', [$inputs['quality_hg-start'], $inputs['quality_hg-end']]);
+    }
+    if (!empty($inputs['quality_tails-start']) && !empty($inputs['quality_tails-end'])) {
+      $this->query->whereBetween('ta.op_quality_tails', [$inputs['quality_tails-start'], $inputs['quality_tails-end']]);
+    }
+    if (!empty($inputs['Bilayer_thickness-start']) && !empty($inputs['Bilayer_thickness-end'])) {
+      $this->query->whereBetween('ta.bilayer_thickness', [$inputs['Bilayer_thickness-start'], $inputs['Bilayer_thickness-end']]);
+    }
+    if (!empty($inputs['Form_factor_quality-start']) && !empty($inputs['Form_factor_quality-end'])) {
+      $this->query->whereBetween('ta.ff_quality', [$inputs['Form_factor_quality-start'], $inputs['Form_factor_quality-end']]);
+    }
 
-    $cadSql = "trajectories.id in (%s)";
+
     
-    $cadSql2 = sprintf($cadSql, implode(', ', $IdList));
+   
+  $ids = $this->query->get(); // Get the results and sort by ID to ensure consistent ordering
+  $trayectorias = Trayectoria::with(['analisis', 'lipidos', 'iones', 'campo_de_fuerza'])
+    ->whereIn('id', $ids->pluck('id'))
+    ->get(); // Fetch trajectory objects with relationships loaded
 
-    // Vamos a cambiar la forma de comparar
-    // Limpiaremos la sesion de varibles de comparacion
-    // Con este formato -> CompareID752
-    // y pasaremos toda la lista de nuevos IDs a la session.
-
-    $listaIdsSesson = session()->all();
-    
-    $ConsultaFinal = sprintf($baseQuery, "trajectories.*,", $Selects, $Joins, $cadSql2, "");
-
-    
-
-    $trayectorias = "";
-    if (!empty($IdList))
-      $trayectorias = collect(DB::select($ConsultaFinal))->groupBy('id');
-
-    
-
-    return $trayectorias;
+    // Debug: Print interpolated query
+            $sql = $this->query->toSql();
+            $bindings = $this->query->getBindings();
+            $interpolatedQuery = $sql;
+            foreach ($bindings as $binding) {
+              $value = is_numeric($binding) ? $binding : "'" . addslashes($binding) . "'";
+              $interpolatedQuery = preg_replace('/\?/', $value, $interpolatedQuery, 1);
+            }
+            error_log("\n\n=== DEBUG: Interpolated Query ===\n");
+            error_log($interpolatedQuery . "\n");
+            error_log("=================================\n\n");
+  return $trayectorias;
   }
 
   // Se manda los datos a la vista de resultado
@@ -312,6 +290,31 @@ class NewAdvancedSearchController extends Controller
     $trayectorias = $this->resultsGeneral($request);
 
     if (!is_string($trayectorias)) {
+      // Handle sorting
+      $sortBy = $request->input('sort', 'id');
+      $direction = $request->input('direction', 'asc');
+      
+      // Map sort fields to actual data properties
+      $sortMap = [
+        'id' => 'id',
+        'temperature' => 'temperature',
+        'length' => 'trj_length',
+        'area_per_lipid' => function($traj) { return optional($traj->analisis)->area_per_lipid ?? 0; },
+        'quality_total' => function($traj) { return optional($traj->analisis)->op_quality_total ?? 0; },
+      ];
+      
+      if (isset($sortMap[$sortBy])) {
+        if (is_callable($sortMap[$sortBy])) {
+          $trayectorias = $direction === 'desc' 
+            ? $trayectorias->sortByDesc($sortMap[$sortBy])
+            : $trayectorias->sortBy($sortMap[$sortBy]);
+        } else {
+          $trayectorias = $direction === 'desc'
+            ? $trayectorias->sortByDesc($sortMap[$sortBy])
+            : $trayectorias->sortBy($sortMap[$sortBy]);
+        }
+      }
+      
       $page = $request->input('page', 1);
       $perPage = 15;
       $offset = $page * $perPage - $perPage;
@@ -325,6 +328,8 @@ class NewAdvancedSearchController extends Controller
 
     return view('new_advanced_search.results', [
       'trayectorias' => $allTrayectorias,
+      'sort' => $request->input('sort', 'id'),
+      'direction' => $request->input('direction', 'asc'),
     ]);
   }
 
@@ -617,6 +622,7 @@ class NewAdvancedSearchController extends Controller
    
     return $filtrosAplicados;
   }
+
 
   /**
    * @param Filtro[]|Collection $filtrosAplicables

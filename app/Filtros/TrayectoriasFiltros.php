@@ -17,14 +17,18 @@ class TrayectoriasFiltros extends Filtro
         $this->visible = $visible;
         $this->modelo = new Trayectoria();
         $this->tipo = self::TIPO_PROPIEDAD;
+        $this->string = true; // Para que se use el operador LIKE en vez de = en la consulta
+        $this->logical = false; // Permit logical operators (AND/OR/NOT)
+        $this->cardinality = 1; // Allow multiple selections for AND logic
 
         // Parche para el forcefields
         $this->countpiece = "trajectories.".$this->columna."";
         if ($countfix!="") $this->countpiece = $countfix;
 
-        $this->join_count = " COUNT(CASE WHEN  $this->countpiece  = '%s' THEN 1 ELSE NULL END) AS `%s` ";
+        $this->join_count = "";//" COUNT(CASE WHEN  $this->countpiece  = '%s' THEN 1 ELSE NULL END) AS `%s` ";
         $this->where = $columna.".%s = 1 ";
-        $this->join = " INNER JOIN(
+        $this->join = "";/*
+                        " INNER JOIN(
                                   SELECT ".$this->columna.".id
                                   FROM
                                       ( SELECT
@@ -38,7 +42,7 @@ class TrayectoriasFiltros extends Filtro
                                   WHERE %s
                                   ) ".$this->columna."_select
                       ON trajectories.id = ".$this->columna."_select.id ";
-
+                        */
     }
 
     function html() {
