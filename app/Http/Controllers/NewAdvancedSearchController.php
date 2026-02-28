@@ -295,26 +295,28 @@ class NewAdvancedSearchController extends Controller
       $sortBy = $request->input('sort', 'id');
       $direction = $request->input('direction', 'asc');
       
-      // Map sort fields to actual data properties
+      // Map sort fields to value-extraction callbacks
       $sortMap = [
-        'id' => 'id',
-        'temperature' => 'temperature',
-        'length' => 'trj_length',
-        'area_per_lipid' => function($traj) { return optional($traj->analisis)->area_per_lipid ?? 0; },
-        'op_quality_total' => function($traj) { return optional($traj->analisis)->op_quality_total ?? 0; },
-        'ff_quality' => function($traj) { return optional($traj->analisis)->ff_quality ?? 0; },
+        'id' => function($traj) { return $traj->id; },
+        'temperature' => function($traj) { return $traj->temperature; },
+        'length' => function($traj) { return $traj->trj_length; },
+        'area_per_lipid' => function($traj) { return optional($traj->analisis)->area_per_lipid; },
+        'op_quality_total' => function($traj) { return optional($traj->analisis)->op_quality_total; },
+        'ff_quality' => function($traj) { return optional($traj->analisis)->ff_quality; },
       ];
       
       if (isset($sortMap[$sortBy])) {
-        if (is_callable($sortMap[$sortBy])) {
-          $trayectorias = $direction === 'desc' 
-            ? $trayectorias->sortByDesc($sortMap[$sortBy])
-            : $trayectorias->sortBy($sortMap[$sortBy]);
-        } else {
-          $trayectorias = $direction === 'desc'
-            ? $trayectorias->sortByDesc($sortMap[$sortBy])
-            : $trayectorias->sortBy($sortMap[$sortBy]);
-        }
+        $getValue = $sortMap[$sortBy];
+        $trayectorias = $trayectorias->sort(function ($a, $b) use ($getValue, $direction) {
+          $valA = $getValue($a);
+          $valB = $getValue($b);
+          // Nulls always last, regardless of sort direction
+          if (is_null($valA) && is_null($valB)) return 0;
+          if (is_null($valA)) return 1;
+          if (is_null($valB)) return -1;
+          $cmp = $valA <=> $valB;
+          return $direction === 'desc' ? -$cmp : $cmp;
+        });
       }
       
       $page = $request->input('page', 1);
