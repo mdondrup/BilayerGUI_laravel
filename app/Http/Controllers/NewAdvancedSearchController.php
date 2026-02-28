@@ -128,6 +128,7 @@ class NewAdvancedSearchController extends Controller
     // We start with a base query and then dynamically build the WHERE clause and JOINs.
     $this->query = DB::table('trajectories')->select('trajectories.id')->distinct();
     $this->query->join('trajectories_lipids as tl', 'trajectories.id', '=', 'tl.trajectory_id');
+    $this->query->join('lipids as l', 'tl.lipid_id', '=', 'l.id');
     $this->query->join('trajectories_analysis as ta', 'trajectories.id', '=', 'ta.trajectory_id');
 
     // This is a complex query builder that dynamically constructs SQL based on the filters provided in the request.
@@ -164,7 +165,6 @@ class NewAdvancedSearchController extends Controller
           // For AND logic, we need to ensure that the trajectory has all selected lipids.
           // We can achieve this by counting the distinct lipids that match and comparing it to the number of AND lipids selected.
           if (!empty($andLipids)) {
-            $this->query->join('lipids as l', 'tl.lipid_id', '=', 'l.id');
             $this->query->groupBy('trajectories.id')
                         ->havingRaw('COUNT(DISTINCT CASE WHEN l.molecule IN (' . implode(',', array_fill(0, count($andLipids), '?')) .
                          ') THEN l.molecule END) = ?', array_merge($andLipids, [count($andLipids)]));

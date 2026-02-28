@@ -18,8 +18,8 @@ class TrayectoriasFiltros extends Filtro
         $this->modelo = new Trayectoria();
         $this->tipo = self::TIPO_PROPIEDAD;
         $this->string = true; // Para que se use el operador LIKE en vez de = en la consulta
-        $this->logical = false; // Permit logical operators (AND/OR/NOT)
-        $this->cardinality = 1; // Allow multiple selections for AND logic
+        $this->logical = false; // Do not show logical operators  (AND/OR/NOT)
+        $this->cardinality = 1; // Do not allow multiple selections for AND logic
 
         // Parche para el forcefields
         $this->countpiece = "trajectories.".$this->columna."";

@@ -18,7 +18,8 @@
                                         'temperature' => 'Temperature',
                                         'length' => 'Length (ps)',
                                         'area_per_lipid' => 'Area per lipid',
-                                        'quality_total' => 'Quality: total',
+                                        'op_quality_total' => 'OP Quality: total',
+                                        'ff_quality' => 'Form factor quality',
                                     ];
                                     $currentSort = $sort ?? 'id';
                                     $currentDirection = $direction ?? 'asc';
@@ -56,7 +57,7 @@
                                     <td>{{ $trayectoria->trj_length ?? 'N/A' }}</td>
                                     <td>{{ round(optional($trayectoria->analisis)->area_per_lipid ?? 0, 2) }}</td>
                                     <td>{{ optional($trayectoria->analisis)->op_quality_total ?? 'N/A' }}</td>
-                                   
+                                   <td> {{ optional($trayectoria->analisis)->ff_quality ?? 'N/A' }}</td>
                                     <td><ul>
                                         <li>{{ optional($trayectoria->analisis)->op_quality_headgroups ?? 'N/A' }}</li>
                                         <li>{{ optional($trayectoria->analisis)->op_quality_tails ?? 'N/A' }}</li>
@@ -64,7 +65,7 @@
                                      <td>{{ $trayectoria->software ?? 'N/A' }}</td>
                                     <td>{{ $trayectoria->campo_de_fuerza->name ?? 'N/A' }}</td>
                                     <td>
-                                        @if (empty($trayectoria->lipidos))
+                                        @if ($trayectoria->lipidos->isEmpty())
                                             N/A
                                         @else
                                         @foreach ($trayectoria->lipidos as $lipid)
@@ -73,7 +74,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if (empty($trayectoria->iones))
+                                        @if ($trayectoria->iones->isEmpty())
                                             N/A
                                         @else
                                         @foreach ($trayectoria->iones as $ion)
