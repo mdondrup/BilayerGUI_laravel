@@ -85,7 +85,7 @@ class NewAdvancedSearchController extends Controller
       'page' => 'nullable|integer|min:1',
       'selected' => 'nullable|integer|in:1',
       'embed' => 'nullable|boolean',
-      'sort' => 'nullable|string|in:id,temperature,length,area_per_lipid,quality_total',
+      'sort' => 'nullable|string|in:id,temperature,length,area_per_lipid,op_quality_total,ff_quality',
       'direction' => 'nullable|string|in:asc,desc',
     ];
 
@@ -301,7 +301,8 @@ class NewAdvancedSearchController extends Controller
         'temperature' => 'temperature',
         'length' => 'trj_length',
         'area_per_lipid' => function($traj) { return optional($traj->analisis)->area_per_lipid ?? 0; },
-        'quality_total' => function($traj) { return optional($traj->analisis)->op_quality_total ?? 0; },
+        'op_quality_total' => function($traj) { return optional($traj->analisis)->op_quality_total ?? 0; },
+        'ff_quality' => function($traj) { return optional($traj->analisis)->ff_quality ?? 0; },
       ];
       
       if (isset($sortMap[$sortBy])) {
@@ -357,7 +358,8 @@ class NewAdvancedSearchController extends Controller
             $trayectoriaTratada = [
               'trajectories.id' => $value2->id,
               'trajectories.force_field' => $value2->ff_name,
-             
+              'trajectories.op_quality_total' => $value2->op_quality_total,
+              'trajectories.ff_quality' => $value2->ff_quality,
               'trajectories.length' => $value2->trj_length,
              
               'trajectories.temperature' => $value2->temperature,
