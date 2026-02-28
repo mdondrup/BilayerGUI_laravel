@@ -17,7 +17,7 @@ class Iones extends Filtro
         $this->valor = '';
         $this->visible = true;
         $this->table = 'ions';
-        $this->fields = 'name';
+        $this->fields = 'molecule';
         $this->logical = true; // Permit logical operators (AND/OR/NOT)
         $this->cardinality = 2; // Allow multiple selections for AND logic
         $this->modelo = new Ion();
