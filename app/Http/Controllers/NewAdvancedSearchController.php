@@ -113,7 +113,6 @@ class NewAdvancedSearchController extends Controller
   public function resultsGeneral(Request $request)
   {
     
-    $filtrosPrincipales = Filtros::all(); 
     
     $inputs = $this->validateAdvancedSearchRequest($request);
 
