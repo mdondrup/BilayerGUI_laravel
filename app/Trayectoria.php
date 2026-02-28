@@ -82,19 +82,9 @@ class Trayectoria extends AppModel
     }
 
     function countExperiments() {
-      $op = $this->belongsToMany(
-            Experiments::class,
-            'trajectories_experiments_OP',
-            'trajectory_id',
-            'experiment_id'
-        )->count();
-      $ff = $this->belongsToMany(
-            Experiments::class,
-            'trajectories_experiments_FF',
-            'trajectory_id',
-            'experiment_id'
-        )->count();
-      return $op + $ff;  
+        $op = $this->experimentsOP()->count();
+        $ff = $this->experimentsFF()->count();
+        return $op + $ff;
     }
     
 
