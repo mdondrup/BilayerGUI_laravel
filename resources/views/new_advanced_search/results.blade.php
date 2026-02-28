@@ -63,7 +63,7 @@
                                         <li>{{ optional($trayectoria->analisis)->op_quality_tails ?? 'N/A' }}</li>
                                     </ul></td>
                                      <td>{{ $trayectoria->software ?? 'N/A' }}</td>
-                                    <td>{{ $trayectoria->campo_de_fuerza->name ?? 'N/A' }}</td>
+                                    <td>{{ optional($trayectoria->campo_de_fuerza)->name ?? 'N/A' }}</td>
                                     <td>
                                         @if ($trayectoria->lipidos->isEmpty())
                                             N/A

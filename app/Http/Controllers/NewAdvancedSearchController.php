@@ -113,11 +113,12 @@ class NewAdvancedSearchController extends Controller
   public function resultsGeneral(Request $request)
   {
     
-    $filtrosPrincipales = Filtros::all(); 
     
     $inputs = $this->validateAdvancedSearchRequest($request);
 
-    error_log ('Debug: Validated inputs: ' . json_encode($inputs)); // Debug line to check validated inputs
+    if (config('app.debug')) {
+      error_log('Debug: Validated inputs: ' . json_encode($inputs)); // Debug line to check validated inputs
+    }
     
     // Rebuild the SQL query using the facade
     // This is a complex query builder that dynamically constructs SQL based on the filters provided in the request. 
