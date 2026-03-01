@@ -160,7 +160,17 @@ class NewAdvancedSearchController extends Controller
           }
           // Handle OR lipids with simple WHERE IN
           if (!empty($orLipids)) {
-            $this->query->whereIn('l.molecule', $orLipids);
+            if (empty($andLipids) && empty($notLipids)) {
+              // If only OR lipids are present, 
+              // we can use a simple WHERE IN without GROUP BY
+              $this->query->whereIn('l.molecule', $orLipids);
+            } else {
+              // If there are also AND/NOT lipids, we need to include all OR lipids in the GROUP BY query to ensure correct results
+              $andNotLipids = array_merge($andLipids, $notLipids);
+              $this->query->groupBy('trajectories.id')
+                          ->havingRaw('COUNT(DISTINCT CASE WHEN l.molecule IN (' . implode(',', array_fill(0, count($orLipids), '?')) .
+                           ') THEN l.molecule END) > 0', $orLipids);
+            }
           }
           // Handle AND lipids with GROUP BY and HAVING
           // For AND logic, we need to ensure that the trajectory has all selected lipids.
@@ -198,7 +208,16 @@ class NewAdvancedSearchController extends Controller
           }
         }
         if (!empty($orIons)) {
-          $this->query->whereIn('i.molecule', $orIons);
+          if (empty($andIons) && empty($notIons)) {
+            // If only OR ions are present, we can use a simple WHERE IN without GROUP BY
+            $this->query->whereIn('i.molecule', $orIons);
+          } else {
+            // If there are also AND/NOT ions, we need to include all OR ions in the GROUP BY query to ensure correct results
+            $andNotIons = array_merge($andIons, $notIons);
+            $this->query->groupBy('trajectories.id')
+                        ->havingRaw('COUNT(DISTINCT CASE WHEN i.molecule IN (' . implode(',', array_fill(0, count($orIons), '?')) .
+                         ') THEN i.molecule END) > 0', $orIons);
+          }
         }
         if (!empty($andIons)) {
           $this->query->groupBy('trajectories.id')
@@ -267,6 +286,7 @@ class NewAdvancedSearchController extends Controller
    
   $ids = $this->query->get(); // Get the results and sort by ID to ensure consistent ordering
   $trayectorias = Trayectoria::with(['analisis', 'lipidos', 'iones', 'campo_de_fuerza'])
+    ->withCount(['experimentsOP', 'experimentsFF'])
     ->whereIn('id', $ids->pluck('id'))
     ->get(); // Fetch trajectory objects with relationships loaded
 

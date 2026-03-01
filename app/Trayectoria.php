@@ -82,8 +82,16 @@ class Trayectoria extends AppModel
     }
 
     function countExperiments() {
-        $op = $this->experimentsOP()->count();
-        $ff = $this->experimentsFF()->count();
+
+        // Prefer counts loaded via withCount() to avoid N+1 queries,
+        // and fall back to querying the relationships if not present.
+        $op = array_key_exists('experiments_op_count', $this->attributes)
+            ? $this->attributes['experiments_op_count']
+            : $this->experimentsOP()->count();
+        $ff = array_key_exists('experiments_ff_count', $this->attributes)
+            ? $this->attributes['experiments_ff_count']
+            : $this->experimentsFF()->count();
+
         return $op + $ff;
     }
     
