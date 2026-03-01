@@ -88,6 +88,7 @@
                                         @else
                                             {{ $n }}
                                         @endif
+                                    </td>
                                     <td>
                                         <a href="{{ route('trayectorias.show', $trayectoria->id) }}" class="btn btn-sm btn-primary">View</a>
                                
