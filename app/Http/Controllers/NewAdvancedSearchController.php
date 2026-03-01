@@ -257,8 +257,7 @@ class NewAdvancedSearchController extends Controller
       }
 
     }
-
-
+    // Additional filters for numeric ranges and other properties
     if (!empty($inputs['temperature-start']) && !empty($inputs['temperature-end'])) {
       $this->query->whereBetween('temperature', [$inputs['temperature-start'], $inputs['temperature-end']]);
     }
@@ -280,8 +279,13 @@ class NewAdvancedSearchController extends Controller
     if (!empty($inputs['Form_factor_quality-start']) && !empty($inputs['Form_factor_quality-end'])) {
       $this->query->whereBetween('ta.ff_quality', [$inputs['Form_factor_quality-start'], $inputs['Form_factor_quality-end']]);
     }
-
-
+    if( !empty($inputs['trayectoria'] ?? false)) {
+      $this->query->whereIn('trajectories.id', $inputs['trayectoria']);
+    }
+    if ( !empty($inputs['membranas'] ?? false)) {
+      $this->query->join('trajectories_membranes as tm', 'trajectories.id', '=', 'tm.trajectory_id')
+                  ->whereIn('tm.membrane_id', $inputs['membranas']);
+    }
     
    
   $ids = $this->query->get(); // Get the results and sort by ID to ensure consistent ordering
