@@ -50,7 +50,7 @@ class Trayectoria extends AppModel
     }
 
     function lipidos() {
-      $lipidosData =$this->belongsToMany(Lipido::class, TrayectoriasLipidos::getTableName())->withPivot('leaflet_1', 'leaflet_2');
+      $lipidosData =$this->hasManyThrough(Lipido::class, TrayectoriasLipidos::class, 'trajectory_id', 'id', 'id', 'lipid_id');
       return $lipidosData;
     }
 
@@ -59,7 +59,7 @@ class Trayectoria extends AppModel
     }
 
     function analisis() {
-      $analisisData = $this->belongsTo('App\TrayectoriaAnalisis', 'id','trajectory_id');
+      $analisisData = $this->hasOne(TrayectoriaAnalisis::class, 'trajectory_id', 'id');
       return $analisisData;
     }
 
@@ -88,6 +88,19 @@ class Trayectoria extends AppModel
             ->sortBy('type');
     }   
 
+    function countExperiments() {
+
+        // Prefer counts loaded via withCount() to avoid N+1 queries,
+        // and fall back to querying the relationships if not present.
+        $op = array_key_exists('experiments_op_count', $this->attributes)
+            ? $this->attributes['experiments_op_count']
+            : $this->experimentsOP()->count();
+        $ff = array_key_exists('experiments_ff_count', $this->attributes)
+            ? $this->attributes['experiments_ff_count']
+            : $this->experimentsFF()->count();
+
+        return $op + $ff;
+    }
     
 
     function iones() {

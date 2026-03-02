@@ -18,6 +18,8 @@ class Lipidos extends Filtro
         $this->visible = true;
         $this->table = 'lipids';
         $this->fields = 'molecule';
+        $this->logical = true; // Permit logical operators (AND/OR/NOT)
+        $this->cardinality = 2; // Allow multiple selections for AND logic
         
         // COUNT/CASE pattern for AND logic support
         // Creates a boolean column for each selected lipid

@@ -46,13 +46,14 @@ use App\Http\Controllers\StatisticsController;
                    
                     <br><small>Latest updates: </small>
                     <ul>
-                        <li><em>Added cross references tab to trajectory and experiment pages.</em></li>
+                        <li><b>Added cross references tab to trajectory and experiment pages.</b></li>
+                        <li><b>Check out the new Advanced Search functionality!</b></li>
                         <li>Implemented paginated list of lipids with links to detail pages.</li>
                         <li>Added an embed mode for the lipids list. <pre>http://localhost/lipids?items_per_page=all&embed=true</pre></li>
                         
                     </ul>
-                    <!-- span class="text-muted" style="font-size: 0.8em;">
-                    Previous updates:
+                    <details class="text-muted" style="font-size: 0.8em;">
+                    <summary>Previous updates</summary>
                     <ul>
                         <li>Re-implemented the OP data plotting for simulations.</li>
                         <li>OP plot now supports multiple groups and experiments per lipid, with data properly organized by lipid and group.</li>
@@ -63,7 +64,7 @@ use App\Http\Controllers\StatisticsController;
                         <li>Added a checkbox to toggle normalization of FF data between 0 and 1.</li>
                         <li>Improved mobile responsive design.</li>
                     </ul>
-                    </span -->
+                    </details>
                     Quick links to new functionality:
                     <ul>
                         <li><a href="/trajectories/5" style="color: green;">Simulation with multiple experimental data and quality annotation</a></li>

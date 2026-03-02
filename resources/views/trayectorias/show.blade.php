@@ -323,7 +323,7 @@
                                                                         >
                                                                     </canvas>
                                                                     </div>                                                                        
-                                                                        <p style="cursor: pointer;" data-toggle="collapse" data-target="#dataCollapse_{{ $group }}_{{ $lipid_id }}">
+                                                                        <p style="cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#dataCollapse_{{ $group }}_{{ $lipid_id }}">
                                                                             <span class="bi bi-chevron-down"></span> Data
                                                                         </p>
                                                                         <div id="dataCollapse_{{ $group }}_{{ $lipid_id }}" class="collapse" style="background-color: #1a1a1a; padding: 10px; border-radius: 5px;">
