@@ -8,20 +8,7 @@ use App\Filtros\Filtro;
 @extends('layouts.app')
 
 @section('content')
-    <?php
-    $numero_id = 0;
-
-    // Al entrar en el formulario borramos la seleccion de la session para empezar una nueva busqueda
-    $listaIdsSesson = session()->all();
-    // Borrramos los IDs que estaban en session
-
-    foreach ($listaIdsSesson as $key => $value) {
-        if (gettype($value) != 'array' && strpos($key, 'CompareID') !== false) {
-            session()->forget($key);
-        }
-    }
-
-    ?>
+   
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -32,21 +19,21 @@ use App\Filtros\Filtro;
                             <!-- style="display: flex; justify-content: space-between" -->
                             <div class="row">
                                 <div class="col-xs-12 col-sm-6">
-                                    <span class="titulo"> @lang('Búsqueda avanzada')<span>
+                                    <span class="titulo"> @lang('Advanced Search')<span>
                                 </div>
                                 <div class="col-xs-12 col-sm-6 text-right"
                                     style="display: flex; align-items: aplicar_evento_eliminar_filtro">
                                     <select id="selector-filtros" class="form-control btn-sm" name="" id=""
                                         style="width: inherit; margin-right: 20px">
-                                        <option value="0">@lang('Agregar filtro')</option>
+                                        <option value="0">@lang('Add filter')</option>
                                         @foreach ($filtros_posibles as $filtro)
                                             <option value="{{ $filtro->codigo }}">{{ $filtro->label }}</option>
                                         @endforeach
                                     </select>
 
                                     <button type="button" class="btn btn-primary" style="font-size:8pt;width:100px"
-                                        onclick="DeleteAll()">Delete Filters</button>
-                                    <input type="submit" class="btn btn-primary btn-light ml-4" value="@lang('Buscar')">
+                                        onclick="DeleteAll()">@lang('Delete Filters')</button>
+                                    <input type="submit" class="btn btn-primary btn-light ml-4" value="@lang('Search')">
                                 </div>
                             </div>
                         </div>
@@ -100,15 +87,11 @@ use App\Filtros\Filtro;
                             <div class="col-xs-12 col-lg-12 containerSlider">
                                 <span class="titulo">By properties and quality</span>
                                 <div class="tooltip-2 bi bi-info-circle">
-                                    <span class="tooltiptext">Calculated from trajectories after discarding the
-                                        equilibration time using the codes available at this Github link</span>
+                                    <span class="tooltiptext">Calculated from the trajectory and experimental data by FAIRMD Lipids scripts.</span>
                                 </div>
-                                <a href="https://github.com/NMRLipids/Databank/tree/main/Scripts/AnalyzeDatabank">Github
-                                    link</a>
+                                
 
                                 <hr>
-
-
                                 <div class="row">
 
                                     <div class="col-xs-12 col-md-12">
@@ -124,7 +107,6 @@ use App\Filtros\Filtro;
                                             data-namefield="temperature"></div>
                                     </div>
                                 </div>
-
 
                                 <div class="row">
 
@@ -237,9 +219,7 @@ use App\Filtros\Filtro;
     </div>
 
 
-    <form id="formulario-busqueda-avanzada-submit" action="{{ route('new_advanced_search.results') }}" method="get">
 
-    </form>
 @endsection
 
 @section('js')
@@ -302,8 +282,8 @@ use App\Filtros\Filtro;
         newSliderSelector();
 
         function newSliderSelector() {
-            // Seleccionamos el formulario de envio de consulta
-            var container = document.getElementById("formulario-busqueda-avanzada-submit");
+            // Slider hidden inputs go directly into the main form
+            var container = document.getElementById("formulario-busqueda-avanzada");
 
             $(".multi-range").each(function(index) {
                 //  console.log( index + ": " + $( this ).text() );
@@ -344,29 +324,13 @@ use App\Filtros\Filtro;
                 b.type = "hidden";
                 b.name = fieldName + '-end';
                 b.value = "";
-                var startInputSlide = container.appendChild(a);
-                var endInputSlide = container.appendChild(b);
-                var inputs = [startInputSlide, endInputSlide];
-                // Evento cambia los valores
+                container.appendChild(a);
+                container.appendChild(b);
+                var inputs = [a, b];
+                // Update hidden input values when slider moves
                 newslider.noUiSlider.on('slide', function(values, handle) {
-                    //console.log(inputs[handle].name);
-                    //inputs[handle].value = values[handle];
-                    if (!$('input[name="' + inputs[handle].name + '"]').length) {
-                        //Your code when inputName does not exist!
-                        //  console.log('no existe');
-                        $('#formulario-busqueda-avanzada-submit').append('<input type="hidden" name="' +
-                            inputs[0].name + '" value="' + values[0] + '" />');
-                        $('#formulario-busqueda-avanzada-submit').append('<input type="hidden" name="' +
-                            inputs[1].name + '" value="' + values[1] + '" />');
-
-                    } else {
-                        // Parche si vuelve a la pagina.. lo mejor seria forzar la recarga
-                        $('input[name="' + inputs[handle].name + '"]').val(values[handle]);
-                        inputs[0].value = values[0];
-                        inputs[1].value = values[1];
-                    }
-
-
+                    inputs[0].value = values[0];
+                    inputs[1].value = values[1];
                 });
             });
 
@@ -378,50 +342,46 @@ use App\Filtros\Filtro;
         }
 
         $('#formulario-busqueda-avanzada').submit(function() {
+            var $form = $(this);
 
-          
-
-
-            $('input').each(function() {
-                if ($(this).attr('type') && $(this).prop('checked')) {
-                    $('#formulario-busqueda-avanzada-submit').append('<input type="hidden" name="' + $(this)
-                        .attr('name') + '" value="' + $(this).val() + '" />');
-                }
-               
-                if ($(this).attr('type') == "text") {
-                    $('#formulario-busqueda-avanzada-submit').append('<input type="hidden" name="' + $(this)
-                        .attr('name') + '" value="' + $(this).val() + '" />');
-                }
-                //console.log($(this).attr('type') +" _ "+ $(this).val() + " _ " +$(this).attr('name'));
-                if (($(this).val() == '')) {
-                    if ($(this).attr('type') != "text") $(this).remove();
-                }
-            })
-
-            $('select').each(function() {
-                if ($(this).is('select')) {
-                    if ($(this).val() !== '') {
-                        $('#formulario-busqueda-avanzada-submit').append('<input type="hidden" name="' + $(
-                            this).attr('name') + '" value="' + $(this).val() + '" />');
-                    } else {
-                        // Clean select with nothing selected
-                        var nameCut = $(this).attr('name').slice(0, -3) + "_operador";
-                        $('input[name^="' + nameCut + '"]').each(function() {
-                            if ($(this).attr('type') != "radio") $(this).remove();
-
-                        })
-
+            // Disable empty datalist inputs and their operator radios
+            $form.find('input[list]').each(function() {
+                if ($(this).val() === '') {
+                    $(this).prop('disabled', true);
+                    // Disable matching operator radios: name "lipidos[0]" → "lipidos_operador[0]"
+                    var name = $(this).attr('name');
+                    var match = name.match(/^(.+)\[(\d+)\]$/);
+                    if (match) {
+                        var operadorName = match[1] + '_operador[' + match[2] + ']';
+                        $form.find('input[name="' + operadorName + '"]').prop('disabled', true);
                     }
                 }
-            })
-            // HACK
-            $('#formulario-busqueda-avanzada-submit').append(
-                '<input type="hidden" name="nothinghere" value="1" />');
+            });
 
-            $('#formulario-busqueda-avanzada-submit').submit();
+            // Disable empty selects and their operator radios (skip the filter selector dropdown)
+            $form.find('select').each(function() {
+                if ($(this).attr('id') === 'selector-filtros') return;
+                if ($(this).val() === '') {
+                    $(this).prop('disabled', true);
+                    var name = $(this).attr('name');
+                    var match = name.match(/^(.+)\[(\d+)\]$/);
+                    if (match) {
+                        var operadorName = match[1] + '_operador[' + match[2] + ']';
+                        $form.find('input[name="' + operadorName + '"]').prop('disabled', true);
+                    }
+                }
+            });
 
-            return false;
+            // Disable slider hidden inputs that haven't been changed (empty values)
+            $form.find('input[type="hidden"]').each(function() {
+                if ($(this).val() === '') $(this).prop('disabled', true);
+            });
 
+            // Add nothinghere marker
+            $form.append('<input type="hidden" name="nothinghere" value="1" />');
+
+            // Submit the main form directly
+            return true;
         });
 
         $('#selector-filtros').change(function() {

@@ -177,7 +177,8 @@ class TrayectoriasController extends Controller
             'FFData' => $this->FFData,
             'FFLegend' => $this->FFLegend,
             'compul' => $this->comp_ul,
-            'compll' => $this->comp_ll
+            'compll' => $this->comp_ll,
+            'related_experiments' => $trayectoria->getExperiments(),
         ]);
     }
 }

@@ -204,7 +204,7 @@ class ExperimentController extends Controller
         }            
 
         $dataFF[] =  ($experiment->type === 'FF' && !empty($experiment->data)) ? json_decode($experiment->data, true) : null;
-
+        $exp_object = \App\Experiments::find($experiment->id);
         return View::make('experiment', [
                 'entity' => ['doi' => $experiment->article_doi,
                             'data_doi' => $experiment->data_doi,
@@ -216,6 +216,7 @@ class ExperimentController extends Controller
                 'properties' => $assocProps,
                 'OPData' => $OPData,
                 'FFData' => $dataFF,
+                'related_simulations' => $exp_object->getTrajectories(),
             ]);
     }
 }
