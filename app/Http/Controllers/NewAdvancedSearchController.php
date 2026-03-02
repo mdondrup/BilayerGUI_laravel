@@ -34,6 +34,8 @@ class NewAdvancedSearchController extends Controller
     * @throws ValidationException If validation fails, an exception is thrown with details about the errors
     */
 
+  private $filters = [];
+
   private function validateAdvancedSearchRequest(Request $request): array
   {
     $inputs = $request->all();
@@ -103,17 +105,32 @@ class NewAdvancedSearchController extends Controller
 
     $validator->validate();
 
+    // Build a human-readable list of active filters for display in the results page
+    foreach ($inputs as $key => $value) {
+      if (str_ends_with($key, '-start') || str_ends_with($key, '-end')) {
+        $this->filters[] = ucfirst(str_replace('_', ' ', str_replace(['-start', '-end'], '', $key)));
+        
+      }
+      if (in_array($key, ['lipidos', 'iones', 'membranas'])) {
+        $this->filters[] = ucfirst(str_replace('_', ' ', $key)) . ': ' . implode(', ', (array)$value);
+      }
+      if (in_array($key, ['trayectoria_force_field'])) {
+        $this->filters[] = 'Force Field: ' . implode(', ', (array)$value);
+      } 
+    }
+    $this->filters = array_unique($this->filters);
+
+
     return $inputs;
   }
 
-
-
-
-
-  public function resultsGeneral(Request $request)
+  /**
+   * Build the filter query and return matching trajectory IDs.
+   * This is lightweight — only integer IDs are fetched.
+   */
+  private function getFilteredIds(Request $request): \Illuminate\Support\Collection
   {
-    
-    
+     
     $inputs = $this->validateAdvancedSearchRequest($request);
 
     if (config('app.debug')) {
@@ -128,17 +145,16 @@ class NewAdvancedSearchController extends Controller
 
     // We start with a base query and then dynamically build the WHERE clause and JOINs.
     $this->query = DB::table('trajectories')->select('trajectories.id')->distinct();
-    $this->query->join('trajectories_lipids as tl', 'trajectories.id', '=', 'tl.trajectory_id');
-    $this->query->join('lipids as l', 'tl.lipid_id', '=', 'l.id');
-    $this->query->join('trajectories_analysis as ta', 'trajectories.id', '=', 'ta.trajectory_id');
-
+    
     // This is a complex query builder that dynamically constructs SQL based on the filters provided in the request.
     // We will add joins only for the filters that are present in the request to optimize the query.
     // Allowing arbitray filters is powerful but can lead to SQL injection if not handled properly. Therefore
     // we will use parameter binding for all user inputs to ensure that the query is safe. 
     
     if ($inputs['lipidos'] ?? false) {
-     
+      $this->query->join('trajectories_lipids as tl', 'trajectories.id', '=', 'tl.trajectory_id');
+      $this->query->join('lipids as l', 'tl.lipid_id', '=', 'l.id'); // Join with lipids for lipid-based filtering, almost always needed, 
+
       // If all lipids are selected with AND or OR, we can use a single join with 
       // GROUP BY and HAVING to filter trajectories that have all selected lipids.    
       // CHECK if all lipids are selected with the same operator
@@ -261,6 +277,20 @@ class NewAdvancedSearchController extends Controller
     if (!empty($inputs['temperature-start']) && !empty($inputs['temperature-end'])) {
       $this->query->whereBetween('temperature', [$inputs['temperature-start'], $inputs['temperature-end']]);
     }
+
+    // Join trajectories_analysis once if any analysis filter is active
+    $needsAnalysisJoin = 
+      (!empty($inputs['Area_per_lipid-start']) && !empty($inputs['Area_per_lipid-end'])) ||
+      (!empty($inputs['quality_total-start']) && !empty($inputs['quality_total-end'])) ||
+      (!empty($inputs['quality_hg-start']) && !empty($inputs['quality_hg-end'])) ||
+      (!empty($inputs['quality_tails-start']) && !empty($inputs['quality_tails-end'])) ||
+      (!empty($inputs['Bilayer_thickness-start']) && !empty($inputs['Bilayer_thickness-end'])) ||
+      (!empty($inputs['Form_factor_quality-start']) && !empty($inputs['Form_factor_quality-end']));
+
+    if ($needsAnalysisJoin) {
+      $this->query->join('trajectories_analysis as ta', 'trajectories.id', '=', 'ta.trajectory_id');
+    }
+
     if (!empty($inputs['Area_per_lipid-start']) && !empty($inputs['Area_per_lipid-end'])) {
       $this->query->whereBetween('ta.area_per_lipid', [$inputs['Area_per_lipid-start'], $inputs['Area_per_lipid-end']]);
     }
@@ -279,6 +309,7 @@ class NewAdvancedSearchController extends Controller
     if (!empty($inputs['Form_factor_quality-start']) && !empty($inputs['Form_factor_quality-end'])) {
       $this->query->whereBetween('ta.ff_quality', [$inputs['Form_factor_quality-start'], $inputs['Form_factor_quality-end']]);
     }
+
     if( !empty($inputs['trayectoria'] ?? false)) {
       $this->query->whereIn('trajectories.id', $inputs['trayectoria']);
     }
@@ -286,87 +317,91 @@ class NewAdvancedSearchController extends Controller
       $this->query->join('trajectories_membranes as tm', 'trajectories.id', '=', 'tm.trajectory_id')
                   ->whereIn('tm.membrane_id', $inputs['membranas']);
     }
-    
-   
-  $ids = $this->query->get(); // Get the results and sort by ID to ensure consistent ordering
-  $trayectorias = Trayectoria::with(['analisis', 'lipidos', 'iones', 'campo_de_fuerza'])
-    ->withCount(['experimentsOP', 'experimentsFF'])
-    ->whereIn('id', $ids->pluck('id'))
-    ->get(); // Fetch trajectory objects with relationships loaded
 
-    // Debug: Print interpolated query
-            $sql = $this->query->toSql();
-            $bindings = $this->query->getBindings();
-            $interpolatedQuery = $sql;
-            foreach ($bindings as $binding) {
-              $value = is_numeric($binding) ? $binding : "'" . addslashes($binding) . "'";
-              $interpolatedQuery = preg_replace('/\?/', $value, $interpolatedQuery, 1);
-            }
-            error_log("\n\n=== DEBUG: Interpolated Query ===\n");
-            error_log($interpolatedQuery . "\n");
-            error_log("=================================\n\n");
-  return $trayectorias;
+    if (config('app.debug')) {
+      // Debug: Print interpolated query
+      $sql = $this->query->toSql();
+      $bindings = $this->query->getBindings();
+      $interpolatedQuery = $sql;
+      foreach ($bindings as $binding) {
+        $value = is_numeric($binding) ? $binding : "'" . addslashes($binding) . "'";
+        $interpolatedQuery = preg_replace('/\?/', $value, $interpolatedQuery, 1);
+      }
+      error_log("\n\n=== DEBUG: Filter Query ===\n");
+      error_log($interpolatedQuery . "\n");
+      error_log("=================================\n\n");
+    }
+
+    return $this->query->get()->pluck('id');
   }
 
-  // Se manda los datos a la vista de resultado
+  /**
+   * Paginated results with SQL-level sorting.
+   * Only hydrates the 15 Eloquent models needed for the current page.
+   */
   function results(Request $request)
   {
+    $ids = $this->getFilteredIds($request);
+    $total = $ids->count();
 
-    $trayectorias = $this->resultsGeneral($request);
+    $sortBy = $request->input('sort', 'id');
+    $direction = $request->input('direction', 'asc');
+    $page = $request->input('page', 1);
+    $perPage = 15;
 
-    if (!is_string($trayectorias)) {
-      // Handle sorting
-      $sortBy = $request->input('sort', 'id');
-      $direction = $request->input('direction', 'asc');
-      
-      // Map sort fields to value-extraction callbacks
-      $sortMap = [
-        'id' => function($traj) { return $traj->id; },
-        'temperature' => function($traj) { return $traj->temperature; },
-        'length' => function($traj) { return $traj->trj_length; },
-        'area_per_lipid' => function($traj) { return optional($traj->analisis)->area_per_lipid; },
-        'op_quality_total' => function($traj) { return optional($traj->analisis)->op_quality_total; },
-        'ff_quality' => function($traj) { return optional($traj->analisis)->ff_quality; },
-      ];
-      
-      if (isset($sortMap[$sortBy])) {
-        $getValue = $sortMap[$sortBy];
-        $trayectorias = $trayectorias->sort(function ($a, $b) use ($getValue, $direction) {
-          $valA = $getValue($a);
-          $valB = $getValue($b);
-          // Nulls always last, regardless of sort direction
-          if (is_null($valA) && is_null($valB)) return 0;
-          if (is_null($valA)) return 1;
-          if (is_null($valB)) return -1;
-          $cmp = $valA <=> $valB;
-          return $direction === 'desc' ? -$cmp : $cmp;
-        });
-      }
-      
-      $page = $request->input('page', 1);
-      $perPage = 15;
-      $offset = $page * $perPage - $perPage;
-      $allTrayectorias = new LengthAwarePaginator($trayectorias->slice($offset, $perPage, true), $trayectorias->count(), $perPage, $page);
-      $allTrayectorias->setPath(Paginator::resolveCurrentPath());
-     
-    } else {
-     
-      $allTrayectorias = $trayectorias;
+    // Map user-facing sort keys to actual SQL columns
+    $sortColumnMap = [
+      'id'               => 'trajectories.id',
+      'temperature'      => 'trajectories.temperature',
+      'length'           => 'trajectories.trj_length',
+      'area_per_lipid'   => 'ta_sort.area_per_lipid',
+      'op_quality_total' => 'ta_sort.op_quality_total',
+      'ff_quality'       => 'ta_sort.ff_quality',
+    ];
+
+    $sortColumn = $sortColumnMap[$sortBy] ?? 'trajectories.id';
+
+    // Build Eloquent query for just this page
+    $query = Trayectoria::with(['analisis', 'lipidos', 'iones', 'campo_de_fuerza'])
+      ->withCount(['experimentsOP', 'experimentsFF'])
+      ->whereIn('trajectories.id', $ids);
+
+    // Join trajectories_analysis for sorting when the sort column lives there
+    if (str_starts_with($sortColumn, 'ta_sort.')) {
+      $query->leftJoin('trajectories_analysis as ta_sort', 'trajectories.id', '=', 'ta_sort.trajectory_id')
+            ->select('trajectories.*'); // prevent extra columns from overwriting model attributes
     }
+
+    // Null-last ordering: IS NULL puts nulls at the bottom regardless of direction
+    $query->orderByRaw("$sortColumn IS NULL, $sortColumn $direction");
+
+    $trayectorias = $query
+      ->offset(($page - 1) * $perPage)
+      ->limit($perPage)
+      ->get();
+
+    $allTrayectorias = new LengthAwarePaginator($trayectorias, $total, $perPage, $page);
+    $allTrayectorias->setPath(Paginator::resolveCurrentPath());
 
     return view('new_advanced_search.results', [
       'trayectorias' => $allTrayectorias,
-      'sort' => $request->input('sort', 'id'),
-      'direction' => $request->input('direction', 'asc'),
+      'sort' => $sortBy,
+      'direction' => $direction,
+      'filters' => $this->filters,
     ]);
   }
 
-  // Se manda los datos a la vista de resultado
-  // Se llama de el resultado de la busqueda avanzada
+  /**
+   * Export all matching results (no pagination).
+   */
   function resultsExport(Request $request)
   {
 
-    $allTrayectorias = $this->resultsGeneral($request);
+    $ids = $this->getFilteredIds($request);
+    $allTrayectorias = Trayectoria::with(['analisis', 'lipidos', 'iones', 'campo_de_fuerza'])
+      ->withCount(['experimentsOP', 'experimentsFF'])
+      ->whereIn('id', $ids)
+      ->get();
 
     $filtroSelect = false;
     if ($request->input('selected') == 1) {
