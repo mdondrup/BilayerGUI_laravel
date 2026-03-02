@@ -54,7 +54,7 @@
                                 <tr>
                                     <td>{{ $trayectoria->id }}</td>
                                     <td>{{ $trayectoria->temperature ?? 'N/A' }}</td>
-                                    <td>{{ $trayectoria->trj_length ?? 'N/A' }}</td>
+                                    <td>{{ round($trayectoria->trj_length ?? 0, 0) }}</td>
                                     <td>{{ round(optional($trayectoria->analisis)->area_per_lipid ?? 0, 2) }}</td>
                                     <td>{{ optional($trayectoria->analisis)->op_quality_total ?? 'N/A' }}</td>
                                    <td> {{ optional($trayectoria->analisis)->ff_quality ?? 'N/A' }}</td>
@@ -75,7 +75,7 @@
                                     </td>
                                     <td>
                                         @if ($trayectoria->iones->isEmpty())
-                                            N/A
+                                            -
                                         @else
                                         @foreach ($trayectoria->iones as $ion)
                                             {{ $ion->molecule }}@if (!$loop->last), @endif
