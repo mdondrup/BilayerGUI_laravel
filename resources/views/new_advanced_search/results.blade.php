@@ -19,6 +19,8 @@
         <div class="row justify-content-center">
             <div class="">
                 <h3 class="text-white text-center">Simulation Search Results</h3>
+                <p><a href="{{ route('new_advanced_search.form') }}" class="text-white">Back to Search</a></p>
+                @if (!empty($filters))
                 <p>Filtered by: 
                     <ul class="filters-list">
                     @foreach ($filters as $filter)
@@ -26,6 +28,12 @@
                     @endforeach
                     </ul>
                 </p>
+                @endif
+                 @if (session('message'))
+                    <div class="alert alert-info">
+                        {{ session('message') }}
+                    </div>
+                @endif
                 @if (empty($trayectorias) || $trayectorias->isEmpty())
                     <p class="text-white text-center">No results found.</p>
                 @else
@@ -48,14 +56,25 @@
                                 
                                 @foreach($sortableColumns as $column => $label)
                                     <th>
-                                        <a href="{{ request()->fullUrlWithQuery(['sort' => $column, 'direction' => ($currentSort === $column && $currentDirection === 'asc') ? 'desc' : 'asc']) }}" class="text-white text-decoration-none">
-                                            {{ $label }}
+                                        <a href="{{ request()->fullUrlWithQuery(['sort' => $column, 'direction' => ($currentSort === $column && $currentDirection === 'asc') ? 'desc' : 'asc']) }}" 
+                                        class="text-white text-decoration-none"
+                                        title="Sort by {{ $label }} {{ ($currentSort === $column) ? (($currentDirection === 'asc') ? 'descending' : 'ascending') : 'ascending' }}"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"  
+                                        >
+                                            
                                             @if($currentSort === $column)
                                                 @if($currentDirection === 'asc')
-                                                ▲
-                                                @else
-                                                ▼
+                                                {{ $label }}&nbsp;<span style="font-size: 0.5em;">▲</span>
+                                                 @elseif($currentDirection === 'desc')
+                                                {{ $label }}&nbsp;<span style="font-size: 0.5em;">▼</span>
+                                                 @else
+                                                {{ $label }}&nbsp;<span style="font-size: 0.5em;">▲▼</span>
+
                                                 @endif
+                                               
+                                            @else
+                                               {{ $label }}&nbsp;<span style="font-size: 0.5em;">▲▼</span>
+
                                             @endif
                                         </a>
                                     </th>
@@ -124,6 +143,5 @@
             </div>
         </div> 
     </div>
-
-    
 @endsection
+

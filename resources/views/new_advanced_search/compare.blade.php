@@ -713,7 +713,7 @@ function genDataParamOrde($GitHubURL, $FileUrl, &$labelData, &$data, &$dataerror
             $firstActive = 'active';
             foreach ($lista as $key2 => $value2) {
                 echo ('<li role="presentation"  class="nav-item ">
-    <a href="#home' . $key2 . '" class="nav-link ' . $firstActive . '" aria-controls="home' . $key2 . '" role="tab" data-toggle="tab">' . $key2 . '</a>
+    <a href="#home' . $key2 . '" class="nav-link ' . $firstActive . '" aria-controls="home' . $key2 . '" role="tab" data-bs-toggle="tab">' . $key2 . '</a>
   </li>');
                 $firstActive = '';
             }
