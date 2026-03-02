@@ -87,15 +87,11 @@ use App\Filtros\Filtro;
                             <div class="col-xs-12 col-lg-12 containerSlider">
                                 <span class="titulo">By properties and quality</span>
                                 <div class="tooltip-2 bi bi-info-circle">
-                                    <span class="tooltiptext">Calculated from trajectories after discarding the
-                                        equilibration time using the codes available at this Github link</span>
+                                    <span class="tooltiptext">Calculated from the trajectory and experimental data by FAIRMD Lipids scripts.</span>
                                 </div>
-                                <a href="https://github.com/NMRLipids/Databank/tree/main/Scripts/AnalyzeDatabank">Github
-                                    link</a>
+                                
 
                                 <hr>
-
-
                                 <div class="row">
 
                                     <div class="col-xs-12 col-md-12">
@@ -111,7 +107,6 @@ use App\Filtros\Filtro;
                                             data-namefield="temperature"></div>
                                     </div>
                                 </div>
-
 
                                 <div class="row">
 
