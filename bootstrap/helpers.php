@@ -3,6 +3,10 @@
 const OPERADOR_AND = 'and';
 const OPERADOR_NOT = 'not';
 const OPERADOR_OR = 'or';
+const OPERADOR_CONTAINS = 'contains';
+const OPERADOR_EQUALS = 'equals';
+const OPERADOR_STARTS = 'starts_with';
+const OPERADOR_ENDS = 'ends_with';
 
 function resaltar_texto($texto, $texto_para_resaltar) {
     $texto_resaltado = preg_replace("%($texto_para_resaltar)%i", '<b>$1</b>', $texto);

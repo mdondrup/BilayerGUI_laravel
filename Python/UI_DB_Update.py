@@ -92,6 +92,11 @@ parser.add_argument(
         help="Set the logging level (default: INFO)"
     )
 
+# Dry-run mode
+parser.add_argument(
+    "--dry-run", action='store_true',
+    help=''' Run without committing changes to the database. Default: %(default)s ''')
+
 # Debug mode
 parser.add_argument(
     "-d", "--debug", type=int, default=0,
@@ -184,10 +189,13 @@ def UPSERT(conn, table, data) -> int | None:
     placeholders = ", ".join(["%s"] * len(columns))
     col_list = ", ".join(f"`{c}`" for c in columns)
 
-    update_parts = [
-        f"`{c}` = new.`{c}`"
-        for c in columns
-    ]
+    update_parts = []
+    for c in columns:
+        if c == pk:
+            # Wrap pk in LAST_INSERT_ID so cursor.lastrowid returns it on UPDATE
+            update_parts.append(f"`{c}` = LAST_INSERT_ID(new.`{c}`)")
+        else:
+            update_parts.append(f"`{c}` = new.`{c}`")
 
     # Force LAST_INSERT_ID(pk) so we get pk on UPDATE too
     # only if pk is not part of the columns being updated
@@ -213,8 +221,9 @@ def UPSERT(conn, table, data) -> int | None:
         logger.trace("Prepared Query String:")
         logger.trace(query)
         cursor.execute(sql, values)
+        last_id = cursor.lastrowid if pk else None
 
-        return cursor.lastrowid if pk else None
+    return last_id
 
 
 
@@ -403,9 +412,6 @@ def LinkEntries(Table: str, LipidInformation: dict) -> None:
         # Execute the query creating a new entry
         res = cursor.execute(SQL_Create(Table, LipidInformation), list(LipidInformation.values()))
 
-    # Commit the changes
-    database.commit()
-
     # Num rows affected should be 1
     if res != 1:
         RuntimeError("ERROR: record wasn't inserted!")
@@ -438,9 +444,6 @@ def CreateEntry(Table: str, LipidInformation: dict) -> int:
         logger.debug(f"Creating entry in {Table} with values {LipidInformation}")
         res = cursor.execute(SQL_Create(Table, LipidInformation), tuple(LipidInformation.values()))
         ID = cursor.lastrowid
-    # Commit the changes
-    database.commit()
-    cursor.close()
 
     # Num rows affected should be 1
     if res != 1:
@@ -885,7 +888,7 @@ if __name__ == '__main__':
                         has_issues = True
                     
                     # Link the lipid with the forcefield
-                    LinkEntries('lipids_forcefields',
+                    UPSERT(database, 'lipids_forcefields',
                                 {"lipid_id": Lip_ID,
                                  "forcefield_id": FF_ID,
                                  "mapping": README["COMPOSITION"][key]["MAPPING"]
@@ -1026,10 +1029,10 @@ if __name__ == '__main__':
                 "trj_length":      README["TRJLENGTH"],
                 "water_resname":   README.get("COMPOSITION").get("SOL", {"NAME": "IMPLICIT"} ).get("NAME"),
                 }
-
+            logger.debug(f"Collected trajectory information: {trajectoryInfo}") 
             # Entry in the DB with the LipidInfo of the trajectory
             Trj_ID = UPSERT(database, 'trajectories', trajectoryInfo)
-
+            logger.debug(f"Inserted trajectory with ID {Trj_ID} for system {README['path']}")
     # -- TABLE `trajectories_lipids`
             TrjL_ID = {}
             for lipid in Lipids:
@@ -1417,6 +1420,11 @@ if __name__ == '__main__':
                 raise err
             FAILS.append(README["path"])
     
+    if args.dry_run:
+        logger.warning("Dry-run mode: rolling back all changes.")
+        database.rollback()
+    else:
+        database.commit()
     database.close() 
 
 ####################

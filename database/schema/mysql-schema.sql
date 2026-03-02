@@ -170,6 +170,7 @@ CREATE TABLE `ions` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `ion_unique` (`molecule`, `forcefield_id`),
   KEY `forcefield_id` (`forcefield_id`),
   CONSTRAINT `ions_ibfk_1` FOREIGN KEY (`forcefield_id`) REFERENCES `forcefields` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -203,6 +204,7 @@ CREATE TABLE `lipids_synonyms` (
   PRIMARY KEY (`id`),
   KEY `lipid_id` (`lipid_id`),
   KEY `synonym` (`synonym`),
+  UNIQUE KEY `lipid_synonym_unique` (`lipid_id`, `synonym`),
   CONSTRAINT `lipids_synonyms_ibfk_1` FOREIGN KEY (`lipid_id`) REFERENCES `lipids` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -218,11 +220,13 @@ DROP TABLE IF EXISTS `lipids_forcefields`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `lipids_forcefields` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `lipid_id` bigint unsigned NOT NULL,
   `forcefield_id` bigint unsigned NOT NULL,
   `mapping` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
   -- PRIMARY KEY (`lipid_id`,`forcefield_id`, `mapping`),
-  KEY (`lipid_id`,`forcefield_id`),
+  UNIQUE KEY `lipid_forcefield_unique` (`lipid_id`,`forcefield_id`),
   CONSTRAINT `lipids_forcefields_ibfk_1` FOREIGN KEY (`lipid_id`) REFERENCES `lipids` (`id`),
   CONSTRAINT `lipids_forcefields_ibfk_2` FOREIGN KEY (`forcefield_id`) REFERENCES `forcefields` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -329,13 +333,13 @@ DROP TABLE IF EXISTS `membranes`;
 CREATE TABLE `membranes` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `forcefield_id` bigint unsigned NOT NULL,
-  `lipid_names_l1` varchar(255) DEFAULT NULL,
-  `lipid_names_l2` varchar(255) DEFAULT NULL,
-  `lipid_number_l1` varchar(255) DEFAULT NULL,
-  `lipid_number_l2` varchar(255) DEFAULT NULL,
+  `lipid_names_l1` varchar(191) DEFAULT NULL,
+  `lipid_names_l2` varchar(191) DEFAULT NULL,
+  `lipid_number_l1` varchar(191) DEFAULT NULL,
+  `lipid_number_l2` varchar(191) DEFAULT NULL,
   `geometry` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `membranes_unique` (`forcefield_id`,`lipid_names_l1`,`lipid_names_l2`), 
+  UNIQUE KEY `membranes_unique` (`forcefield_id`,`lipid_names_l1`,`lipid_names_l2`,`lipid_number_l1`,`lipid_number_l2`), 
   KEY `forcefield_id` (`forcefield_id`),
   CONSTRAINT `membranes_ibfk_1` FOREIGN KEY (`forcefield_id`) REFERENCES `forcefields` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -430,7 +434,7 @@ CREATE TABLE `trajectories_analysis` (
    -- REMOVE `form_factor_experiment` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   
-  KEY `trajectory_id` (`trajectory_id`),
+  UNIQUE KEY `trajectory_id` (`trajectory_id`),
   CONSTRAINT `trajectories_analysis_ibfk_1` FOREIGN KEY (`trajectory_id`) REFERENCES `trajectories` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -449,6 +453,7 @@ CREATE TABLE `trajectories_analysis_ions` (
   `ion_id` bigint NOT NULL,
   `density_file` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `trajectory_ion_unique` (`trajectory_id`,`ion_id`),
   KEY `trajectory_id` (`trajectory_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -496,6 +501,7 @@ CREATE TABLE `trajectories_experiments_FF` (
   PRIMARY KEY (`id`),
   KEY `trajectory_id` (`trajectory_id`),
   KEY `experiment_id` (`experiment_id`),
+  UNIQUE KEY `trajectory_experiment_unique` (`trajectory_id`,`experiment_id`),
   CONSTRAINT `experiment_id` FOREIGN KEY (`experiment_id`) REFERENCES `experiments` (`id`),
   CONSTRAINT `trajectory_id` FOREIGN KEY (`trajectory_id`) REFERENCES `trajectories` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
@@ -562,8 +568,7 @@ CREATE TABLE `trajectories_lipids` (
   `leaflet_1` int NOT NULL,
   `leaflet_2` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `analysis_trajectory_id_foreign` (`trajectory_id`),
-  KEY `Lipid_ID` (`lipid_id`),
+  UNIQUE KEY `trajectory_lipid_unique` (`trajectory_id`,`lipid_id`),
   CONSTRAINT `trajectories_lipids_ibfk_1` FOREIGN KEY (`trajectory_id`) REFERENCES `trajectories` (`id`),
   CONSTRAINT `trajectories_lipids_ibfk_2` FOREIGN KEY (`lipid_id`) REFERENCES `lipids` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -583,8 +588,7 @@ CREATE TABLE `trajectories_membranes` (
   `bulk` int DEFAULT NULL,
   `name` varchar(1024) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `trajectory_id` (`trajectory_id`,`membrane_id`),
-  KEY `membrane_id` (`membrane_id`),
+  UNIQUE KEY `trajectory_membrane_unique` (`trajectory_id`,`membrane_id`),
   CONSTRAINT `trajectories_membranes_ibfk_1` FOREIGN KEY (`trajectory_id`) REFERENCES `trajectories` (`id`),
   CONSTRAINT `trajectories_membranes_ibfk_2` FOREIGN KEY (`membrane_id`) REFERENCES `membranes` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3;

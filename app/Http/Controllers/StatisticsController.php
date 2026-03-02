@@ -21,7 +21,7 @@ class StatisticsController extends Controller
 
         DB::enableQueryLog();
 
-        $TotalTrayectorias = TrayectoriaAnalisis::select('id')->count();
+        $TotalTrayectorias = Trayectoria::select('id')->count();
         $TotalMembranas = Membrana::select('id')->count();
         $CountMembranas = Membrana::groupBy('id')->select('id', DB::raw('count(*) as total'))->get();
        
@@ -38,7 +38,7 @@ class StatisticsController extends Controller
 
     static function totals()
     {
-      $TotalTrayectorias = TrayectoriaAnalisis::select('id')->count();
+      $TotalTrayectorias = Trayectoria::select('id')->count();
       $TotalMembranas = Membrana::select('id')->count();
 
       return view('statistics.totals', [
