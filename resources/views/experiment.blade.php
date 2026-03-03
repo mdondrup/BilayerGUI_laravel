@@ -359,7 +359,6 @@
                             @elseif  ($entity['type'] === 'FF' && ! empty($FFData) )
                             <div class="row p-2">
                                 <div class="col-sm-12 col-md-12 chart-container-half">
-                                    <input type="checkbox" id="ffNormalizeCheckbox" data-ffnormalize-target="myChartFormFactEXP">Normalize (0-1)
                                     <canvas id="myChartFormFactEXP"
                                     data-ffdata="{{ json_encode($FFData) }}"
                                     data-fflegend='["Form Factor"]'

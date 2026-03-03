@@ -362,7 +362,7 @@
                                             <h3>Form Factor</h3>
                                             <label style="display: inline-flex; align-items: center; gap: 6px; color: #ffffff; font-weight: 600; margin-bottom: 8px;">
                                                 <input type="checkbox" data-ffnormalize-target="myChartFormFact" checked>
-                                                Normalize (0-1)
+                                                Normalize (by max of first series)
                                             </label>
                                             <canvas id="myChartFormFact"
                                                 data-ffdata="{{ json_encode($FFData) }}"

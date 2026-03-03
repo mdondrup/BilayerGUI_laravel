@@ -148,7 +148,7 @@ function withAlpha(color, alpha) {
         return myChart;
     }
 
-    function normalizeSeries(data) {
+    function normalizeSeries(data, maxFirstSeries) {
         if (!Array.isArray(data) || data.length === 0) {
             return data;
         }
@@ -172,12 +172,14 @@ function withAlpha(color, alpha) {
             return data;
         }
 
-        const min = Math.min(...values);
         const max = Math.max(...values);
-        const range = max - min;
 
-        const normalizeValue = value => (range === 0 ? 0 : (value - min) / range);
-
+        // Scale each series so its peak aligns with the first series' peak.
+        // If max is 0 or non-finite, return data unchanged to avoid division by zero.
+        if (!max || !Number.isFinite(max)) {
+            return data;
+        }
+        const normalizeValue = value => (maxFirstSeries / max) * value;
         return data.map(point => {
             if (typeof point === 'number') {
                 return normalizeValue(point);
@@ -223,7 +225,7 @@ function withAlpha(color, alpha) {
 
     function setYAxisTitle(chart, isNormalized) {
         chart.options.scales.y.title.text = isNormalized
-            ? 'Form Factor (0-1)'
+            ? 'Form Factor (normalized)'
             : 'Form Factor (Å⁻¹)';
     }
 
@@ -239,8 +241,26 @@ function withAlpha(color, alpha) {
                 const title = canvas.dataset.fftitle || 'Form Factor'; // Default title if not provided
                 const toggle = document.querySelector(`input[data-ffnormalize-target="${canvas.id}"]`);
                 const isNormalized = toggle ? toggle.checked : true;
+                let maxFirstSeries = 0;
+                if (isNormalized) { 
+                    // If normalization is enabled by default or toggle exists, calculate max of first series for proper scaling
+                    const firstSeries = rawData[0];
+                    maxFirstSeries = Math.max(...firstSeries.map(point => {
+                        if (typeof point === 'number') {
+                            return point;
+                        }
+                        if (Array.isArray(point) && point.length >= 2) {
+                            return point[1];
+                        }
+                        if (point && typeof point === 'object' && Number.isFinite(point.y)) {
+                            return point.y;
+                        }
+                        return Number.NEGATIVE_INFINITY;
+                    }));
+
+                }
                 const seriesList = isNormalized
-                    ? rawData.map(series => normalizeSeries(series))
+                    ? rawData.map(series => normalizeSeries(series, maxFirstSeries))
                     : rawData;
                 const dataset = buildDataset(seriesList, rawLegend);
                 const chart = drawOneChart(canvas, dataset, title);
@@ -259,7 +279,7 @@ function withAlpha(color, alpha) {
                     toggle.addEventListener('change', event => {
                         const nextNormalized = event.target.checked;
                         const nextSeriesList = nextNormalized
-                            ? rawData.map(series => normalizeSeries(series))
+                            ? rawData.map(series => normalizeSeries(series, maxFirstSeries))
                             : rawData;
                         chart.data = buildDataset(nextSeriesList, rawLegend);
                         setYAxisTitle(chart, nextNormalized);
