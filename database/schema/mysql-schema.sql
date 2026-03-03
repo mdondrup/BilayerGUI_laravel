@@ -502,8 +502,8 @@ CREATE TABLE `trajectories_experiments_FF` (
   KEY `trajectory_id` (`trajectory_id`),
   KEY `experiment_id` (`experiment_id`),
   UNIQUE KEY `trajectory_experiment_unique` (`trajectory_id`,`experiment_id`),
-  CONSTRAINT `experiment_id` FOREIGN KEY (`experiment_id`) REFERENCES `experiments` (`id`),
-  CONSTRAINT `trajectory_id` FOREIGN KEY (`trajectory_id`) REFERENCES `trajectories` (`id`)
+  CONSTRAINT `trajectories_experiments_FF_ibfk_1` FOREIGN KEY (`experiment_id`) REFERENCES `experiments` (`id`),
+  CONSTRAINT `trajectories_experiments_FF_ibfk_2` FOREIGN KEY (`trajectory_id`) REFERENCES `trajectories` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -523,6 +523,7 @@ CREATE TABLE `trajectories_experiments_OP` (
   KEY `trajectory_id` (`trajectory_id`),
   KEY `lipid_id` (`lipid_id`),
   KEY `experiment_id` (`experiment_id`),
+  UNIQUE KEY `trajectory_lipid_experiment_unique` (`trajectory_id`,`lipid_id`,`experiment_id`),
   CONSTRAINT `trajectories_experiments_OP_ibfk_1` FOREIGN KEY (`trajectory_id`) REFERENCES `trajectories` (`id`),
   CONSTRAINT `trajectories_experiments_OP_ibfk_2` FOREIGN KEY (`lipid_id`) REFERENCES `lipids` (`id`),
   CONSTRAINT `trajectories_experiments_OP_ibfk_3` FOREIGN KEY (`experiment_id`) REFERENCES `experiments` (`id`)
