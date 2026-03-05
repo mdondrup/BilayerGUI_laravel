@@ -1,23 +1,23 @@
-<?php
+@php
 
-use App\Lipido;
-require_once '../bootstrap/helpers.php';
+    use App\Lipido;
+    require_once '../bootstrap/helpers.php';
 
-/**
- * 
- * @var Lipido[] $lipidos
- */
+    /**
+     *
+     * @var Lipido[] $lipidos
+     */
 
-// Al entrar en el formulario borramos la seleccion de la session para empezar una nueva busqueda
-$listaIdsSesson = session()->all();
-// Borrramos los IDs que estaban en session
+    // Al entrar en el formulario borramos la seleccion de la session para empezar una nueva busqueda
+    $listaIdsSesson = session()->all();
+    // Borrramos los IDs que estaban en session
 
-foreach ($listaIdsSesson as $key => $value) {
-    if (gettype($value) != 'array' && strpos($key, 'CompareID') !== false) {
-        session()->forget($key);
+    foreach ($listaIdsSesson as $key => $value) {
+        if (gettype($value) != 'array' && strpos($key, 'CompareID') !== false) {
+            session()->forget($key);
+        }
     }
-}
-?>
+@endphp
 
 @extends('layouts.app')
 
@@ -39,11 +39,17 @@ foreach ($listaIdsSesson as $key => $value) {
 
                 <div class=" ">
                     <div class="search_result" style="padding: 1rem">
-                        @if (count($lipidos) == 0 and
-                                count($iones) == 0 and
-                                count($temperatures) == 0 and
-                                count($membranas) == 0)
-                            Your query has returned no data. Simple search only works for lipids and/or ions. See <a target="_blank" href="https://nmrlipids.github.io/moleculesAndMapping.html">Molecules and Mapping</a> for a list of allowed molecules. For other parameters, try the Advanced Search.<br>
+                        @if ($lipidos->isEmpty() and $iones->isEmpty() and $trayectorias->isEmpty() and $experiments->isEmpty())
+                            <span class="text-white-75 mb-1" style="font-size: 1.2em;">
+                                Your query has returned no data. We searched lipids, experiments, and simulations for partial matches in meta-data, paths and DOIs.
+                                You can use partial matching, and wildcards (* and ?) and exact matching("",''). For example, searching for <em>P?PE</em> will return lipids POPE and PYPE
+                                 and all trajectories and experiments that contain POPE or PYPE in their lipid composition, but also those that contain it in their name or in the path of the files.
+                                 <em>"CHOL"</em> will return only results for CHOL but not DCHOL.
+                                 See <a
+                                    target="_blank" href="https://nmrlipids.github.io/moleculesAndMapping.html">Molecules
+                                    and Mapping</a> for a list of  molecules. For simulation search, try the Advanced
+                                Search.<br>
+                            </span>
                         @endif
 
 
@@ -59,7 +65,7 @@ foreach ($listaIdsSesson as $key => $value) {
                                         </span>
                                     </div>
                                 @endforeach
-                               
+
 
                             </div>
                         @endif
@@ -81,13 +87,33 @@ foreach ($listaIdsSesson as $key => $value) {
                             </div>
                         @endif
 
+                        <!-- Experiments -->
+                        @if (count($experiments) > 0)
+                            <h1 class="txt-white  mt-4">@lang('Experiments')</h1>
+                            <div class="row m-1">
+                                @foreach ($experiments as $experiment)
+                                    <div class="col-12 p-1">
+                                        <span class="badge badge-secondary">@lang('Experiment')
+                                            ({{ $experiment->type }})</span>
+                                        <span>
+                                            <a href="{{ route('experiments.show', ['type' => $experiment->type, 'path' => $experiment->path]) }}"
+                                                class="">{{ $experiment->path }}</a>
+                                        </span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+
                         <!-- Modelo de Membrana -->
-                        @if (count($membranas) > 0)
+                        @if (count($trayectorias) > 0)
                             <!-- Contador -->
                             <?php
                             $maxLipids = 0;
                             ?>
-                            @foreach ($membranas as $membrana)
+                            @foreach ($trayectorias as $trayectoria)
+                                @php
+                                    $membrana =  $trayectoria->membrana;
+                                @endphp
                                 @if (strlen($membrana->lipid_names_l1) > 0 && strlen($membrana->lipid_names_l2) > 0)
                                     <?php
                                     $lipidsInMembrane = explode(':', $membrana->lipid_number_l1);
@@ -101,16 +127,26 @@ foreach ($listaIdsSesson as $key => $value) {
                             <div class="row m-1">
                                 <div class="col">
                                     <p>Hide by number of lipids: </p>
-                                    <?php
-                                    for ($i = 1; $i <= $maxLipids; $i++) {
-                                        echo '<label><input type="checkbox" class="b' . $i . '" name="' . $i . '" value="' . $i . '" onclick="PressCheck(this)">&nbsp;' . $i . ' lipid &nbsp;&nbsp;</label>';
-                                    }
-                                    ?>
-
+                                    @php
+                                        for ($i = 1; $i <= $maxLipids; $i++) {
+                                            echo '<label><input type="checkbox" class="b' .
+                                                $i .
+                                                '" name="' .
+                                                $i .
+                                                '" value="' .
+                                                $i .
+                                                '" onclick="PressCheck(this)">&nbsp;' .
+                                                $i .
+                                                ' lipid &nbsp;&nbsp;</label>';
+                                        }
+                                    @endphp
                                 </div>
                             </div>
                             <div class="row m-1">
-                                @foreach ($membranas as $membrana)
+                                @foreach ($trayectorias as $trayectoria)
+                                    @php
+                                        $membrana =  $trayectoria->membrana;
+                                    @endphp
                                     @if (strlen($membrana->lipid_names_l1) > 0 && strlen($membrana->lipid_names_l2) > 0)
                                         <?php
                                         $lipidsInMembrane = explode(':', $membrana->lipid_number_l1);
@@ -134,24 +170,7 @@ foreach ($listaIdsSesson as $key => $value) {
                         @endif
 
 
-                        <!-- Temperaturas -->
-                        @if (count($temperatures) > 0)
-                            <h1 class="txt-white mt-4">Temperatures</h1>
-                            <div class="row m-1">
-                                @foreach ($temperatures as $temperature)
-                                    <p class="d-flex justify-content-between">
-                                    <div class="col-12 p-1">
-                                        <span class="badge badge-secondary">Temperature </span>
-                                        <span>
-                                            <a href="{{ route('new_advanced_search.results') . '?trayectoria_temperature_operador[1]=and&trayectoria_temperature[1]=' . $temperature->temperature }}"
-                                                class="">
-                                                {!! resaltar_texto($temperature->temperature, $texto) !!}
-                                            </a>
-                                        </span>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endif
+
 
                     </div>
                 </div>

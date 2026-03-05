@@ -125,19 +125,23 @@ use App\Http\Controllers\StatisticsController;
                                 $('#BasicSearch').focus();
 
                             });
+                            $('#lipid_name_example').click(function(){
+                                $('#BasicSearch').val('1-octadecanoyl-2-(9Z)-octadecenoyl-sn-glycero-3-phosphocholine');
+                                $('#BasicSearch').focus();
+                            });
                             });
                         </script> 
 
 
 
-                        <p class="text-white-75 mb-3">Search based on lipid composition for example by: 
-                            <a href="#" id="expopc">POPC</a> or
-                           <a href="#" id="expopcpope">POPC:POPE</a>. Please refer to the
+                        <p class="text-white-75 mb-3">Search based on (partial matching) lipid names, synonyms, or properties (InChI, InChIKey, Smiles), for example by: 
+                            <a href="#" id="expopc">POPC</a>,
+                           <a href="#" id="expopcpope">POPC:POPE</a> or <a href="#" id="lipid_name_example">1-octadecanoyl-2-(9Z)-octadecenoyl-sn-glycero-3-phosphocholine</a>. Please refer to the
                              <a
                                 href="{{ route('lipids.list') }}">
                                 list of universal molecule names that can be used in searches</a>.
                             You can search for trajectories by their ID by typing 'ID' followed by their numeric ID, for example,
-                            ID123. More options are available in Advanced search.
+                            ID123. More options are available in Advanced search. You can  force search by DOI by typing 'DOI:' followed by the DOI, for example, DOI:10.1021/acs.jpcb.4c04719.
                         </p>
                         <p>Current content of the FAIRMD Lipids Databank:</p>
                         <span class="text-white-75 mb-1" style="font-size: 0.9em;">
