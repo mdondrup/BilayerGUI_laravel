@@ -9,7 +9,8 @@ const OPERADOR_STARTS = 'starts_with';
 const OPERADOR_ENDS = 'ends_with';
 
 function resaltar_texto($texto, $texto_para_resaltar) {
-    $texto_resaltado = preg_replace("%($texto_para_resaltar)%i", '<b>$1</b>', $texto);
+    $escaped = preg_quote($texto_para_resaltar, '%');
+    $texto_resaltado = preg_replace("%({$escaped})%i", '<b>$1</b>', $texto);
     return $texto_resaltado;
 }
 
