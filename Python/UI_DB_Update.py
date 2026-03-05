@@ -485,7 +485,7 @@ def load_lipid_metadata(lipid, database):
     logger.debug(f"Inserted/Updated lipid {molecule_id} with ID {lipid_id}")
 
     # Insert synonyms
-    synonyms = bioschema.get('alternateNames', [])
+    synonyms = bioschema.get('alternateName', [])
     for synonym in synonyms:
         synonym_data = {
             'lipid_id': lipid_id,
