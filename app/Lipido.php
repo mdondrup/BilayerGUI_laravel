@@ -49,6 +49,16 @@ class Lipido extends AppModel
         );
     }
 
+    public function synonyms()
+    {
+        return $this->hasMany(LipidSynonym::class, 'lipid_id', 'id');
+    }
+
+    public function cross_references()
+    {
+        return $this->hasMany(LipidCrossReference::class, 'lipid_id', 'id');
+    }
+
     public function getInchiKeyAttribute()
     {
         $inchiKeyProperty = $this->properties()->where('properties.name', 'InChIKey')->first();
