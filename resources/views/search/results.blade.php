@@ -54,10 +54,10 @@
 
 
                         @if (count($lipidos) > 0)
-                            <h1 class="txt-white  mt-4">@lang('Lípido')</h1>
-                            <div class="row m-1">
+                            <h1 class="txt-white  mt-4">@lang('Lípido') <small class="text-muted">({{ count($lipidos) }})</small></h1>
+                            <div class="row m-1" data-limit="20">
                                 @foreach ($lipidos as $lipido)
-                                    <div class="col-sm-12 col-lg-2 p-1">
+                                    <div class="col-sm-12 col-lg-2 p-1 limit-item">
                                         <span class="badge badge-secondary">@lang('Lípido') </span>
                                         <span>
                                             <a href="{{ route('lipid.show', $lipido->id) }}"
@@ -65,39 +65,20 @@
                                         </span>
                                     </div>
                                 @endforeach
-
-
                             </div>
                         @endif
 
 
                         <!-- ION -->
                         @if (count($iones) > 0)
-                            <h1 class="txt-white  mt-4">@lang('Ion')</h1>
-                            <div class="row m-1">
+                            <h1 class="txt-white  mt-4">@lang('Ion') <small class="text-muted">({{ count($iones) }})</small></h1>
+                            <div class="row m-1" data-limit="20">
                                 @foreach ($iones as $ion)
-                                    <div class="col-sm-12 col-lg-2 p-1">
+                                    <div class="col-sm-12 col-lg-2 p-1 limit-item">
                                         <span class="badge badge-secondary">@lang('Ion') </span>
                                         <span>
                                             <a href="{{ route('new_advanced_search.results') . '?iones_operador[1]=or&iones[1]=' . $ion->molecule }}"
                                                 class="">{!! resaltar_texto($ion->molecule, $texto) !!}</a>
-                                        </span>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endif
-
-                        <!-- Experiments -->
-                        @if (count($experiments) > 0)
-                            <h1 class="txt-white  mt-4">@lang('Experiments')</h1>
-                            <div class="row m-1">
-                                @foreach ($experiments as $experiment)
-                                    <div class="col-12 p-1">
-                                        <span class="badge badge-secondary">@lang('Experiment')
-                                            ({{ $experiment->type }})</span>
-                                        <span>
-                                            <a href="{{ route('experiments.show', ['type' => $experiment->type, 'path' => $experiment->path]) }}"
-                                                class="">{{ $experiment->path }}</a>
                                         </span>
                                     </div>
                                 @endforeach
@@ -123,7 +104,7 @@
                                 @endif
                             @endforeach
 
-                            <h1 class="txt-white mt-4">Membranes</h1>
+                            <h1 class="txt-white mt-4">Simulations <small class="text-muted">({{ count($trayectorias) }})</small></h1>
                             <div class="row m-1">
                                 <div class="col">
                                     <p>Hide by number of lipids: </p>
@@ -142,7 +123,7 @@
                                     @endphp
                                 </div>
                             </div>
-                            <div class="row m-1">
+                            <div class="row m-1" data-limit="20">
                                 @foreach ($trayectorias as $trayectoria)
                                     @php
                                         $membrana =  $trayectoria->membrana;
@@ -153,10 +134,10 @@
                                         $numLipids = count($lipidsInMembrane);
                                         ?>
 
-                                        <!--  <p class="d-flex justify-content-between"> -->
-                                        <div class="col-12 p-1 num{{ $numLipids }}">
+                                     <div class="col-12 col-md-6 col-lg-4 p-1 limit-item">
+                                        <div class="num{{ $numLipids }}">
 
-                                            <span class="badge badge-secondary">Membrane </span>
+                                            <span class="badge badge-secondary">Membrane composition</span>
                                             <span>
                                                 <a href="{{ route('new_advanced_search.results') . '?membranas_operador[1]=or&membranas[1]=' . $membrana->id }}"
                                                     class=""> {!! resaltar_texto($membrana->lipid_names_l1, $texto) !!} <=> {!! resaltar_texto($membrana->lipid_names_l2, $texto) !!} =>
@@ -164,20 +145,59 @@
                                                 </a>
                                             </span>
                                         </div>
+                                    </div>
                                     @endif
                                 @endforeach
                             </div>
                         @endif
 
-
-
-
+                        <!-- Experiments -->
+                        @if (count($experiments) > 0)
+                            <h1 class="txt-white  mt-4">@lang('Experiments') <small class="text-muted">({{ count($experiments) }})</small></h1>
+                            <div class="row m-1" data-limit="20">
+                                @foreach ($experiments as $experiment)
+                                    <div class="col-12 col-md-6 col-lg-4 p-1 limit-item">
+                                        <span class="badge badge-secondary">@lang('Experiment')
+                                            ({{ $experiment->type }})</span>
+                                        <span>
+                                            <a href="{{ route('experiments.show', ['type' => $experiment->type, 'path' => $experiment->path]) }}"
+                                                class="">{{ $experiment->path }}</a>
+                                        </span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <script>
+        // Pseudo-pagination: hide items beyond data-limit and add "Show more" button
+        document.querySelectorAll('[data-limit]').forEach(function(container) {
+            var limit = parseInt(container.dataset.limit, 10);
+            var items = container.querySelectorAll('.limit-item');
+            if (items.length <= limit) return;
+
+            // Hide overflow items
+            for (var i = limit; i < items.length; i++) {
+                items[i].classList.add('d-none');
+            }
+
+            // Create "Show more" button
+            var btn = document.createElement('button');
+            var remaining = items.length - limit;
+            btn.className = 'btn btn-sm btn-outline-light mt-2 mb-2';
+            btn.textContent = 'Show more (' + remaining + ' more)';
+            btn.addEventListener('click', function() {
+                for (var i = limit; i < items.length; i++) {
+                    items[i].classList.remove('d-none');
+                }
+                btn.style.display = 'none';
+            });
+            container.appendChild(btn);
+        });
+
         // pulsas uno y marca el estado del gemelo
         function PressCheck(aa) {
 
