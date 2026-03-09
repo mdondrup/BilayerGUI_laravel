@@ -61,7 +61,7 @@
                                         <span class="badge badge-secondary">@lang('Lípido') </span>
                                         <span>
                                             <a href="{{ route('lipid.show', $lipido->id) }}"
-                                                class="">{!! resaltar_texto($lipido->molecule, $texto) !!}</a>
+                                                class="" title="{{ $lipido->displayTitle() }}">{{ $lipido->displayName() }}</a>
                                         </span>
                                     </div>
                                 @endforeach
@@ -78,7 +78,7 @@
                                         <span class="badge badge-secondary">@lang('Ion') </span>
                                         <span>
                                             <a href="{{ route('new_advanced_search.results') . '?iones_operador[1]=or&iones[1]=' . $ion->molecule }}"
-                                                class="">{!! resaltar_texto($ion->molecule, $texto) !!}</a>
+                                                class="" title="{{ $ion->displayTitle() }}">{{ $ion->displayName() }}</a>
                                         </span>
                                     </div>
                                 @endforeach
@@ -137,11 +137,10 @@
                                      <div class="col-12 col-md-6 col-lg-4 p-1 limit-item">
                                         <div class="num{{ $numLipids }}">
 
-                                            <span class="badge badge-secondary">Membrane composition</span>
+                                            <span class="badge badge-secondary">Simulation</span>
                                             <span>
-                                                <a href="{{ route('new_advanced_search.results') . '?membranas_operador[1]=or&membranas[1]=' . $membrana->id }}"
-                                                    class=""> {!! resaltar_texto($membrana->lipid_names_l1, $texto) !!} <=> {!! resaltar_texto($membrana->lipid_names_l2, $texto) !!} =>
-                                                        {!! resaltar_texto($membrana->lipid_number_l1, $texto) !!} <=> {!! resaltar_texto($membrana->lipid_number_l2, $texto) !!}
+                                                <a href="{{ route('trayectorias.show', $trayectoria->id) }}"
+                                                    class="" title="{{ $trayectoria->displayTitle() }}"> {{ $trayectoria->displayName() }}
                                                 </a>
                                             </span>
                                         </div>
@@ -161,7 +160,7 @@
                                             ({{ $experiment->type }})</span>
                                         <span>
                                             <a href="{{ route('experiments.show', ['type' => $experiment->type, 'path' => $experiment->path]) }}"
-                                                class="">{{ $experiment->path }}</a>
+                                                class="" title="{{ $experiment->displayTitle() }}">{{ $experiment->displayName() }}</a>
                                         </span>
                                     </div>
                                 @endforeach
