@@ -49,9 +49,39 @@ class Lipido extends AppModel
         );
     }
 
+    public function synonyms()
+    {
+        return $this->hasMany(LipidSynonym::class, 'lipid_id', 'id');
+    }
+
+    public function cross_references()
+    {
+        return $this->hasMany(LipidCrossReference::class, 'lipid_id', 'id');
+    }
+
     public function getInchiKeyAttribute()
     {
         $inchiKeyProperty = $this->properties()->where('properties.name', 'InChIKey')->first();
         return $inchiKeyProperty?->value;
+    }
+    
+    public function getShortestSynonym()
+    {
+        $shortestSynonym = $this->synonyms()->orderByRaw('LENGTH(synonym) ASC')->first();
+        return $shortestSynonym?->synonym;
+    }
+
+
+
+    public function displayName()
+    {
+        return ($this->molecule ?? $this->short_name ?? $this->name ?? 'Unknown Lipid '. $this->id. ' (ID)') . 
+        ($this->getShortestSynonym() ? ' (' . $this->getShortestSynonym() . ')' : ' ('.$this->name.')');
+    }
+
+    public function displayTitle()
+    {
+        return "Lipid: " . $this->name;
+
     }
 }
