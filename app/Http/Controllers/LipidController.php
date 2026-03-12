@@ -72,7 +72,11 @@ class LipidController extends Controller
                 ->sortBy('molecule')
                 ->values();
             // Pass a flag to the view so it knows not to render pagination controls
-            return view('lipids.list', ['lipids' => $lipids, 'showAll' => true, 'embed' => $embed]);
+            if ($embed) {
+                return view('lipids.embed', ['lipids' => $lipids, 'showAll' => true]);
+            } else {    
+                return view('lipids.list', ['lipids' => $lipids, 'showAll' => true]);
+            }
         }
 
         
@@ -82,13 +86,15 @@ class LipidController extends Controller
         }
         $lipids = Lipido::orderBy('molecule', 'asc')->paginate($itemsPerPage);
 
-
+        if ($embed) {
+            return view('lipids.embed', ['lipids' => $lipids, 'showAll' => false]);
+        } else {    
         return view('lipids.list', [
             'lipids' => $lipids, 
             'showAll' => false, 
-            'embed' => $embed  ]);
+             ]);
+        }
     }
-
     /**
      * Show the data for a given lipid profile.
      */
