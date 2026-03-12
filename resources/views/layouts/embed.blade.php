@@ -1,4 +1,10 @@
 <!-- This is the embed layout for when the page is embedded in an iframe. -->
-
-     <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
-	@yield('content')
+<!DOCTYPE html>
+<html>     
+<head>
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
+</head>
+<body>
+    @yield('content')
+</body>
+</html>
