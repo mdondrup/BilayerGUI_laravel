@@ -68,7 +68,7 @@
                         <li role="presentation" class="nav-item">
                             <button class="nav-link" id="homeCrossReferences-tab"
                                 data-bs-toggle="tab" data-bs-target="#homeCrossReferences"
-                                type="button" role="tab">Cross references</button>                          
+                                type="button" role="tab">Experiments</button>                          
                         </li>
                         @endif
 
