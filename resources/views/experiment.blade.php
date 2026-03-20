@@ -60,7 +60,7 @@
                         <!-- Add cross reference links to related simulations if available -->
                         @if (! empty($related_simulations)) 
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="related-tab" data-bs-toggle="tab" data-bs-target="#related" type="button" role="tab">Cross references</button>
+                            <button class="nav-link" id="related-tab" data-bs-toggle="tab" data-bs-target="#related" type="button" role="tab">Simulations</button>
                         </li>
                         @endif
                     </ul>
