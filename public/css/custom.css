@@ -305,8 +305,7 @@ font-weight: bold;
   background-color: rgb(255 255 255 / 28%);
 
 }
-.nav-tabs-conf{
-}
+
 
 
 .bg-mole{
@@ -370,11 +369,7 @@ position: relative;
   color: #c33331;
 }
 
-.jmol_zorder div:nth-child(2){
- z_order: 0!important;
 
-
-}
 
 .expandCompare{
   width: fit-content;
@@ -443,9 +438,7 @@ margin-top: 30px;
 padding-left: 30px;
 
 }
-.cardlipids{
 
-}
 .cardlipids h5{
   border-bottom-style: solid;
   border-bottom-width: 1px;
