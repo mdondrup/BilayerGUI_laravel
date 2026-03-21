@@ -1,4 +1,4 @@
-@extends((isset($embed) && $embed) ? 'layouts.embed' : 'layouts.app')
+@extends('layouts.app')
 
 @section('content')
     <!-- Main page -->
@@ -25,7 +25,6 @@
                                         
                                         <td>
                                             <a href="{{ route('lipid.show', $lipid->id) }}" 
-                                            @if(isset($embed) && $embed) target="_blank" @endif
                                             class="btn btn-sm btn-primary">View</a>
                                         </td>
                                     </tr>

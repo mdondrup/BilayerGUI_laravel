@@ -26,7 +26,7 @@ NMRLipids Databank -- A portal for visualization of molecular simulations
 * Optionally: configure server host and port (default: localhost9000)
 * Create the database: ``` php artisan migrate ```
 * To create a link to display resources in ```storage/``` : ``` php artisan storage:link ```
-* This will set up a system with a MySQL database with the NMRLipids schema (default db name laravel), and empty tables (and a schema not in sync with the current DB export).
+* This will set up a system with a MySQL database with the NMRLipids schema (default db name laravel), and empty tables.
 * ``` npm run build ``` to set up resources managed by Vite
 
 
@@ -38,7 +38,7 @@ NMRLipids Databank -- A portal for visualization of molecular simulations
 
 * You can use Laravel Sail to set up Docker integration
 * Clone the repository
-* You need only composer, and Docker on the target machine
+* You need only composer, and Docker on the hosting computer
 * Create a customized ``` .env ``` file
 * start Docker
 * Follow the instructions to install and run Sail here https://laravel.com/docs/12.x/sail

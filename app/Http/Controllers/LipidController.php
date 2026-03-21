@@ -37,7 +37,7 @@ class LipidController extends Controller
             'molecularFormula' => $entity['properties_flat']['molecularFormula'] ?? null,
             'molecularWeight' => $entity['properties_flat']['MolecularWeight'] ?? null,
             'smiles' => $entity['properties_flat']['smiles'] ?? null,
-            'alternateName' => $entity['properties_flat']['alternateName'] ?? null,
+            'alternateName' => $entity['synonyms'] ?? null,
             'description' => $entity['properties_flat']['description'] ?? null,
             'image' => $entity['properties_flat']['image'] ?? null,
             'sameAs' => $entity['properties_flat']['sameAs'] ?? null,
@@ -72,7 +72,11 @@ class LipidController extends Controller
                 ->sortBy('molecule')
                 ->values();
             // Pass a flag to the view so it knows not to render pagination controls
-            return view('lipids.list', ['lipids' => $lipids, 'showAll' => true, 'embed' => $embed]);
+            if ($embed) {
+                return view('lipids.embed', ['lipids' => $lipids, 'showAll' => true]);
+            } else {    
+                return view('lipids.list', ['lipids' => $lipids, 'showAll' => true]);
+            }
         }
 
         
@@ -82,13 +86,15 @@ class LipidController extends Controller
         }
         $lipids = Lipido::orderBy('molecule', 'asc')->paginate($itemsPerPage);
 
-
+        if ($embed) {
+            return view('lipids.embed', ['lipids' => $lipids, 'showAll' => false]);
+        } else {    
         return view('lipids.list', [
             'lipids' => $lipids, 
             'showAll' => false, 
-            'embed' => $embed  ]);
+             ]);
+        }
     }
-
     /**
      * Show the data for a given lipid profile.
      */
@@ -125,7 +131,10 @@ class LipidController extends Controller
         if (isset($des)) {
             $lipids_data['description'] = $des;
     };       
-        
+        $lipids_data['synonyms'] = DB::table('lipids_synonyms')
+            ->where('lipid_id', $lipid_id)
+            ->pluck('synonym')
+            ->toArray();
         // get additional properties if needed
         $properties = DB::table('lipid_properties')
             ->join('properties', 'lipid_properties.property_id', '=', 'properties.id')
@@ -134,7 +143,14 @@ class LipidController extends Controller
             ->where('name', '!=', 'description')
             ->get();
         // If description is part of properties, move it to main lipid data
-        
+        $descriptionProperty = $properties->firstWhere('name', 'description');
+        if ($descriptionProperty) {
+            $lipids_data['description'] = $descriptionProperty->value;
+            $properties = $properties->filter(function ($prop) {
+                return $prop->name !== 'description';
+            });
+        }
+
 
         // Move description from properties to main lipid data if exists
         

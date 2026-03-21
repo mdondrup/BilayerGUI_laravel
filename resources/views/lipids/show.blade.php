@@ -6,14 +6,13 @@
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-lg-10">
-                    <hr class="divider divider-light" />
-                    <h3 class="text-white text-center mt-0">{{ $entity['name'] }}</h3>
-                    <?php 
+                    <h3 class="text-white text-center mt-0">Lipid {{ $entity['name'] }}</h3>
+                    @php
                         $e2ntity = $entity ?? [];
                         $properties = $entity['properties'] ?? []; 
                         $cross_refs = $entity['cross_references'] ?? [];
-
-                    ?>
+                        $synonyms = $entity['synonyms'] ?? [];
+                    @endphp
 
                     <!-- Bootstrap Tabs -->
                     <ul class="nav nav-pills justify-content-start" id="lipidTab" role="tablist">
@@ -28,6 +27,11 @@
                             <button class="nav-link" id="crossrefs-tab" data-bs-toggle="tab" data-bs-target="#crossrefs" type="button" role="tab">Cross References</button>
                         </li>
                         @endif
+                        @if(!empty($synonyms))
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="synonyms-tab" data-bs-toggle="tab" data-bs-target="#synonyms" type="button" role="tab">Synonyms</button>
+                        </li>
+                        @endif
                     </ul>
 
                     <!-- Tab Contents -->
@@ -35,27 +39,60 @@
                         
                         <!-- Overview -->
                         <div class="tab-pane fade show active" id="overview" role="tabpanel">
-                            <ul class="mb-0" style="font-size:1.1em;">
-                                @foreach ($entity as $key => $value)
-                                    @if($key === 'jsonLd' || 
-                                    $key === 'id' || 
-                                    $key === 'properties' || 
-                                    $key === 'cross_references' ||
-                                    $key === 'properties_flat')
-                                     <!-- Skip certain keys --> @continue @endif
-                                    <li><strong>{{ ucfirst($key) }}:</strong> {{ $value }}</li>
-                                @endforeach
-                            </ul>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-sm table-dark mb-0">
+                                    <tbody>
+                                        @foreach ($entity as $key => $value)
+                                            @if($key === 'jsonLd' ||
+                                            $key === 'id' ||
+                                            $key === 'properties' ||
+                                            $key === 'cross_references' ||
+                                            $key === 'synonyms' ||
+                                            $key === 'properties_flat')
+                                             @continue @endif
+                                            <tr>
+                                                <th scope="row">{{ ucfirst($key) }}</th>
+                                                <td>{{ $value }}</td>
+                                            </tr>
+                                        @endforeach
+                                        @if(!empty($entity['properties_flat']['image']))
+                                            <tr>
+                                                <th scope="row">Image</th>
+                                                <td style="max-width: 200px; overflow: scroll; background-color: #ffffff;">
+                                                    <img src="{{ $entity['properties_flat']['image'] }}" alt="Lipid Image" class="img-fluid" style="background-color: #ffffff; max-width: 200px;">
+                                                </td>
+                                            </tr>
+                                        @endif
+                                        <tr>
+                                            <th scope="row">Used in: </th>
+                                            <td><a href=" {{ route('search.results', ['text' => '"' . $entity['molecule'] . '"']) }} " class="text-white-75">Search Experiments/Simulations</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
                         <!-- Properties -->
                         <div class="tab-pane fade" id="properties" role="tabpanel">
                             @if(!empty($properties))
-                                <ul style="font-size:1.1em;">
-                                    @foreach ($properties as $x)
-                                        <li><strong>{{ $x->name }}:</strong> {{ $x->value }}{{ $x->unit }}</li>
-                                    @endforeach
-                                </ul>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-sm table-dark">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Property</th>
+                                                <th scope="col">Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($properties as $x)
+                                                <tr>
+                                                    <td>{{ $x->name }}</td>
+                                                    <td>{{ $x->value }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             @else
                                 <p>No properties available.</p>
                             @endif
@@ -64,24 +101,42 @@
                         <!-- Cross References -->
                         @if(!empty($cross_refs))
                         <div class="tab-pane fade" id="crossrefs" role="tabpanel">
-                            <ul style="font-size:1.1em;">
-                                @foreach ($cross_refs as $xref)
-                                    <li>
-                                        <strong>{{ $xref->database ?? 'Database' }}:</strong>
-                                        @if(!empty($xref->url))
-                                            <a href="{{ $xref->url }}" target="_blank" class="text-white-75">{{ $xref->external_id ?? '' }}</a>
-                                        @else
-                                            <!-- Link to identifiers.org if no URL is provided -->
-                                            <a href="https://identifiers.org/{{ $xref->database }}/{{ $xref->external_id }}" target="_blank" class="text-white-75">{{ $xref->external_id ?? '' }}</a>
-
-                                         
-                                        @endif
-                                    </li>
-                                @endforeach
-                            </ul>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-sm table-dark">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Database</th>
+                                            <th scope="col">External ID</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($cross_refs as $xref)
+                                            <tr>
+                                                <td>{{ $xref->database ?? 'Database' }}</td>
+                                                <td>
+                                                    @if(!empty($xref->url))
+                                                        <a href="{{ $xref->url }}" target="_blank" class="text-white-75">{{ $xref->external_id ?? '' }}</a>
+                                                    @else
+                                                        <a href="https://identifiers.org/{{ urlencode($xref->database) }}/{{ urlencode($xref->external_id) }}" target="_blank" class="text-white-75">{{ $xref->external_id ?? '' }}</a>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         @endif
-
+                        <!-- Synonyms -->
+                        @if(!empty($synonyms))
+                        <div class="tab-pane fade" id="synonyms" role="tabpanel">
+                                <ul>     
+                                        @foreach ($synonyms as $syn)
+                                            <li>{!! $syn !!}</li>
+                                        @endforeach
+                                </ul>
+                        </div>
+                        @endif
                     </div>
                     <div style="margin-top:1rem; flex:1 0 auto;">
                         @include('bioschemas.json_pre', ['entity' => $entity]) 
