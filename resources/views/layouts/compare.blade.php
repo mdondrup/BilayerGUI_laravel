@@ -20,7 +20,7 @@ foreach ($allSession as $key => $value) {
                     src="{{ asset('storage/images/supepmem_w_letras.png') }}" alt="">-->
                     <?php //{{ config('app.name') }}
                     ?>
-                    NMR lipids Databank
+                    FAIRMD Lipids Databank
 
                     <div class="d-none">
                         <span>Versión: {{ config('app.version') }}</span>

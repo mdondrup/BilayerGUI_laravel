@@ -33,8 +33,9 @@ use App\Http\Controllers\StatisticsController;
             <div class="row gx-4 gx-lg-5  align-items-center justify-content-center text-center">
                 <div class="col-lg-8 align-self-end">
                     <h2 class="text-white font-weight-bold">
-                        <img class="img-fluid" alt="FAIRMD Lipids Databank Logo"
-                            src="{{ asset('storage/images/nmr_w_letras.png') }}" alt="">
+                        <img class="img-fluid d-block mx-auto" alt="FAIRMD Lipids Databank Logo"
+                            src="{{ asset('storage/images/fairmd_w_letras.png') }}" alt=""
+                            style="max-width: 75%; padding: 2.5rem 1.5rem 0.75rem;">
                           (version {{ config('app.version') }})
                     </h2>
                 </div>
