@@ -37,13 +37,13 @@ p {
 }
 
 .masthead {
-        padding: 15rem 1rem 10rem !important;
+        padding: 5rem 1rem 10rem !important;
 }
 
 /* Navigation adjustments for mobile */
 @media (max-width: 1089px) {
     .masthead {
-        padding: 15rem 1rem 10rem !important;
+        padding: 5rem 1rem 10rem !important;
     }
 
     .navbar {
