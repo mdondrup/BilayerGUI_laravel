@@ -10,6 +10,7 @@ html.welcome, .welcome body {
     min-height: 100vh;
     height: 100%;
     margin: 0px;
+    overscroll-behavior: none;
 }
 
 main {
@@ -76,7 +77,9 @@ body{
     font-family: 'Nunito', sans-serif;
     font-weight: 200;
     height: 100vh;
-    color: white;}
+    color: white;
+    overscroll-behavior: none;
+}
 
 /* Colores alternos tabla vertical*/
 /*
