@@ -16,8 +16,8 @@ foreach ($allSession as $key => $value) {
         <nav id="mainNav" class="navbar navbar-expand-md navbar-light ">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img class="img-fluid" style="width:225px" alt="Responsive image"
-                        src="{{ asset('storage/images/nmr_w_letras.png') }}" alt="">
+                    <img class="img-fluid" style="width:225px" alt="FAIRMD Lipids Databank"
+                        src="{{ asset('storage/images/fairmd_w_letras.png') }}">
                     <?php //{{ config('app.name') }}
                     ?>
                     <div class="d-none">

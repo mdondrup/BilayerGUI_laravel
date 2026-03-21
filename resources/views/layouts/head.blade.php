@@ -12,7 +12,7 @@
     <meta property="og:description" content="FAIRMD Lipids Databank">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:locale" content="en_US">
-    <meta property="og:image" content="{{ url('storage/images/nmr_w_letras.png') }}">
+    <meta property="og:image" content="{{ url('storage/images/fairmd_w_letras.png') }}">
 
         <!-- Include bioschemas for the data catalog only in production-->
      {{-- app.env is set in config/app.php and can be overridden in .env --}}
