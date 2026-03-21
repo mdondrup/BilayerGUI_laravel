@@ -10938,7 +10938,7 @@ hr.divider-light {
 }
 
 header.masthead {
-  padding-top: 10rem;
+  padding-top: 4.5rem;
   /*padding-bottom: calc(10rem - 4.5rem);*
   /*background: linear-gradient(to bottom, rgba(81, 214, 256, 0.8) 0%, rgba(0, 122, 133, 0.8) 100%), url("/storage/images/bg_02.jpg");*/
   background: linear-gradient(to bottom, rgba(81, 214, 256, 0.8) 0%, rgba(0, 122, 133, 0.8) 100%);
@@ -10947,8 +10947,11 @@ header.masthead {
   background-attachment: scroll;
   background-size: cover;
   height: 100%;
-  flex: 1 0 auto;
-  min-height: 41rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 header.masthead h1, header.masthead .h1 {
@@ -10957,15 +10960,15 @@ header.masthead h1, header.masthead .h1 {
 @media (min-width: 992px) {
   header.masthead {
     height: 100%;
-    min-height: 50rem;
-    padding-top: 4.5rem;
-    padding-bottom: 4.5rem;
+    min-height: 100vh;
+    padding-top: 0;
+    padding-bottom: 1.5rem;
   }
   header.masthead p {
     font-size: 1.15rem;
   }
   header.masthead h1, header.masthead .h1 {
-    font-size: 3rem;
+    font-size: 1rem;
   }
 }
 

@@ -26,18 +26,16 @@ use App\Http\Controllers\StatisticsController;
         </div>
     </nav>
 
-<div class="container-fluid p-0" style="display: flex; flex-direction: column; min-height: 100vh;">
+<div class="container-fluid p-0" style="display: flex; flex-direction: column; min-height: 50vh;">
     <!-- Masthead-->
     <header class="masthead">
-        <div class="container" style="max-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 1em; margin-bottom: 1em;">
+        <div class="container" style="width: 100; margin-bottom: 1em;">
             <div class="row gx-4 gx-lg-5  align-items-center justify-content-center text-center">
                 <div class="col-lg-8 align-self-end">
-                    <h2 class="text-white font-weight-bold">
                         <img class="img-fluid d-block mx-auto" alt="FAIRMD Lipids Databank Logo"
                             src="{{ asset('storage/images/fairmd_w_letras.png') }}" alt=""
-                            style="max-width: 75%; padding: 2.5rem 1.5rem 0.75rem;">
-                          (version {{ config('app.version') }})
-                    </h2>
+                            style="max-width: 75%; padding: 0.5rem 1.5rem 0.75rem;">
+                         <h3> (version {{ config('app.version') }})</h3>
                 </div>
                 @if(config('app.debug'))
                 <div class="col-lg-8 alert alert-warning" style="display: flex; flex-direction: column; padding: 1em;" role="alert">
