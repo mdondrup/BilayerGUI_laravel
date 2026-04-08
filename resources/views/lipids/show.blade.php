@@ -35,12 +35,12 @@
                     </ul>
 
                     <!-- Tab Contents -->
-                    <div class="tab-content bg-dark text-white p-4 rounded-bottom" id="lipidTabContent">
+                    <div class="tab-content text-white p-4 rounded-bottom" id="lipidTabContent">
                         
                         <!-- Overview -->
                         <div class="tab-pane fade show active" id="overview" role="tabpanel">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-sm table-dark mb-0">
+                                <table class="table table-bordered table-striped table-sm table-glass table-hover mb-0">
                                     <tbody>
                                         @foreach ($entity as $key => $value)
                                             @if($key === 'jsonLd' ||
@@ -55,6 +55,12 @@
                                                 <td>{{ $value }}</td>
                                             </tr>
                                         @endforeach
+                                        <tr>
+                                            <th scope="row">Used in: </th>
+                                            <td><a href="{{ route('search.results', ['text' => '"' . $entity['molecule'] . '"']) }}" class="btn btn-success btn-sm">Browse Experiments/Simulations</a>
+                                             <a href="{{ route('new_advanced_search.results', ['lipidos[1]' => '' . $entity['molecule'] . '', 'sort' => 'op_quality_total', 'direction' => 'desc', 'lipidos_operador[1]' => 'and']) }}" class="btn btn-primary btn-sm">Browse Simulations with Quality</a></td>
+
+                                        </tr>
                                         @if(!empty($entity['properties_flat']['image']))
                                             <tr>
                                                 <th scope="row">Image</th>
@@ -64,9 +70,10 @@
                                             </tr>
                                         @endif
                                         <tr>
-                                            <th scope="row">Used in: </th>
-                                            <td><a href=" {{ route('search.results', ['text' => '"' . $entity['molecule'] . '"']) }} " class="text-white-75">Search Experiments/Simulations</a></td>
+                                            <th scope="row">Show on GitHub</th>
+                                            <td>{!! renderGitHubURL('Molecules/membrane/' . $entity['molecule']) !!}</td>
                                         </tr>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -76,7 +83,7 @@
                         <div class="tab-pane fade" id="properties" role="tabpanel">
                             @if(!empty($properties))
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-striped table-sm table-dark">
+                                    <table class="table table-bordered table-striped table-sm table-glass table-hover">
                                         <thead>
                                             <tr>
                                                 <th scope="col">Property</th>
@@ -102,7 +109,7 @@
                         @if(!empty($cross_refs))
                         <div class="tab-pane fade" id="crossrefs" role="tabpanel">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-sm table-dark">
+                                <table class="table table-bordered table-striped table-sm table-glass table-hover">
                                     <thead>
                                         <tr>
                                             <th scope="col">Database</th>
@@ -117,7 +124,7 @@
                                                     @if(!empty($xref->url))
                                                         <a href="{{ $xref->url }}" target="_blank" class="text-white-75">{{ $xref->external_id ?? '' }}</a>
                                                     @else
-                                                        <a href="https://identifiers.org/{{ urlencode($xref->database) }}/{{ urlencode($xref->external_id) }}" target="_blank" class="text-white-75">{{ $xref->external_id ?? '' }}</a>
+                                                        <a href="https://identifiers.org/{{ $xref->database }}/{{ $xref->external_id }}" target="_blank" class="text-white-75">{{ $xref->external_id ?? '' }}</a>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -147,10 +154,7 @@
 
         </div>
     </div>
-    <div style="display: block; height: 200%;">
-        &nbsp;
-    &nbsp;
-    </div>
+    
 
 
 

@@ -1,21 +1,7 @@
 @extends('layouts.app')
 
-<style>
-    .filters-list {
-        list-style-type: none;
-        padding-left: 0;
-    }
-    .filters-list li {
-        display: inline-block;
-        margin-right: 10px;
-        background-color: #343a40;
-        padding: 5px 10px;
-        border-radius: 5px;
-    }
-</style>
-
 @section('content')
-   <div class="container">
+   <div class="container advanced-results-page">
         <div class="row justify-content-center">
             <div class="">
                 <h3 class="text-white text-center">Simulation Search Results</h3>
@@ -38,13 +24,13 @@
                     <p class="text-white text-center">No results found.</p>
                 @else
                 <div class="text-white text-center table-responsive">
-                    <table class="table table-bordered table-striped table-sm table-dark">
+                    <table class="table table-bordered table-striped table-sm table-glass table-hover">
                         <thead>
                             <tr>
                                 @php
                                     $sortableColumns = [
                                         'id' => 'ID',
-                                        'temperature' => 'Temperature',
+                                        'temperature' => 'Temperature (K)',
                                         'length' => 'Length (ps)',
                                         'area_per_lipid' => 'Area per lipid',
                                         'op_quality_total' => 'OP Quality: total',
@@ -130,7 +116,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('trayectorias.show', $trayectoria->id) }}" class="btn btn-sm btn-primary">View</a>
+                                        <a href="{{ route('trayectorias.show', $trayectoria->id) }}" class="btn btn-sm btn-primary" title="{{ $trayectoria->displayTitle() }}">View</a>
                                
                                     </td>
                                 </tr>

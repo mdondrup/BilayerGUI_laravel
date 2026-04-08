@@ -46,7 +46,18 @@ Route::get('filesff/{id}/{file}', 'App\Http\Controllers\FileController@downloadf
 
 Route::get('/filtro/{codigo}', 'App\Http\Controllers\FiltrosController@html')->name('filtros.html');
 Route::get('/filtro-busqueda-avanzada/{codigo}/{numero}', 'App\Http\Controllers\FiltrosController@htmlBusquedaAvanzada')->name('filtros.html_busqueda_avanzada');
-Route::get('/trajectories/{trayectoria_id}', 'App\Http\Controllers\TrayectoriasController@show')->name('trayectorias.show');
+
+# Routes for trajectories and simulations, both URLs point to the same controller method
+Route::get('/trajectories/{trayectoria_id}', 'App\Http\Controllers\TrayectoriasController@show')
+->where('trayectoria_id', '[0-9]+')
+->name('trayectorias.show');
+Route::get('/simulations/{trayectoria_id}', 'App\Http\Controllers\TrayectoriasController@show')
+->where('trayectoria_id', '[0-9]+')
+->name('simulations.show');
+
+Route::get('/trajectories', 'App\Http\Controllers\TrayectoriasController@list')->name('trayectorias.list');
+Route::get('/simulations', 'App\Http\Controllers\TrayectoriasController@list')->name('simulations.list');
+
 
 Route::get('/filtro-busqueda-avanzada-selects/{codigo}/{numero}', 'App\Http\Controllers\FiltrosController@htmlBusquedaAvanzadaSelects')->name('filtros.html_busqueda_avanzada_selects');
 
@@ -60,7 +71,7 @@ Route::get('/search/basic', 'App\Http\Controllers\SearchController@basic')->name
 Route::get('/sitemap.xml', [SitemapXmlController::class, 'sitemap']);
 
 // Routes for advanced search autocomplete fields
-Route::get('lipids', function (Illuminate\Http\Request  $request) {
+Route::get('lipids/autocomplete', function (Illuminate\Http\Request  $request) {
     $term = $request->term ?: ''; //  <- esto depende del js que lo manda asi
     $tags = App\Lipido::where('molecule', 'LIKE', '%' . $term . '%')
         ->orderBy('molecule', 'asc')
@@ -71,7 +82,7 @@ Route::get('lipids', function (Illuminate\Http\Request  $request) {
         $valid_tags[] = ['id' => $id, 'molecule' => $tag];
     }
     return $valid_tags;
-});
+})->name('lipids.autocomplete');
 
 
 /* Implementing a route for lipids

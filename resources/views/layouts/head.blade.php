@@ -1,10 +1,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script>
+    // Apply high-contrast class early to prevent flash of unstyled content
+    (function(){var s=localStorage.getItem('high-contrast');if(s==='on')document.documentElement.classList.add('high-contrast');else if(s==='off')document.documentElement.classList.add('no-high-contrast');})();
+    </script>
     
     <meta name="description" content="FAIRMD Lipids Databank" />
     <meta name="author" content="NMRLipids Consortium" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="doi-concurrent-fetches" content="{{ config('app.doi_concurrent_fetches', 10) }}" />
+    <meta name="doi-max-retries" content="{{ config('app.doi_max_retries', 3) }}" />
 
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="FAIRMD Lipids Databank">
@@ -12,7 +18,7 @@
     <meta property="og:description" content="FAIRMD Lipids Databank">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:locale" content="en_US">
-    <meta property="og:image" content="{{ url('storage/images/nmr_w_letras.png') }}">
+    <meta property="og:image" content="{{ url('storage/images/fairmd_w_letras.png') }}">
 
         <!-- Include bioschemas for the data catalog only in production-->
      {{-- app.env is set in config/app.php and can be overridden in .env --}}
@@ -41,7 +47,7 @@
 
     <link rel="stylesheet" href="{{ asset('css/welcome-mobile.css') }}">
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/styles.css') }}?v={{ config('app.version', '1') }}" rel="stylesheet" />
     <!--  SLIDER -->
     <link href="{{ asset('css/multislider.css') }}" rel="stylesheet" />
 
@@ -85,37 +91,5 @@
     @vite(['resources/js/app.js'])
    
      
-
-<style>
-    /* Dark pill tabs */
-    .nav-pills .nav-link {
-        color: #ddd;
-        background-color: transparent;
-        border-radius: 50rem;
-        margin: 0 0.3rem;
-        transition: background-color 0.2s ease, color 0.2s ease;
-    }
-
-    .nav-pills .nav-link:hover {
-        color: #fff;
-        background-color: rgba(255, 255, 255, 0.15);
-    }
-
-    .nav-pills .nav-link.active {
-        color: #fff;
-        background-color: #0d6efd; /* Bootstrap primary */
-        font-weight: 600;
-        box-shadow: 0 0 10px rgba(13,110,253,0.5);
-    }
-
-    /* Tab content styling */
-    .tab-content {
-        background-color: #212529; /* Bootstrap dark */
-        border-radius: 0 0 0.5rem 0.5rem;
-        margin-top: 1rem;
-        padding: 1.5rem;
-    }
-</style>
-
 
 </head>

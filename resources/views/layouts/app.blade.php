@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @include('layouts.head')
-<?php
+@php
 $allSession = Session::all();
 $numSelected = 0;
 foreach ($allSession as $key => $value) {
@@ -9,80 +9,47 @@ foreach ($allSession as $key => $value) {
         $numSelected = $numSelected + 1;
     }
 }
-?>
+@endphp
 
 <body>
     <div id="app" class="bg-datos" style="height:auto;overflow-x:hidden; ">
-        <nav id="mainNav" class="navbar navbar-expand-md navbar-light ">
-            <div class="container">
+        <nav id="mainNav" class="navbar navbar-expand-xl navbar-light fixed-top py-3">
+            <div class="container px-4 px-lg-5">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img class="img-fluid" style="width:225px" alt="Responsive image"
-                        src="{{ asset('storage/images/nmr_w_letras.png') }}" alt="">
-                    <?php //{{ config('app.name') }}
-                    ?>
-                    <div class="d-none">
-                        <span>Versión: {{ config('app.version') }}</span>
-                        <span>Entorno: {{ config('app.env') }}</span>
-                    </div>
+                    <img class="img-fluid fairmd-logo" style="min-height: 20px; max-height: 45px;" alt="FAIRMD Lipids Databank"
+                        src="{{ asset('storage/images/fairmd_w_letras.png') }}">
+                   
+                    
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="{{ __('Toggle navigation') }}">
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse"
+                    data-nav-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                    aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if ($numSelected > 0)
-                                <!--<li class="nav-item">
-                                <a class="nav-link" href="{{ route('new_advanced_search.compare') }}">{{ __('Compare') }}</a>
-                            </li>-->
-                            @endif
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                    href="{{ route('new_advanced_search.form') }}">{{ __('Advanced Search') }}</a>
-                            </li>
-                            <!--  <li class="nav-item" -->
-                                <!--/li>-->
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                        style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                        <li class="nav-item">
+                            <form action="{{ route('search.results') }}" method="get" class="d-flex align-items-center">
+                                <input type="text" name="text" class="form-control form-control-sm" placeholder="Search..." aria-label="Search" style="width: 120px;">
+                                <button class="btn btn-sm btn-outline-light ms-1" type="submit">Go</button>
+                            </form>
+                        </li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('new_advanced_search.form') }}"><span class="nav-icon" aria-hidden="true" style="font-size: 1.2rem;">⌕ </span>Advanced Search</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('lipids.list') }}"><span class="nav-icon" aria-hidden="true" style="font-size: 1.2rem;">◌</span>Lipids</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('experiments.list') }}"><span class="nav-icon" aria-hidden="true">⚗</span>Experiments</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('simulations.list') }}"><span class="nav-icon" aria-hidden="true">◈</span>Simulations</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ config('app.github_contribute_url') }}"><span class="nav-icon" aria-hidden="true">✦</span>Contribute</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/#about') }}"><span class="nav-icon" aria-hidden="true">ⓘ</span>About</a></li>
+                            <li class="nav-item d-flex align-items-center ms-2">
+                            <button class="contrast-toggle" id="contrastToggle" type="button" title="Toggle high-contrast mode" aria-label="Toggle high-contrast mode">&#9684;</button>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
 
-        <main style="padding-bottom: 140px;">
+        <main style="padding-top: 5.5rem; padding-bottom: 0rem;">
             @yield('content')
         </main>
 
