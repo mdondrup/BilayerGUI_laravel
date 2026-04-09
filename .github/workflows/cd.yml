@@ -72,7 +72,7 @@ jobs:
 
       - name: Sync application files
         run: |
-          rsync -az --delete --no-owner --no-group \
+          rsync -rlz --delete --omit-dir-times --no-owner --no-group --no-perms \
             --exclude='.git/' \
             --exclude='.github/' \
             --exclude='.env' \
