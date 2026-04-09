@@ -1,5 +1,5 @@
 [![Laravel CI](https://github.com/NMRLipids/BilayerUI_laravel/actions/workflows/ci.yml/badge.svg)](https://github.com/NMRLipids/BilayerUI_laravel/actions/workflows/ci.yml)
-
+[![Laravel CD](https://github.com/NMRLipids/BilayerUI_laravel/actions/workflows/cd.yml/badge.svg)](https://github.com/NMRLipids/BilayerUI_laravel/actions/workflows/cd.yml)
 # Synopsis
 
 NMRLipids Databank -- A portal for visualization of molecular simulations
