@@ -2,7 +2,28 @@
     <!-- fixed-bottom-->
     <!-- Grid container -->
     <div class=" p-4 w-100">
-        <!-- Section: Images -->
+        <!-- Funding -->
+        <section class="mb-3">
+            <div class="row justify-content-center mb-2">
+                <div class="col-auto d-flex align-items-center justify-content-center gap-3">
+                    <img src="{{ asset('storage/images/EN_Co-fundedbytheEU_RGB_WHITE.svg') }}" alt="Co-funded by the EU" style="max-height:64px; width:auto; display:block;">
+                    <img src="{{ asset('storage/images/TMS_eng_sh.svg') }}" alt="Co-funded by the Trond Mohn Foundation" style="max-height:75px; width:auto; display:block;">
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-auto text-center">
+                    <p class="mb-0" style="max-width:780px;">
+                        The FAIRMD project has been co-funded from the European Commission’s Horizon Europe Research and Innovation programme through the
+                        <a href="https://oscars-project.eu/" target="_blank" rel="noopener" class="text-white text-decoration-underline">OSCARS</a> project Open Call under grant agreement No.
+                        <a href="https://cordis.europa.eu/project/id/101129751" target="_blank" rel="noopener" class="text-white text-decoration-underline">101129751</a>,
+                        M.S.M. is supported by the
+                        <a href="https://mohnfoundation.no/en/" target="_blank" rel="noopener" class="text-white text-decoration-underline">Trond Mohn Foundation</a> (BFS2017TMT01)
+                    </p>
+                </div>
+            </div>
+        </section>
+        <!-- Section: Copyright -->
         <section>
 
             <div class="row justify-content-center align-items-center ">
@@ -65,8 +86,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<!-- SimpleLightbox plugin JS-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
 
 <!-- High-contrast toggle + OS preference detection -->
 <script>
