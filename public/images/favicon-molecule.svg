@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-6 -6 166 178" width="166" height="178">
+  <!-- Background rounded square -->
+  <rect x="-6" y="-6" width="166" height="178" rx="24" ry="24" fill="#0a6e78"/>
+  <!-- Bonds -->
+  <line x1="97" y1="129" x2="145" y2="157" stroke="#ffffff" stroke-width="3"/>
+  <line x1="97" y1="129" x2="49" y2="157" stroke="#ffffff" stroke-width="3"/>
+  <line x1="49" y1="49" x2="9" y2="77" stroke="#ffffff" stroke-width="3"/>
+  <line x1="145" y1="49" x2="145" y2="9" stroke="#ffffff" stroke-width="3"/>
+  <line x1="49" y1="49" x2="97" y2="77" stroke="#ffffff" stroke-width="3"/>
+  <line x1="97" y1="77" x2="97" y2="129" stroke="#ffffff" stroke-width="3"/>
+  <line x1="97" y1="77" x2="145" y2="49" stroke="#ffffff" stroke-width="3"/>
+  <!-- Atom nodes -->
+  <circle cx="49" cy="49" r="11" fill="#f4623a"/>
+  <circle cx="97" cy="77" r="14" fill="#ffffff"/>
+  <circle cx="97" cy="129" r="14" fill="#ffffff"/>
+  <circle cx="49" cy="157" r="11" fill="#f4623a"/>
+  <circle cx="9" cy="77" r="9" fill="#666666"/>
+  <circle cx="145" cy="49" r="11" fill="#f4623a"/>
+  <circle cx="145" cy="157" r="9" fill="#666666"/>
+  <circle cx="145" cy="9" r="9" fill="#666666"/>
+</svg>
