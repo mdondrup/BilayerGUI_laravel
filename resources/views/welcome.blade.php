@@ -55,7 +55,7 @@ use App\Http\Controllers\StatisticsController;
             <div class="row justify-content-center text-center pt-2 pt-lg-4">
                 <div class="col-lg-8">
                     <img class="img-fluid d-block mx-auto fairmd-logo" alt="FAIRMD Lipids Databank Logo"
-                        src="{{ asset('storage/images/fairmd_w_letras.png') }}"
+                        src="{{ asset('images/fairmd_w_letras.png') }}"
                         style="max-width: 420px; width: 100%; padding: 0.5rem 0 1rem;">
                     <p class="text-white-75" style="font-size: 0.85rem; margin-bottom: 0.25rem;">version {{ config('app.version') }}</p>
                     <p class="text-white-80 mb-4" style="max-width: 600px; margin: 0 auto; line-height: 1.6;">

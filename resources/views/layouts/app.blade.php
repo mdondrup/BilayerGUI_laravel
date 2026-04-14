@@ -17,7 +17,7 @@ foreach ($allSession as $key => $value) {
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img class="img-fluid fairmd-logo" style="min-height: 20px; max-height: 45px;" alt="FAIRMD Lipids Databank"
-                        src="{{ asset('storage/images/fairmd_w_letras.png') }}">
+                        src="{{ asset('images/fairmd_w_letras.png') }}">
                    
                     
                 </a>

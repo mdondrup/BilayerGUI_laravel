@@ -6,8 +6,8 @@
         <section class="mb-3">
             <div class="row justify-content-center mb-2">
                 <div class="col-auto d-flex align-items-center justify-content-center gap-3">
-                    <img src="{{ asset('storage/images/EN_Co-fundedbytheEU_RGB_WHITE.svg') }}" alt="Co-funded by the EU" style="max-height:64px; width:auto; display:block;">
-                    <img src="{{ asset('storage/images/TMS_eng_sh.svg') }}" alt="Co-funded by the Trond Mohn Foundation" style="max-height:75px; width:auto; display:block;">
+                    <img src="{{ asset('images/EN_Co-fundedbytheEU_RGB_WHITE.svg') }}" alt="Co-funded by the EU" style="max-height:64px; width:auto; display:block;">
+                    <img src="{{ asset('images/TMS_eng_sh.svg') }}" alt="Co-funded by the Trond Mohn Foundation" style="max-height:75px; width:auto; display:block;">
                 </div>
             </div>
 
