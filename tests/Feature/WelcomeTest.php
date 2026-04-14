@@ -57,3 +57,10 @@ test('the header contains the json-ld data catalog markup', function () {
 
     expect($actual)->toEqual($expected);
 });
+
+test('the logo image is accessible', function () {
+    $path = public_path('images/fairmd_w_letras.png');
+
+    expect(file_exists($path))->toBeTrue('Logo image should exist at public/images/fairmd_w_letras.png');
+    expect(mime_content_type($path))->toBe('image/png');
+});
