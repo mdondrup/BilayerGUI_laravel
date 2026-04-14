@@ -84,3 +84,17 @@ FAIRMDLipids Databank -- A portal for visualization of molecular simulations
   ```
  * Check the output for any error messages.
  * All data required for display are now stored in the DB and you can delete the BilayerData if you do not need them
+
+### Running function tests
+
+Tests are run automatically as a CI workflow. You can run tests manually by:
+
+```
+artisan test
+```
+If running via sail:
+```
+./vendor/bin/sail artisan test
+```
+
+In order to be allowed to merge a PR into main, all tests must pass and at least one reviewer needs to accept these changes.
