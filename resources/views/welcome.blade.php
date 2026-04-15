@@ -97,7 +97,7 @@ use App\Http\Controllers\StatisticsController;
                             <div class="input-group" style="max-width: 400px;">
                                 <select name="lipid" class="form-select" aria-label="Select lipid">
                                     <option value="" selected disabled>Best simulations for lipid…</option>
-                                    @foreach (\App\Lipido::orderBy('molecule')->get()->unique('molecule') as $lipid)
+                                    @foreach ($lipids as $lipid)
                                         <option value="{{ $lipid->molecule }}">{{ $lipid->molecule }}</option>
                                     @endforeach
                                 </select>

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\SitemapXmlController;
@@ -21,11 +22,14 @@ use Illuminate\Support\Facades\View;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $lipids = Cache::remember('welcome.lipid_list', now()->addHours(12), function () {
+        return \App\Lipido::orderBy('molecule')->get()->unique('molecule')->values();
+    });
+    return view('welcome', compact('lipids'));
 })->name('welcome');
 
-Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
-
+Route::redirect('/home', '/')->name('home');
+Route::redirect('/about', '/#about')->name('about');
 
 // advanced search
 Route::get('/new-advanced-search', 'App\Http\Controllers\NewAdvancedSearchController@form')->name('new_advanced_search.form');
