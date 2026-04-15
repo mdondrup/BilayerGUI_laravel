@@ -32,12 +32,12 @@ use App\Http\Controllers\StatisticsController;
                             <button class="btn btn-sm btn-outline-light ms-1" type="submit">Go</button>
                         </form>
                     </li --- IGNORE --->
-                    <li class="nav-item"><a class="nav-link" href="{{ route('new_advanced_search.form') }}"><span class="nav-icon" aria-hidden="true" style="font-size: 1.2rem;">⌕ </span>Advanced Search</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('lipids.list') }}"><span class="nav-icon" aria-hidden="true">◌</span>Lipids</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('experiments.list') }}"><span class="nav-icon" aria-hidden="true">⚗</span>Experiments</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('simulations.list') }}"><span class="nav-icon" aria-hidden="true">◈</span>Simulations</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ config('app.github_contribute_url') }}"><span class="nav-icon" aria-hidden="true">✦</span>Contribute</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#about"><span class="nav-icon" aria-hidden="true">ⓘ</span>About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('new_advanced_search.form') }}" title="Search simulations by membrane composition, force field, temperature and more"><span class="nav-icon" aria-hidden="true" style="font-size: 1.2rem;">⌕ </span>Advanced Search</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('lipids.list') }}" title="Browse all lipid molecules in the databank"><span class="nav-icon" aria-hidden="true">◌</span>Lipids</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('experiments.list') }}" title="Browse experimental NMR and X-ray measurements"><span class="nav-icon" aria-hidden="true">⚗</span>Experiments</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('simulations.list') }}" title="Browse and compare MD simulation trajectories"><span class="nav-icon" aria-hidden="true">◈</span>Simulations</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ config('app.github_contribute_url') }}" title="Learn how to contribute your simulation data to the databank"><span class="nav-icon" aria-hidden="true">✦</span>Contribute</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about" title="About FAIRMD Lipids Databank"><span class="nav-icon" aria-hidden="true">ⓘ</span>About</a></li>
                     <li class="nav-item d-flex align-items-center ms-2">
                         <button class="contrast-toggle" id="contrastToggle" type="button" title="Toggle high-contrast mode" aria-label="Toggle high-contrast mode">&#9684;</button>
                     </li>

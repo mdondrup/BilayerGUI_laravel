@@ -19,7 +19,7 @@ use App\Filtros\Filtro;
                             <!-- style="display: flex; justify-content: space-between" -->
                             <div class="row">
                                 <div class="col-xs-12 col-sm-6">
-                                    <span class="titulo"> @lang('Advanced Search')<span>
+                                    <span class="titulo"> @lang('Advanced Search for Simulations')<span>
                                 </div>
                                 <div class="col-xs-12 col-sm-6 text-right"
                                     style="display: flex; align-items: aplicar_evento_eliminar_filtro">
