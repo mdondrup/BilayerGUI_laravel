@@ -9,9 +9,11 @@ use App\Molecula;
 use App\Trayectoria;
 use App\TrayectoriaAnalisis;
 use App\Membrana;
+use App\Experiments;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class StatisticsController extends Controller
@@ -38,12 +40,18 @@ class StatisticsController extends Controller
 
     static function totals()
     {
-      $TotalTrayectorias = Trayectoria::select('id')->count();
-      $TotalMembranas = Membrana::select('id')->count();
+      $totals = Cache::remember('statistics.totals', now()->addHours(12), function () {
+          return [
+              'totalTrayectorias' => Trayectoria::select('id')->count(),
+              'totalMembranas' => Membrana::select('id')->count(),
+              'totalExperiments' => Experiments::select('id')->count(),
+          ];
+      });
 
       return view('statistics.totals', [
-          'totalTrayectorias' => $TotalTrayectorias,
-          'totalMembranas'=>$TotalMembranas
+          'totalTrayectorias' => $totals['totalTrayectorias'],
+          'totalMembranas' => $totals['totalMembranas'],
+          'totalExperiments' => $totals['totalExperiments']
         ]);
     }
 

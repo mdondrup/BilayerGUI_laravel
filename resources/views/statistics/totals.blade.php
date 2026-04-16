@@ -19,6 +19,10 @@ use Illuminate\Filesystem\Filesystem;
         {{ $totalTrayectorias }}</p>
     </div>
     <div class="col hero-stats">
+        <p>Total&nbsp;experiments:<br>
+        {{ $totalExperiments }}</p>
+    </div>
+    <div class="col hero-stats">
         <p>Total&nbsp;membranes:<br>
         {{ $totalMembranas }}</p>
     </div>
