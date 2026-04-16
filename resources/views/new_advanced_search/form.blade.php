@@ -134,7 +134,7 @@ use App\Filtros\Filtro;
                                         </div>
                                         <div class="col multi-range" id="slide_9"
                                             data-initvalue="{{ $QualityFactor[0]->quality_totalStart }}"
-                                            data-endvalue="{{ $QualityFactor[0]->quality_totalEnd }}" data-prec="1"
+                                            data-endvalue="{{ $QualityFactor[0]->quality_totalEnd }}" data-prec="4"
                                             data-namefield="quality_total">
                                         </div>
                                     </div>
@@ -151,7 +151,7 @@ use App\Filtros\Filtro;
                                         </div>
                                         <div class="col multi-range" id="slide_10"
                                             data-initvalue="{{ $Quality_HG[0]->quality_hgStart }}"
-                                            data-endvalue="{{ $Quality_HG[0]->quality_hgEnd }}" data-prec="1"
+                                            data-endvalue="{{ $Quality_HG[0]->quality_hgEnd }}" data-prec="4"
                                             data-namefield="quality_hg">
                                         </div>
                                     </div>
@@ -168,7 +168,7 @@ use App\Filtros\Filtro;
                                         </div>
                                         <div class="col multi-range" id="slide_119"
                                             data-initvalue="{{ $Quality_Tails[0]->quality_tailsStart }}"
-                                            data-endvalue="{{ $Quality_Tails[0]->quality_tailsEnd }}" data-prec="1"
+                                            data-endvalue="{{ $Quality_Tails[0]->quality_tailsEnd }}" data-prec="4"
                                             data-namefield="quality_tails">
                                         </div>
                                     </div>
@@ -185,7 +185,7 @@ use App\Filtros\Filtro;
                                         <div class="col multi-range" id="slide_12"
                                             data-initvalue="{{ $Bilayer_thickness[0]->Bilayer_thicknessStart }}"
                                             data-endvalue="{{ $Bilayer_thickness[0]->Bilayer_thicknessEnd }}"
-                                            data-prec="1" data-namefield="Bilayer_thickness">
+                                            data-prec="2" data-namefield="Bilayer_thickness">
                                         </div>
                                     </div>
                                 </div>
@@ -201,7 +201,7 @@ use App\Filtros\Filtro;
                                         <div class="col multi-range" id="slide_12"
                                             data-initvalue="{{ $Form_factor_quality[0]->Form_factor_qualityStart }}"
                                             data-endvalue="{{ $Form_factor_quality[0]->Form_factor_qualityEnd }}"
-                                            data-prec="1" data-namefield="Form_factor_quality">
+                                            data-prec="4" data-namefield="Form_factor_quality">
                                         </div>
                                     </div>
                                 </div>
@@ -291,10 +291,22 @@ use App\Filtros\Filtro;
                 var init = parseFloat(this.getAttribute('data-initvalue'));
                 var end = parseFloat(this.getAttribute('data-endvalue'));
                 var fieldName = this.getAttribute('data-namefield');
-                var Precision = this.getAttribute('data-prec');
+                var Precision = parseInt(this.getAttribute('data-prec'), 10);
+
+                // Floor the min and ceil the max at the slider's precision so the
+                // actual data values always fall within the selectable range.
+                // When min === max (single data point), expand by one step either side.
+                var factor = Math.pow(10, Precision);
+                var step = 1 / factor;
+                var rangeMin = Math.floor(init * factor) / factor;
+                var rangeMax = Math.ceil(end * factor) / factor;
+                if (rangeMin === rangeMax) {
+                    rangeMin = parseFloat((rangeMin - step).toFixed(Precision));
+                    rangeMax = parseFloat((rangeMax + step).toFixed(Precision));
+                }
 
                 noUiSlider.create(newslider, {
-                    start: [init, end],
+                    start: [rangeMin, rangeMax],
                     tooltips: [wNumb({
                         decimals: Precision
                     }), wNumb({
@@ -302,8 +314,8 @@ use App\Filtros\Filtro;
                     })],
                     connect: [false, true, false],
                     range: {
-                        'min': [init],
-                        'max': [end]
+                        'min': [rangeMin],
+                        'max': [rangeMax]
                     },
                     /*pips: {
                           mode: 'steps',
@@ -328,9 +340,9 @@ use App\Filtros\Filtro;
                 container.appendChild(b);
                 var inputs = [a, b];
                 // Update hidden input values when slider moves
-                newslider.noUiSlider.on('slide', function(values, handle) {
-                    inputs[0].value = values[0];
-                    inputs[1].value = values[1];
+                newslider.noUiSlider.on('slide', function(values, handle, unencoded) {
+                    inputs[0].value = (Math.floor(unencoded[0] * factor) / factor).toFixed(Precision);
+                    inputs[1].value = (Math.ceil(unencoded[1] * factor) / factor).toFixed(Precision);
                 });
             });
 

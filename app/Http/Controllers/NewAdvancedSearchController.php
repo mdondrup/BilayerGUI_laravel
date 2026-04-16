@@ -456,8 +456,7 @@ class NewAdvancedSearchController extends Controller
     $filtrosPrincipales = Filtros::filtrosEntidades();
     $filtroTrayectoria = Filtros::get('trayectoria');
     $filtrosTrayectorias = Filtros::filtrosTrayectoria();
-    //ICICICICICICIICICI This is not working because the values are in the 
-    // trajectories_analysis table and not in the ranking_global  
+    
     $QualityFactor = DB::table('trajectories_analysis')
       ->select(DB::raw('MIN(op_quality_total) AS quality_totalStart, MAX(op_quality_total) AS quality_totalEnd'))->get();
     $Quality_HG = DB::table('trajectories_analysis')
