@@ -41,7 +41,7 @@ use App\Filtros\Filtro;
                         <div class="search_result" style="padding-top: 0">
 
                             <div id="filtros-entidades" class="row align-items-start p-4">
-                                <span class="titulo">By Composition</span>
+                                <span class="titulo">By MD simulation composition</span>
                                 @foreach ($filtros_principales as $filtro)
                                     <?php
                                     //  $numero_id++;
@@ -61,7 +61,7 @@ use App\Filtros\Filtro;
                             </div>
 
                             <div class=" pl-3">
-                                <span class="titulo">By MD simulations set-up</span>
+                                <span class="titulo">By MD simulation set-up</span>
                             </div>
                             <div id="filtros-propiedades" class="row align-items-start p-4">
 
@@ -85,7 +85,7 @@ use App\Filtros\Filtro;
                             </div>
 
                             <div class="col-xs-12 col-lg-12 containerSlider">
-                                <span class="titulo">By properties and quality</span>
+                                <span class="titulo">By MD simulation properties and quality</span>
                                 <div class="tooltip-2 bi bi-info-circle">
                                     <span class="tooltiptext">Calculated from the trajectory and experimental data by FAIRMD Lipids scripts.</span>
                                 </div>
