@@ -1419,6 +1419,15 @@ if __name__ == '__main__':
             else:
                 raise err
             FAILS.append(README["path"])
+
+    #### Add an entry in the update_record table with the version of the database and the description of the update
+    update_record = {
+    "fairmd_version": dbl.__version__,
+    "bilayerdata_version": os.getenv("BILAYERDATA_VERSION", "Unknown"),
+    "description": "Update database with the latest systems in the BilayerData repository. " + \
+                   "This update was performed with the script UI_DB_Update.py, which can be found in the Python folder of the repository. "
+    }               
+    _ = UPSERT(database, 'update_record', update_record)        
     
     if args.dry_run:
         logger.warning("Dry-run mode: rolling back all changes.")

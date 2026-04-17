@@ -74,6 +74,7 @@ jobs:
         run: |
           rsync -rlz --delete --omit-dir-times --no-owner --no-group --no-perms \
             --exclude='.git/' \
+            --exclude='Python/config.json' \
             --exclude='.github/' \
             --exclude='.env' \
             --exclude='node_modules/' \

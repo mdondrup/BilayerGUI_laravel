@@ -10,6 +10,7 @@ use App\Trayectoria;
 use App\TrayectoriaAnalisis;
 use App\Membrana;
 use App\Experiments;
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -40,18 +41,26 @@ class StatisticsController extends Controller
 
     static function totals()
     {
-      $totals = Cache::remember('statistics.totals', now()->addHours(12), function () {
+      $totals = Cache::remember('statistics.totals', now()->addHours(6), function () {
           return [
               'totalTrayectorias' => Trayectoria::select('id')->count(),
               'totalMembranas' => Membrana::select('id')->count(),
               'totalExperiments' => Experiments::select('id')->count(),
+              'lastUpdate' => DB::table('update_record')->latest('updated_at')->first()
           ];
       });
+
+      $lastUpdate = $totals['lastUpdate'];
+      if ($lastUpdate && $lastUpdate->updated_at) {
+          $lastUpdate->updated_at = Carbon::parse($lastUpdate->updated_at, 'UTC')
+              ->setTimezone(config('app.timezone'));
+      }
 
       return view('statistics.totals', [
           'totalTrayectorias' => $totals['totalTrayectorias'],
           'totalMembranas' => $totals['totalMembranas'],
-          'totalExperiments' => $totals['totalExperiments']
+          'totalExperiments' => $totals['totalExperiments'],
+          'lastUpdate' => $lastUpdate
         ]);
     }
 
