@@ -343,7 +343,23 @@ use App\Filtros\Filtro;
             applyIonMissingOperatorState(this);
         });
 
-        newSliderSelector();
+        initializeSlidersWhenReady();
+
+        function initializeSlidersWhenReady(retriesLeft = 120) {
+            if (window.noUiSlider && window.wNumb) {
+                newSliderSelector();
+                return;
+            }
+
+            if (retriesLeft <= 0) {
+                console.error('Slider libraries were not loaded in time.');
+                return;
+            }
+
+            setTimeout(function() {
+                initializeSlidersWhenReady(retriesLeft - 1);
+            }, 50);
+        }
 
         function newSliderSelector() {
             // Slider hidden inputs go directly into the main form
