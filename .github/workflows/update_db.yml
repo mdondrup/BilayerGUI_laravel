@@ -67,5 +67,7 @@ jobs:
           # The UI_DB_Update.py script will handle the rest of the updates and will not delete any data.
           cd "${PROD_PATH}/Python"
           ./UI_DB_Update.py -c config.json --level ERROR
+          cd "${PROD_PATH}"
+          php artisan cache:clear
           
           EOF

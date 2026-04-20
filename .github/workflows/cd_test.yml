@@ -76,9 +76,15 @@ jobs:
           printf '%s\n' "$TEST_KNOWN_HOSTS" > ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
-      - name: Create target directory
+      - name: Create target directory if it doesn't exist
         run: |
-          ssh ${SSH_OPTS} ${TEST_USER}@${TEST_HOST} "mkdir -p '${TEST_PATH}'"
+          ssh ${SSH_OPTS} ${TEST_USER}@${TEST_HOST} <<EOF
+          set -e
+          mkdir -p '${TEST_PATH}'
+          chgrp www-data '${TEST_PATH}'
+          chmod g+s '${TEST_PATH}'
+          EOF
+          
 
       - name: Sync application files
         run: |
@@ -92,6 +98,7 @@ jobs:
             --exclude='node_modules/' \
             --exclude='vendor/' \
             --exclude='tests/' \
+            --exclude='BilayerData/' \
             --exclude='storage/' \
             --exclude='public/storage' \
             --exclude='database/testing/' \
