@@ -40,8 +40,7 @@
     <!-- Google fonts-->
     <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
-    <!-- SimpleLightbox plugin CSS-->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
+    
     <!-- Jquery UI plugin CSS-->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
@@ -73,16 +72,8 @@
     <!-- Load jQuery from a CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-
-    <!-- nouislider -->
-    <link href="{{ asset('storage/js/nouislider/nouislider.min.css') }}" rel="stylesheet" />
-    <script type="text/javascript" src="{{ asset('storage/js/nouislider/nouislider.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('storage/js/nouislider/wNumb.min.js') }}"></script>
-
     <!-- JSMOL has been removed -->
 
-
-   <!-- script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script -->
 
    <!--  AUTOCOMPLETE -->
      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>

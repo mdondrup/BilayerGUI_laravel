@@ -152,8 +152,8 @@ class NewAdvancedSearchController extends Controller
     // we will use parameter binding for all user inputs to ensure that the query is safe. 
     
     if ($inputs['lipidos'] ?? false) {
-      $this->query->join('trajectories_lipids as tl', 'trajectories.id', '=', 'tl.trajectory_id');
-      $this->query->join('lipids as l', 'tl.lipid_id', '=', 'l.id'); // Join with lipids for lipid-based filtering, almost always needed, 
+      $this->query->leftJoin('trajectories_lipids as tl', 'trajectories.id', '=', 'tl.trajectory_id');
+      $this->query->leftJoin('lipids as l', 'tl.lipid_id', '=', 'l.id'); // Join with lipids for lipid-based filtering, almost always needed, 
 
       // If all lipids are selected with AND or OR, we can use a single join with 
       // GROUP BY and HAVING to filter trajectories that have all selected lipids.    
@@ -163,15 +163,30 @@ class NewAdvancedSearchController extends Controller
           $orLipids = [];
           $andLipids = [];
           $notLipids = [];
+          $missingLipids = false;
+          $notMissingLipids = false;
           // sort the lipids into their respective operator groups, using AND as default if no operator is specified
           foreach ($inputs['lipidos'] as $index => $lipid) {
             $operator = $inputs['lipidos_operador'][$index] ?? 'and';
+            $isMissingToken = is_string($lipid) && strtolower(trim($lipid)) === 'is_missing';
             if ($operator === 'or') {
-              $orLipids[] = $lipid;
+              if ($isMissingToken) {
+                $missingLipids = true;
+              } else {
+                $orLipids[] = $lipid;
+              }
             } else if ($operator === 'and') {
-              $andLipids[] = $lipid;
+              if ($isMissingToken) {
+                $missingLipids = true;
+              } else {
+                $andLipids[] = $lipid;
+              }
             } else if ($operator === 'not') {
-              $notLipids[] = $lipid;
+              if ($isMissingToken) {
+                $notMissingLipids = true;
+              } else {
+                $notLipids[] = $lipid;
+              }
             }
           }
           // Handle OR lipids with simple WHERE IN
@@ -179,7 +194,14 @@ class NewAdvancedSearchController extends Controller
             if (empty($andLipids) && empty($notLipids)) {
               // If only OR lipids are present, 
               // we can use a simple WHERE IN without GROUP BY
-              $this->query->whereIn('l.molecule', $orLipids);
+              if ($missingLipids) {
+                $this->query->where(function ($q) use ($orLipids) {
+                  $q->whereIn('l.molecule', $orLipids)
+                    ->orWhereNull('tl.trajectory_id');
+                });
+              } else {
+                $this->query->whereIn('l.molecule', $orLipids);
+              }
             } else {
               // If there are also AND/NOT lipids, we need to include all OR lipids in the GROUP BY query to ensure correct results
               $andNotLipids = array_merge($andLipids, $notLipids);
@@ -202,31 +224,59 @@ class NewAdvancedSearchController extends Controller
                         ->havingRaw('COUNT(DISTINCT CASE WHEN l.molecule IN (' . implode(',', array_fill(0, count($notLipids), '?')) .
                          ') THEN l.molecule END) = 0', $notLipids);
           }
+          if ($missingLipids && (!empty($andLipids) || !empty($notLipids) || empty($orLipids))) {
+            $this->query->whereNull('tl.trajectory_id');
+          }
+          if ($notMissingLipids) {
+            $this->query->whereNotNull('tl.trajectory_id');
+          }
           
       }            
     }
-    if (!empty($inputs['iones'] ?? false)) {
-      $this->query->join('trajectories_ions as ti', 'trajectories.id', '=', 'ti.trajectory_id')
-                  ->join('ions as i', 'ti.ion_id', '=', 'i.id');
+    if (!empty($inputs['iones'] ?? false) || !empty($inputs['iones_operador'] ?? false)) {
+      $this->query->leftJoin('trajectories_ions as ti', 'trajectories.id', '=', 'ti.trajectory_id')
+                  ->leftJoin('ions as i', 'ti.ion_id', '=', 'i.id');
 
       if(!empty($inputs['iones_operador'] ?? false)) {
         $orIons = [];
         $andIons = [];
         $notIons = [];
-        foreach ($inputs['iones'] as $index => $ion) {
-          $operator = $inputs['iones_operador'][$index] ?? 'and';
+        $missingIons = false;
+        $notMissingIons = false;
+        foreach ($inputs['iones_operador'] as $index => $operator) {
+          $ion = $inputs['iones'][$index] ?? null;
+          $isMissingToken = is_string($ion) && strtolower(trim($ion)) === 'is_missing';
           if ($operator === 'or') {
-            $orIons[] = $ion;
+            if ($isMissingToken) {
+              $missingIons = true;
+            } else if (!empty($ion)) {
+              $orIons[] = $ion;
+            }
           } else if ($operator === 'and') {
-            $andIons[] = $ion;
+            if ($isMissingToken) {
+              $missingIons = true;
+            } else if (!empty($ion)) {
+              $andIons[] = $ion;
+            }
           } else if ($operator === 'not') {
-            $notIons[] = $ion;
+            if ($isMissingToken) {
+              $notMissingIons = true;
+            } else if (!empty($ion)) {
+              $notIons[] = $ion;
+            }
           }
         }
         if (!empty($orIons)) {
           if (empty($andIons) && empty($notIons)) {
             // If only OR ions are present, we can use a simple WHERE IN without GROUP BY
-            $this->query->whereIn('i.molecule', $orIons);
+            if ($missingIons) {
+              $this->query->where(function ($q) use ($orIons) {
+                $q->whereIn('i.molecule', $orIons)
+                  ->orWhereNull('ti.trajectory_id');
+              });
+            } else {
+              $this->query->whereIn('i.molecule', $orIons);
+            }
           } else {
             // If there are also AND/NOT ions, we need to include all OR ions in the GROUP BY query to ensure correct results
             $andNotIons = array_merge($andIons, $notIons);
@@ -242,8 +292,14 @@ class NewAdvancedSearchController extends Controller
         }
         if (!empty($notIons)) {
           $this->query->groupBy('trajectories.id')
-                      ->havingRaw('COUNT(DISTINCT CASE WHEN i.molecule IN (' . implode(',', array_fill(0, count($notIons), '?')) .
-                       ') THEN i.molecule END) = 0', $notIons);
+                      ->havingRaw('SUM(CASE WHEN i.molecule IN (' . implode(',', array_fill(0, count($notIons), '?')) .
+                       ') THEN 1 ELSE 0 END) = 0', $notIons);
+        }
+        if ($missingIons && (!empty($andIons) || !empty($notIons) || empty($orIons))) {
+          $this->query->whereNull('ti.trajectory_id');
+        }
+        if ($notMissingIons) {
+          $this->query->whereNotNull('ti.trajectory_id');
         }
       }
     }
@@ -456,8 +512,7 @@ class NewAdvancedSearchController extends Controller
     $filtrosPrincipales = Filtros::filtrosEntidades();
     $filtroTrayectoria = Filtros::get('trayectoria');
     $filtrosTrayectorias = Filtros::filtrosTrayectoria();
-    //ICICICICICICIICICI This is not working because the values are in the 
-    // trajectories_analysis table and not in the ranking_global  
+    
     $QualityFactor = DB::table('trajectories_analysis')
       ->select(DB::raw('MIN(op_quality_total) AS quality_totalStart, MAX(op_quality_total) AS quality_totalEnd'))->get();
     $Quality_HG = DB::table('trajectories_analysis')

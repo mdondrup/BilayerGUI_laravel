@@ -1,4 +1,4 @@
-name: Laravel CD
+name: Laravel CD Production
 
 on:
   workflow_run:
@@ -24,7 +24,7 @@ jobs:
     timeout-minutes: 30
 
     env:
-      PROD_USER: gitcd
+      PROD_USER: ${{ secrets.PROD_USER }}
       PROD_HOST: ${{ secrets.PROD_HOST }}
       PROD_PATH: ${{ secrets.PROD_PATH }}
       SSH_OPTS: -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes
@@ -68,22 +68,30 @@ jobs:
 
       - name: Create target directory
         run: |
-          ssh ${SSH_OPTS} ${PROD_USER}@${PROD_HOST} "mkdir -p '${PROD_PATH}'"
+          ssh ${SSH_OPTS} ${PROD_USER}@${PROD_HOST} <<EOF
+          set -e
+          mkdir -p '${PROD_PATH}'
+          chgrp www-data '${PROD_PATH}'
+          chmod g+s '${PROD_PATH}'
+          EOF
 
       - name: Sync application files
         run: |
           rsync -rlz --delete --omit-dir-times --no-owner --no-group --no-perms \
             --exclude='.git/' \
+            --exclude='.devcontainer/' \
+            --exclude='Python/config.json' \
             --exclude='.github/' \
             --exclude='.env' \
+            --exclude='public/robots.txt' \
             --exclude='node_modules/' \
             --exclude='vendor/' \
             --exclude='tests/' \
+            --exclude='BilayerData/' \
             --exclude='storage/' \
             --exclude='public/storage' \
             --exclude='database/testing/' \
             --exclude='dev-tools/' \
-            --exclude='*.sql' \
             -e "ssh ${SSH_OPTS}" \
             ./ ${PROD_USER}@${PROD_HOST}:${PROD_PATH}/
 

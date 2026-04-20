@@ -19,7 +19,7 @@ use App\Filtros\Filtro;
                             <!-- style="display: flex; justify-content: space-between" -->
                             <div class="row">
                                 <div class="col-xs-12 col-sm-6">
-                                    <span class="titulo"> @lang('Advanced Search')<span>
+                                    <span class="titulo"> @lang('Advanced Search for Simulations')<span>
                                 </div>
                                 <div class="col-xs-12 col-sm-6 text-right"
                                     style="display: flex; align-items: aplicar_evento_eliminar_filtro">
@@ -41,7 +41,7 @@ use App\Filtros\Filtro;
                         <div class="search_result" style="padding-top: 0">
 
                             <div id="filtros-entidades" class="row align-items-start p-4">
-                                <span class="titulo">By Composition</span>
+                                <span class="titulo">By MD simulation composition</span>
                                 @foreach ($filtros_principales as $filtro)
                                     <?php
                                     //  $numero_id++;
@@ -61,7 +61,7 @@ use App\Filtros\Filtro;
                             </div>
 
                             <div class=" pl-3">
-                                <span class="titulo">By MD simulations set-up</span>
+                                <span class="titulo">By MD simulation set-up</span>
                             </div>
                             <div id="filtros-propiedades" class="row align-items-start p-4">
 
@@ -85,7 +85,7 @@ use App\Filtros\Filtro;
                             </div>
 
                             <div class="col-xs-12 col-lg-12 containerSlider">
-                                <span class="titulo">By properties and quality</span>
+                                <span class="titulo">By MD simulation properties and quality</span>
                                 <div class="tooltip-2 bi bi-info-circle">
                                     <span class="tooltiptext">Calculated from the trajectory and experimental data by FAIRMD Lipids scripts.</span>
                                 </div>
@@ -134,7 +134,7 @@ use App\Filtros\Filtro;
                                         </div>
                                         <div class="col multi-range" id="slide_9"
                                             data-initvalue="{{ $QualityFactor[0]->quality_totalStart }}"
-                                            data-endvalue="{{ $QualityFactor[0]->quality_totalEnd }}" data-prec="1"
+                                            data-endvalue="{{ $QualityFactor[0]->quality_totalEnd }}" data-prec="4"
                                             data-namefield="quality_total">
                                         </div>
                                     </div>
@@ -151,7 +151,7 @@ use App\Filtros\Filtro;
                                         </div>
                                         <div class="col multi-range" id="slide_10"
                                             data-initvalue="{{ $Quality_HG[0]->quality_hgStart }}"
-                                            data-endvalue="{{ $Quality_HG[0]->quality_hgEnd }}" data-prec="1"
+                                            data-endvalue="{{ $Quality_HG[0]->quality_hgEnd }}" data-prec="4"
                                             data-namefield="quality_hg">
                                         </div>
                                     </div>
@@ -168,7 +168,7 @@ use App\Filtros\Filtro;
                                         </div>
                                         <div class="col multi-range" id="slide_119"
                                             data-initvalue="{{ $Quality_Tails[0]->quality_tailsStart }}"
-                                            data-endvalue="{{ $Quality_Tails[0]->quality_tailsEnd }}" data-prec="1"
+                                            data-endvalue="{{ $Quality_Tails[0]->quality_tailsEnd }}" data-prec="4"
                                             data-namefield="quality_tails">
                                         </div>
                                     </div>
@@ -185,7 +185,7 @@ use App\Filtros\Filtro;
                                         <div class="col multi-range" id="slide_12"
                                             data-initvalue="{{ $Bilayer_thickness[0]->Bilayer_thicknessStart }}"
                                             data-endvalue="{{ $Bilayer_thickness[0]->Bilayer_thicknessEnd }}"
-                                            data-prec="1" data-namefield="Bilayer_thickness">
+                                            data-prec="2" data-namefield="Bilayer_thickness">
                                         </div>
                                     </div>
                                 </div>
@@ -201,7 +201,7 @@ use App\Filtros\Filtro;
                                         <div class="col multi-range" id="slide_12"
                                             data-initvalue="{{ $Form_factor_quality[0]->Form_factor_qualityStart }}"
                                             data-endvalue="{{ $Form_factor_quality[0]->Form_factor_qualityEnd }}"
-                                            data-prec="1" data-namefield="Form_factor_quality">
+                                            data-prec="4" data-namefield="Form_factor_quality">
                                         </div>
                                     </div>
                                 </div>
@@ -279,7 +279,70 @@ use App\Filtros\Filtro;
             })
         }
 
-        newSliderSelector();
+        function applyIonMissingOperatorState(inputEl) {
+            var $input = $(inputEl);
+            var name = $input.attr('name') || '';
+            var match = name.match(/^iones\[(\d+)\]$/);
+            if (!match) return;
+
+            // Keep the full ion datalist intact if anything mutates its options.
+            var listId = $input.attr('list');
+            if (listId) {
+                var datalist = document.getElementById(listId);
+                if (datalist) {
+                    if (!datalist.dataset.originalOptionsHtml) {
+                        datalist.dataset.originalOptionsHtml = datalist.innerHTML;
+                    } else if (datalist.children.length < 2) {
+                        datalist.innerHTML = datalist.dataset.originalOptionsHtml;
+                    }
+                }
+            }
+
+            var index = match[1];
+            var operadorName = 'iones_operador[' + index + ']';
+            var value = ($input.val() || '').trim().toLowerCase();
+            var $opRadios = $('#formulario-busqueda-avanzada').find('input[name="' + operadorName + '"]');
+            var $andRadio = $opRadios.filter('[value="and"]');
+            var $orRadio = $opRadios.filter('[value="or"]');
+            var $notRadio = $opRadios.filter('[value="not"]');
+
+            if (value === 'is_missing') {
+                if ($andRadio.is(':checked')) {
+                    $orRadio.prop('checked', true);
+                }
+                $andRadio.prop('disabled', true).prop('checked', false);
+                $orRadio.prop('disabled', false);
+                $notRadio.prop('disabled', false);
+            } else {
+                $andRadio.prop('disabled', false);
+            }
+        }
+
+        $(document).on('input change', '#formulario-busqueda-avanzada input[list][name^="iones["]', function() {
+            applyIonMissingOperatorState(this);
+        });
+
+        $('#formulario-busqueda-avanzada input[list][name^="iones["]').each(function() {
+            applyIonMissingOperatorState(this);
+        });
+
+        initializeSlidersWhenReady();
+
+        function initializeSlidersWhenReady(retriesLeft = 120) {
+            if (window.noUiSlider && window.wNumb) {
+                newSliderSelector();
+                return;
+            }
+
+            if (retriesLeft <= 0) {
+                console.error('Slider libraries were not loaded in time.');
+                return;
+            }
+
+            setTimeout(function() {
+                initializeSlidersWhenReady(retriesLeft - 1);
+            }, 50);
+        }
 
         function newSliderSelector() {
             // Slider hidden inputs go directly into the main form
@@ -291,10 +354,22 @@ use App\Filtros\Filtro;
                 var init = parseFloat(this.getAttribute('data-initvalue'));
                 var end = parseFloat(this.getAttribute('data-endvalue'));
                 var fieldName = this.getAttribute('data-namefield');
-                var Precision = this.getAttribute('data-prec');
+                var Precision = parseInt(this.getAttribute('data-prec'), 10);
+
+                // Floor the min and ceil the max at the slider's precision so the
+                // actual data values always fall within the selectable range.
+                // When min === max (single data point), expand by one step either side.
+                var factor = Math.pow(10, Precision);
+                var step = 1 / factor;
+                var rangeMin = Math.floor(init * factor) / factor;
+                var rangeMax = Math.ceil(end * factor) / factor;
+                if (rangeMin === rangeMax) {
+                    rangeMin = parseFloat((rangeMin - step).toFixed(Precision));
+                    rangeMax = parseFloat((rangeMax + step).toFixed(Precision));
+                }
 
                 noUiSlider.create(newslider, {
-                    start: [init, end],
+                    start: [rangeMin, rangeMax],
                     tooltips: [wNumb({
                         decimals: Precision
                     }), wNumb({
@@ -302,8 +377,8 @@ use App\Filtros\Filtro;
                     })],
                     connect: [false, true, false],
                     range: {
-                        'min': [init],
-                        'max': [end]
+                        'min': [rangeMin],
+                        'max': [rangeMax]
                     },
                     /*pips: {
                           mode: 'steps',
@@ -328,9 +403,9 @@ use App\Filtros\Filtro;
                 container.appendChild(b);
                 var inputs = [a, b];
                 // Update hidden input values when slider moves
-                newslider.noUiSlider.on('slide', function(values, handle) {
-                    inputs[0].value = values[0];
-                    inputs[1].value = values[1];
+                newslider.noUiSlider.on('slide', function(values, handle, unencoded) {
+                    inputs[0].value = (Math.floor(unencoded[0] * factor) / factor).toFixed(Precision);
+                    inputs[1].value = (Math.ceil(unencoded[1] * factor) / factor).toFixed(Precision);
                 });
             });
 
@@ -347,13 +422,15 @@ use App\Filtros\Filtro;
             // Disable empty datalist inputs and their operator radios
             $form.find('input[list]').each(function() {
                 if ($(this).val() === '') {
-                    $(this).prop('disabled', true);
-                    // Disable matching operator radios: name "lipidos[0]" → "lipidos_operador[0]"
                     var name = $(this).attr('name');
                     var match = name.match(/^(.+)\[(\d+)\]$/);
                     if (match) {
                         var operadorName = match[1] + '_operador[' + match[2] + ']';
+                        $(this).prop('disabled', true);
+                        // Disable matching operator radios: name "lipidos[0]" → "lipidos_operador[0]"
                         $form.find('input[name="' + operadorName + '"]').prop('disabled', true);
+                    } else {
+                        $(this).prop('disabled', true);
                     }
                 }
             });

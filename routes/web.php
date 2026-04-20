@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\SitemapXmlController;
@@ -21,20 +22,24 @@ use Illuminate\Support\Facades\View;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $lipids = Cache::remember('welcome.lipid_list', now()->addHours(12), function () {
+        return \App\Lipido::orderBy('molecule')->get()->unique('molecule')->values();
+    });
+    return view('welcome', compact('lipids'));
 })->name('welcome');
 
-Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
-
+Route::redirect('/home', '/')->name('home');
+Route::redirect('/about', '/#about')->name('about');
 
 // advanced search
-Route::get('/new-advanced-search', 'App\Http\Controllers\NewAdvancedSearchController@form')->name('new_advanced_search.form');
-Route::get('/new-advanced-search/result', 'App\Http\Controllers\NewAdvancedSearchController@results')->name('new_advanced_search.results');
-Route::get('/new-advanced-search/compare', 'App\Http\Controllers\NewAdvancedSearchController@compare')->name('new_advanced_search.compare');
-Route::post('/new-advanced-search/updatecompare', 'App\Http\Controllers\NewAdvancedSearchController@updatecompare')->name('new_advanced_search.updatecompare');
-Route::get('/new-advanced-search/export', 'App\Http\Controllers\NewAdvancedSearchController@resultsExport')->name('new_advanced_search.resultsExportacion');
+Route::get('/advanced-search', 'App\Http\Controllers\NewAdvancedSearchController@form')->name('new_advanced_search.form');
+Route::get('/advanced-search/result', 'App\Http\Controllers\NewAdvancedSearchController@results')->name('new_advanced_search.results');
+Route::get('/advanced-search/compare', 'App\Http\Controllers\NewAdvancedSearchController@compare')->name('new_advanced_search.compare');
+Route::post('/advanced-search/updatecompare', 'App\Http\Controllers\NewAdvancedSearchController@updatecompare')->name('new_advanced_search.updatecompare');
+Route::get('/advanced-search/export', 'App\Http\Controllers\NewAdvancedSearchController@resultsExport')->name('new_advanced_search.resultsExportacion');
 
-Route::get('/new-advanced-search/exportcompare', 'App\Http\Controllers\NewAdvancedSearchController@exportarcompare')->name('new_advanced_search.exportarcompare');
+Route::get('/advanced-search/exportcompare', 'App\Http\Controllers\NewAdvancedSearchController@exportarcompare')->name('new_advanced_search.exportarcompare');
+Route::redirect('/new-advanced-search/', '/advanced-search/')->name('new_advanced_search.redirect');
 // ------
 // Statistics
 Route::get('/statistics', 'App\Http\Controllers\StatisticsController@results')->name('statistics.results');
