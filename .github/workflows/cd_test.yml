@@ -84,6 +84,7 @@ jobs:
         run: |
           rsync -rlz --delete --omit-dir-times --no-owner --no-group --no-perms \
             --exclude='.git/' \
+            --exclude='.devcontainer/' \
             --exclude='Python/config.json' \
             --exclude='.github/' \
             --exclude='.env' \
@@ -95,7 +96,6 @@ jobs:
             --exclude='public/storage' \
             --exclude='database/testing/' \
             --exclude='dev-tools/' \
-            --exclude='*.sql' \
             -e "ssh ${SSH_OPTS}" \
             ./ ${TEST_USER}@${TEST_HOST}:${TEST_PATH}/
 
