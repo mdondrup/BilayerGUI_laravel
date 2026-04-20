@@ -1,11 +1,7 @@
 name: Laravel CD Testing
 
 on:
-  workflow_run:
-    workflows:
-      - Laravel CI
-    types:
-      - completed
+  push:
     branches:
       - testing
 
@@ -17,6 +13,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+
+  wait-for-ci:
+  runs-on: ubuntu-latest
+  steps:
+    - name: Wait for Laravel CI to pass
+      uses: lewagon/wait-on-check-action@v1.3.4
+      with:
+        ref: ${{ github.sha }}
+        # IMPORTANT: Use the Job Name from your CI file, not the Workflow Name
+        check-name: 'tests' 
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        wait-interval: 10 # Seconds between polls
+        allowed-conclusions: success
+
+
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
