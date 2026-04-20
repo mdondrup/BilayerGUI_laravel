@@ -68,12 +68,18 @@ jobs:
 
       - name: Create target directory
         run: |
-          ssh ${SSH_OPTS} ${PROD_USER}@${PROD_HOST} "mkdir -p '${PROD_PATH}'"
+          ssh ${SSH_OPTS} ${PROD_USER}@${PROD_HOST} <<EOF
+          set -e
+          mkdir -p '${PROD_PATH}'
+          chgrp www-data '${PROD_PATH}'
+          chmod g+s '${PROD_PATH}'
+          EOF
 
       - name: Sync application files
         run: |
           rsync -rlz --delete --omit-dir-times --no-owner --no-group --no-perms \
             --exclude='.git/' \
+            --exclude='.devcontainer/' \
             --exclude='Python/config.json' \
             --exclude='.github/' \
             --exclude='.env' \
@@ -81,11 +87,11 @@ jobs:
             --exclude='node_modules/' \
             --exclude='vendor/' \
             --exclude='tests/' \
+            --exclude='BilayerData/' \
             --exclude='storage/' \
             --exclude='public/storage' \
             --exclude='database/testing/' \
             --exclude='dev-tools/' \
-            --exclude='*.sql' \
             -e "ssh ${SSH_OPTS}" \
             ./ ${PROD_USER}@${PROD_HOST}:${PROD_PATH}/
 
