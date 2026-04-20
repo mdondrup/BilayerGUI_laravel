@@ -1,4 +1,4 @@
-name: Laravel CD
+name: Laravel CD Production
 
 on:
   workflow_run:
@@ -24,7 +24,7 @@ jobs:
     timeout-minutes: 30
 
     env:
-      PROD_USER: gitcd
+      PROD_USER: ${{ secrets.PROD_USER }}
       PROD_HOST: ${{ secrets.PROD_HOST }}
       PROD_PATH: ${{ secrets.PROD_PATH }}
       SSH_OPTS: -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes
