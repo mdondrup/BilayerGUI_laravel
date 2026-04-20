@@ -279,35 +279,24 @@ use App\Filtros\Filtro;
             })
         }
 
-        function applyLipidMissingOperatorState(inputEl) {
-            var $input = $(inputEl);
-            var name = $input.attr('name') || '';
-            var match = name.match(/^lipidos\[(\d+)\]$/);
-            if (!match) return;
-
-            var index = match[1];
-            var operadorName = 'lipidos_operador[' + index + ']';
-            var value = ($input.val() || '').trim().toLowerCase();
-            var $opRadios = $('#formulario-busqueda-avanzada').find('input[name="' + operadorName + '"]');
-            var $andRadio = $opRadios.filter('[value="and"]');
-            var $orRadio = $opRadios.filter('[value="or"]');
-            var $notRadio = $opRadios.filter('[value="not"]');
-
-            if (value === 'is_missing') {
-                $orRadio.prop('checked', true);
-                $andRadio.prop('disabled', true).prop('checked', false);
-                $orRadio.prop('disabled', false);
-                $notRadio.prop('disabled', false);
-            } else {
-                $andRadio.prop('disabled', false);
-            }
-        }
-
         function applyIonMissingOperatorState(inputEl) {
             var $input = $(inputEl);
             var name = $input.attr('name') || '';
             var match = name.match(/^iones\[(\d+)\]$/);
             if (!match) return;
+
+            // Keep the full ion datalist intact if anything mutates its options.
+            var listId = $input.attr('list');
+            if (listId) {
+                var datalist = document.getElementById(listId);
+                if (datalist) {
+                    if (!datalist.dataset.originalOptionsHtml) {
+                        datalist.dataset.originalOptionsHtml = datalist.innerHTML;
+                    } else if (datalist.children.length < 2) {
+                        datalist.innerHTML = datalist.dataset.originalOptionsHtml;
+                    }
+                }
+            }
 
             var index = match[1];
             var operadorName = 'iones_operador[' + index + ']';
@@ -318,7 +307,9 @@ use App\Filtros\Filtro;
             var $notRadio = $opRadios.filter('[value="not"]');
 
             if (value === 'is_missing') {
-                $orRadio.prop('checked', true);
+                if ($andRadio.is(':checked')) {
+                    $orRadio.prop('checked', true);
+                }
                 $andRadio.prop('disabled', true).prop('checked', false);
                 $orRadio.prop('disabled', false);
                 $notRadio.prop('disabled', false);
@@ -327,16 +318,8 @@ use App\Filtros\Filtro;
             }
         }
 
-        $(document).on('input change', '#formulario-busqueda-avanzada input[list][name^="lipidos["]', function() {
-            applyLipidMissingOperatorState(this);
-        });
-
         $(document).on('input change', '#formulario-busqueda-avanzada input[list][name^="iones["]', function() {
             applyIonMissingOperatorState(this);
-        });
-
-        $('#formulario-busqueda-avanzada input[list][name^="lipidos["]').each(function() {
-            applyLipidMissingOperatorState(this);
         });
 
         $('#formulario-busqueda-avanzada input[list][name^="iones["]').each(function() {

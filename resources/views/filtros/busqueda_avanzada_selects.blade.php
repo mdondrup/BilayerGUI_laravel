@@ -18,7 +18,7 @@
                         placeholder="Type or select..."
                         autocomplete="off">
                     <datalist id="{{ $filtro->codigo . '_list_' . $numero_id }}">
-                        @if ($filtro->codigo === 'lipidos' || $filtro->codigo === 'iones')
+                        @if ($filtro->codigo === 'iones')
                             <option value="is_missing" label="Missing value">
                         @endif
                         @foreach ($options as $opcion)
