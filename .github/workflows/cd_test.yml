@@ -40,18 +40,17 @@ jobs:
       TEST_HOST: ${{ secrets.TEST_HOST }}
       TEST_PATH: ${{ secrets.TEST_PATH }}
       SSH_OPTS: -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       # Check out the pushed commit so the runner has the source code and package.json.
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ github.sha }}
 
       # Install Node.js on the runner — needed to build frontend assets in the next steps.
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '24'
           cache: npm
