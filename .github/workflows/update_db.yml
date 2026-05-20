@@ -64,6 +64,7 @@ jobs:
           cd "\$FMDL_DATA_PATH"
           BILAYERDATA_VERSION=\$(git log -1 --oneline)
           export BILAYERDATA_VERSION
+          cd "${PROD_PATH}"
           if [ "${{ inputs.force }}" = "true" ]; then
             php artisan migrate:fresh --force; 
           else
