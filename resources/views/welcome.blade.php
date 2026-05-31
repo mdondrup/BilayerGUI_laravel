@@ -164,7 +164,7 @@ use App\Http\Controllers\StatisticsController;
                         <p>FAIRMD Lipids Databank grows through community contributions. You can add your
                             simulation and experimental data, report issues, or help improve the codebase.</p>
                         <div class="d-flex flex-wrap gap-2">
-                            <a href="https://upload-portal.nmrlipids.fi" class="btn btn-warning btn-sm">Submit Data</a>
+                            <a href="{{ config('app.submission_portal_url') }}" class="btn btn-warning btn-sm">Submit Data</a>
                             <a href="{{ config('app.github_contribute_url') }}" class="btn btn-warning btn-sm">How to Contribute Data</a>
                             <a href="https://github.com/NMRLipids/Databank/issues" class="btn btn-outline-secondary btn-sm">Report an Issue</a>
                             <a href="https://github.com/NMRLipids/databank-template/blob/main/scripts/" class="btn btn-outline-secondary btn-sm">Jupyter Notebooks &amp; API Examples</a>
