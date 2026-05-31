@@ -157,16 +157,17 @@ use App\Http\Controllers\StatisticsController;
                             It improves the <a href="https://www.go-fair.org/fair-principles/">Findability, Accessibility, Interoperability, and Reuse (FAIR)</a>
                             of MD simulation data using an overlay databank structure described in the
                             <a href="https://www.nature.com/articles/s41467-024-45189-z">databank publication</a>.
-                            See the <a href="https://nmrlipids.github.io/">online documentation</a> for full details.</p>
+                            See the <a href="https://databank.readthedocs.io/">online documentation</a> for full details.</p>
                     </div>
                     <div class="about-card mb-4" style="border-left: 4px solid #e8a735; background: linear-gradient(135deg, #fffbe6 0%, #fff 100%);">
                         <h4 style="color: #7a5e00;">✦ Contribute to the Databank</h4>
                         <p>FAIRMD Lipids Databank grows through community contributions. You can add your
                             simulation and experimental data, report issues, or help improve the codebase.</p>
                         <div class="d-flex flex-wrap gap-2">
-                            <a href="{{ config('app.github_contribute_url') }}" class="btn btn-warning btn-sm">How to Contribute Data</a>
-                            <a href="https://github.com/NMRLipids/Databank/issues" class="btn btn-outline-secondary btn-sm">Report an Issue</a>
-                            <a href="https://github.com/NMRLipids/databank-template/blob/main/scripts/" class="btn btn-outline-secondary btn-sm">Jupyter Notebooks &amp; API Examples</a>
+                            <a href="{{ config('app.submission_portal_url') }}" class="btn btn-warning btn-sm" target="_blank">Submission Portal</a>
+                            <a href="{{ config('app.github_contribute_url') }}" class="btn btn-outline-secondary btn-sm" target="_blank">How to Contribute Data</a>
+                            <a href="https://github.com/NMRLipids/Databank/issues" class="btn btn-outline-secondary btn-sm" target="_blank">Report an Issue</a>
+                            <a href="https://github.com/NMRLipids/databank-template/blob/main/scripts/" class="btn btn-outline-secondary btn-sm" target="_blank">Jupyter Notebooks &amp; API Examples</a>
                         </div>
                     </div>
                     <div class="about-card mb-4">
@@ -206,7 +207,7 @@ use App\Http\Controllers\StatisticsController;
                                     and relevant trajectory entries.</p>
                                 <ul class="small mb-0">
                                     <li>Data: <a href="https://github.com/NMRLipids/BilayerData/blob/main/LICENSE">CC-BY-4.0</a></li>
-                                    <li>API code: <a href="https://github.com/NMRLipids/Databank/blob/main/LICENSE.txt">GPLv3</a></li>
+                                    <li>API code: <a href="https://github.com/NMRLipids/Databank/blob/main/LICENSE">GPLv3</a></li>
                                     <li>GUI code: <a href="https://github.com/NMRLipids/BilayerGUI_laravel/blob/main/LICENSE">MIT</a></li>
                                 </ul>
                             </div>
@@ -215,7 +216,7 @@ use App\Http\Controllers\StatisticsController;
                             <div class="about-card h-100">
                                 <h4>Resources</h4>
                                 <ul class="small mb-2">
-                                    <li><a href="https://nmrlipids.github.io/">Full documentation</a></li>
+                                    <li><a href="https://databank.readthedocs.io/">Full documentation</a></li>
                                     <li><a href="http://nmrlipids.blogspot.com/">NMRlipids blog</a></li>
                                 </ul>
                                 <p class="small text-dark mb-0">All data and code are provided AS-IS with no warranty. Report issues via each component's GitHub tracker.</p>
