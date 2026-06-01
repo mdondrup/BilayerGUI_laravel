@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Trayectoria;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -49,6 +48,11 @@ class SimulationQueryService
         $page = max(1, $page);
         $perPage = max(1, min(100, $perPage));
 
+        // NOTE: This materializes all matching trajectory IDs to compute $total and
+        // feed the paged query's whereIn(). Acceptable because the trajectories table
+        // is small (hundreds of rows) and the MCP endpoint is rate-limited. If the
+        // dataset grows by orders of magnitude, switch to a COUNT(*) + LIMIT/OFFSET on
+        // the filtered query to avoid loading every ID and a large WHERE IN (...).
         $ids = $this->getFilteredIds($filters);
         $total = $ids->count();
 

@@ -64,6 +64,16 @@ class AdvancedTrajectorySearchTool extends Tool
             'per_page' => 'nullable|integer|min:1|max:100',
         ]);
 
+        // The underlying query only applies lipid/ion filtering when the matching
+        // operator array is present. Mirror the documented default of "and" so that
+        // callers can omit the operator arrays and still get composition filtering.
+        if (! empty($validated['lipids']) && empty($validated['lipids_operator'])) {
+            $validated['lipids_operator'] = array_fill(0, count($validated['lipids']), 'and');
+        }
+        if (! empty($validated['ions']) && empty($validated['ions_operator'])) {
+            $validated['ions_operator'] = array_fill(0, count($validated['ions']), 'and');
+        }
+
         $filters = array_filter([
             'lipidos' => $validated['lipids'] ?? null,
             'lipidos_operador' => $validated['lipids_operator'] ?? null,

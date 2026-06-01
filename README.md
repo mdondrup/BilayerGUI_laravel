@@ -4,6 +4,8 @@
 
 FAIRMDLipids Databank -- A portal for visualization of molecular simulations
 
+FAIRMD Lipids supports MCP — see the [MCP server description](app/Mcp/README.md) for AI-assistant access to the databank.
+
 
 ## System Dependencies
 

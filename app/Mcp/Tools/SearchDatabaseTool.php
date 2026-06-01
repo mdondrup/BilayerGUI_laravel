@@ -3,7 +3,6 @@
 namespace App\Mcp\Tools;
 
 use App\Services\SearchQueryService;
-use App\Services\SimulationQueryService;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
@@ -24,7 +23,6 @@ class SearchDatabaseTool extends Tool
 {
     public function __construct(
         protected SearchQueryService $search,
-        protected SimulationQueryService $simulations,
     ) {}
 
     public function handle(Request $request): Response|ResponseFactory
