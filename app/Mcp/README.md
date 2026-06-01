@@ -146,6 +146,36 @@ bridge (requires Node.js). Add this to your
 Restart Claude Desktop after saving; the FAIRMD Lipids tools will then appear in
 the client.
 
+## Discoverability
+
+Once a client knows the endpoint URL, MCP is self-describing: `initialize` plus
+`tools/list` expose the full, schema-annotated interface. MCP has **no automatic
+crawl/registry mechanism**, so the remaining work is making the endpoint findable.
+
+Levers, in rough order of impact:
+
+1. **List the server in MCP registries** — the primary way clients and users
+   discover MCP servers (e.g. the official MCP registry, the Anthropic/Claude
+   directory, mcp.so, Glama, PulseMCP, Smithery).
+2. **Advertise the endpoint on indexable pages** so web/AI crawlers associate
+   "FAIRMD Lipids" with the MCP endpoint:
+   - Frontpage: [`resources/views/welcome.blade.php`](../../resources/views/welcome.blade.php)
+     — add a human-readable mention/link to `/mcp/fairmd-lipids`.
+   - Shared `<head>` meta: [`resources/views/layouts/head.blade.php`](../../resources/views/layouts/head.blade.php)
+     — the `<meta name="description">` / Open Graph block is the place to surface
+     that the databank offers an MCP interface.
+3. **Publish machine-readable advertisements** at the site root:
+   - `/.well-known/mcp` — a well-known descriptor pointing at the endpoint.
+   - `/llms.txt` — a plain-text summary for LLM-based crawlers, linking the
+     endpoint and this document.
+
+   Client support for both is still emerging, so treat them as low-cost
+   nice-to-haves rather than load-bearing discovery.
+
+> The dev-server [`public/robots.txt`](../../public/robots.txt) disallows all
+> crawling as a safeguard; the deployed/production `robots.txt` allows crawling,
+> so the indexable-page advertisements above take effect in production.
+
 ## Tests
 
 Feature tests for the server and its tools live in

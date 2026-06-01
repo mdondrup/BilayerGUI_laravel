@@ -218,6 +218,10 @@ use App\Http\Controllers\StatisticsController;
                                 <ul class="small mb-2">
                                     <li><a href="https://databank.readthedocs.io/">Full documentation</a></li>
                                     <li><a href="http://nmrlipids.blogspot.com/">NMRlipids blog</a></li>
+                                    <li><strong>AI assistants:</strong> connect via our
+                                        <a href="https://modelcontextprotocol.io/">MCP</a> server at
+                                        <code style="color: #0e4a56;">{{ url('/mcp/fairmd-lipids') }}</code>
+                                        (see <a href="{{ url('/llms.txt') }}">llms.txt</a>).</li>
                                 </ul>
                                 <p class="small text-dark mb-0">All data and code are provided AS-IS with no warranty. Report issues via each component's GitHub tracker.</p>
                             </div>

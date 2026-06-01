@@ -113,3 +113,52 @@ Route::get('/experiment/{type}/{path}', [ExperimentController::class, 'show'])
 Route::get('/experiments', [ExperimentController::class, 'list'])
     ->name('experiments.list');    
 
+// MCP discovery advertisements. Both expose the public MCP endpoint so that
+// MCP-aware clients and LLM crawlers can find it. The endpoint URL is built from
+// the current request host so it is correct in any deployment.
+Route::get('/llms.txt', function () {
+    $mcpUrl = url('/mcp/fairmd-lipids');
+    $site = url('/');
+    $sitemap = url('/sitemap.xml');
+    $name = config('app.name', 'FAIRMD Lipids');
+
+    $body = <<<TXT
+    # {$name}
+
+    > {$name} is a databank for visualization of molecular dynamics (MD) simulations
+    > of lipid membranes and related NMR/X-ray experiments. It exposes a read-only
+    > Model Context Protocol (MCP) server for programmatic, AI-assistant access.
+
+    ## MCP
+
+    - MCP endpoint (Streamable HTTP): {$mcpUrl}
+    - Protocol: Model Context Protocol (https://modelcontextprotocol.io)
+    - Access: read-only, rate-limited
+
+    ## Site
+
+    - Home: {$site}
+    - Sitemap: {$sitemap}
+    TXT;
+
+    return response($body, 200)
+        ->header('Content-Type', 'text/plain; charset=utf-8');
+})->name('llms.txt');
+
+Route::get('/.well-known/mcp', function () {
+    $name = config('app.name', 'FAIRMD Lipids');
+
+    return response()->json([
+        'name' => $name,
+        'description' => 'Read-only MCP access to the '.$name.' databank of lipid membrane MD simulations and related NMR/X-ray experiments.',
+        'documentation' => 'https://github.com/NMRLipids/BilayerUI_laravel/blob/main/app/Mcp/README.md',
+        'servers' => [
+            [
+                'name' => 'fairmd-lipids',
+                'transport' => 'streamable-http',
+                'url' => url('/mcp/fairmd-lipids'),
+            ],
+        ],
+    ], 200, [], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+})->name('well-known.mcp');
+
