@@ -64,6 +64,29 @@ underlying query logic in
 php artisan mcp:inspector fairmd-lipids
 ```
 
+#### Via Laravel Sail
+
+The inspector's web UI (port `6274`) and proxy (port `6277`) must be reachable
+from your host browser, so expose them on the `laravel.test` service in
+`docker-compose.yml` and recreate the container:
+
+```yaml
+        ports:
+            - '${APP_PORT:-80}:80'
+            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+            - '6274:6274'   # MCP Inspector UI
+            - '6277:6277'   # MCP Inspector proxy
+```
+
+```bash
+./vendor/bin/sail up -d
+./vendor/bin/sail artisan mcp:inspector fairmd-lipids --host=0.0.0.0
+```
+
+Then open the tokenized URL printed in the terminal
+(`http://localhost:6274/?MCP_PROXY_AUTH_TOKEN=…`). The `--host=0.0.0.0` flag binds
+the inspector to all interfaces so it is reachable from outside the container.
+
 ### Raw HTTP (curl)
 
 ```bash
@@ -83,8 +106,8 @@ curl -sS -X POST http://127.0.0.1:8000/mcp/fairmd-lipids \
 
 ## Connecting MCP clients
 
-The server speaks streamable HTTP. Replace the URL below with your deployment's
-public URL (e.g. `https://your-host/mcp/fairmd-lipids`); the examples use the local
+The server speaks streamable HTTP. Replace the URL below with our server's actual
+public URL (e.g. `https://lipids.fairmd.org/mcp/fairmd-lipids`) or the public URL of your deployment; the examples use the local
 dev server.
 
 ### HTTP-native clients (VS Code, Cursor, etc.)
