@@ -157,7 +157,7 @@
 
                                                     @php $cadPath = asset('storage/simulations/' . $trayectoria->git_path) @endphp
                                                     <a class="bi bi-cloud-download" href="{{ $cadPath }}/conf.pdb.gz">&nbsp;Download PDB File</a><br>
-                                                    <a class="bi bi-cloud-download" href="https://doi.org/{{ $trayectoria->doi }}" target="_blank">&nbsp;Link to simulation files</a><br>
+                                                    <a class="bi bi-cloud-download" href="https://doi.org/{{ $trayectoria->doi }}" target="_blank" rel="noopener noreferrer">&nbsp;Link to simulation files</a><br>
                                                 </td>
                                             </tr>
                                         </tbody>
